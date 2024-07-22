@@ -1,0 +1,31 @@
+# Test your FastAPI endpoints
+
+GET http://127.0.0.1:8000/
+Accept: application/json
+
+###
+
+POST http://127.0.0.1:8000/register
+Content-Type: application/json
+
+{
+  "name": "Santiagoooo",
+  "lastName": "Valenciaa",
+  "email": "fenixcaps@gmaajil.com",
+  "password": "hola1235"
+}
+
+###
+
+POST http://127.0.0.1:8000/login
+Content-Type: application/json
+
+{
+"email": "fenixcaps@gmaajil.com",
+"password": "hola1235"
+}
+
+###
+
+GET http://127.0.0.1:8000/users
+Accept: : application/jsonVivi
