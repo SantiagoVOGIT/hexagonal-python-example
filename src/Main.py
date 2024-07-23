@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 import logging
 
+from src.domain.entities.user.UserFactory import UserFactory
 from src.infrastructure.common.DatabaseService import DatabaseService
 from src.infrastructure.config.CorsConfig import CorsConfig
 from src.infrastructure.input_adapters.controllers.HealthController import HealthController

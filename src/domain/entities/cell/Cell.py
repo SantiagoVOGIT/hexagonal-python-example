@@ -1,7 +1,5 @@
-from datetime import datetime, timezone
-from typing import Optional
+from datetime import datetime
 
-from src.domain.common.DomainUtils import DomainUtils
 from src.domain.entities.cell.value_objects.CellId import CellId
 from src.domain.entities.cell.value_objects.CellStatus import CellStatus
 from src.domain.entities.cell.value_objects.SpaceNumber import SpaceNumber
@@ -17,17 +15,16 @@ class Cell:
     __createdAt: datetime
 
     def __init__(self,
+                 id: CellId,
                  spaceNumber: SpaceNumber,
                  vehicleType: VehicleType,
-                 status: CellStatus = CellStatus.AVAILABLE,
-                 id: Optional[CellId] = None,
-                 createdAt: Optional[datetime] = None
-                 ):
-        self.__id = DomainUtils.resolveId(id, CellId)
+                 status: CellStatus,
+                 createdAt: datetime):
+        self.__id = id
         self.__spaceNumber = spaceNumber
         self.__vehicleType = vehicleType
         self.__status = status
-        self.__createdAt = DomainUtils.resolveCreatedAt(createdAt)
+        self.__createdAt = createdAt
 
     def getId(self) -> CellId:
         return self.__id
@@ -35,7 +32,7 @@ class Cell:
     def getSpaceNumber(self) -> SpaceNumber:
         return self.__spaceNumber
 
-    def getVehicleTypeId(self) -> VehicleType:
+    def getVehicleType(self) -> VehicleType:
         return self.__vehicleType
 
     def getStatus(self) -> CellStatus:

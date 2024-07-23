@@ -1,7 +1,6 @@
 from datetime import datetime
 from typing import Optional
 
-from src.domain.common.DomainUtils import DomainUtils
 from src.domain.entities.cell.value_objects.CellId import CellId
 from src.domain.entities.reservation.value_objects.ReservationCode import ReservationCode
 from src.domain.entities.reservation.value_objects.ReservationId import ReservationId
@@ -11,7 +10,6 @@ from src.domain.entities.vehicle.value_objects.VehicleId import VehicleId
 
 
 class Reservation:
-
     __id: ReservationId
     __userId: UserId
     __cellId: CellId
@@ -19,29 +17,28 @@ class Reservation:
     __reservationCode: ReservationCode
     __status: ReservationStatus
     __startTime: datetime
-    __endTime: datetime
+    __endTime: Optional[datetime]
     __createdAt: datetime
 
     def __init__(self,
+                 id: ReservationId,
                  userId: UserId,
                  cellId: CellId,
                  vehicleId: VehicleId,
-                 reservationCode: Optional[ReservationCode] = None,
-                 status: ReservationStatus = ReservationStatus.PENDING,
-                 startTime: Optional[datetime] = None,
-                 endTime: Optional[datetime] = None,
-                 id: Optional[ReservationId] = None,
-                 createAt: Optional[datetime] = None
-                 ):
-        self.__id = DomainUtils.resolveId(id, ReservationId)
+                 reservationCode: ReservationCode,
+                 status: ReservationStatus,
+                 startTime: datetime,
+                 endTime: Optional[datetime],
+                 createdAt: datetime):
+        self.__id = id
         self.__userId = userId
         self.__cellId = cellId
         self.__vehicleId = vehicleId
-        self.__reservationCode = Reservation.__resolveReservationCode(reservationCode)
+        self.__reservationCode = reservationCode
         self.__status = status
-        self.__startTime = DomainUtils.resolveCreatedAt(startTime)
+        self.__startTime = startTime
         self.__endTime = endTime
-        self.__createdAt = DomainUtils.resolveCreatedAt(createAt)
+        self.__createdAt = createdAt
 
     def getId(self) -> ReservationId:
         return self.__id
@@ -64,12 +61,8 @@ class Reservation:
     def getStartTime(self) -> datetime:
         return self.__startTime
 
-    def getEndTime(self) -> datetime:
+    def getEndTime(self) -> Optional[datetime]:
         return self.__endTime
 
     def getCreatedAt(self) -> datetime:
         return self.__createdAt
-
-    @staticmethod
-    def __resolveReservationCode(reservationCode) -> ReservationCode:
-        return reservationCode if reservationCode is not None else ReservationCode.generate()

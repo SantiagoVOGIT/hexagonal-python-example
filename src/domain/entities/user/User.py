@@ -1,7 +1,6 @@
 from datetime import datetime
 from typing import Optional
 
-from src.domain.common.DomainUtils import DomainUtils
 from src.domain.entities.user.value_objects.DniType import DniType
 from src.domain.entities.user.value_objects.UserId import UserId
 from src.domain.entities.user.value_objects.UserRole import UserRole
@@ -15,34 +14,33 @@ class User:
     __dniType: DniType
     __firstName: str
     __lastName: str
-    __phoneNumber: str
+    __phoneNumber: Optional[str]
     __emailAddress: str
     __role: UserRole
     __status: UserStatus
     __createdAt: datetime
 
     def __init__(self,
+                 id: UserId,
                  dniNumber: str,
                  dniType: DniType,
                  firstName: str,
                  lastName: str,
-                 role: UserRole,
                  emailAddress: str,
-                 status: UserStatus = UserStatus.ACTIVE,
-                 phoneNumber: Optional[str] = None,
-                 id: Optional[UserId] = None,
-                 createdAt: Optional[datetime] = None
-                 ):
-        self.__id = DomainUtils.resolveId(id, UserId)
-        self.__dniNumber = DomainUtils.isValidDniNumber(dniNumber)
+                 role: UserRole,
+                 status: UserStatus,
+                 phoneNumber: Optional[str],
+                 createdAt: datetime):
+        self.__id = id
+        self.__dniNumber = dniNumber
         self.__dniType = dniType
-        self.__firstName = DomainUtils.isValidName(firstName)
-        self.__lastName = DomainUtils.isValidName(lastName)
-        self.__phoneNumber = DomainUtils.isValidPhoneNumber(phoneNumber)
-        self.__emailAddress = DomainUtils.isValidEmailAddress(emailAddress)
+        self.__firstName = firstName
+        self.__lastName = lastName
+        self.__phoneNumber = phoneNumber
+        self.__emailAddress = emailAddress
         self.__role = role
         self.__status = status
-        self.__createdAt = DomainUtils.resolveCreatedAt(createdAt)
+        self.__createdAt = createdAt
 
     def getId(self) -> UserId:
         return self.__id
@@ -62,7 +60,7 @@ class User:
     def getPhoneNumber(self) -> Optional[str]:
         return self.__phoneNumber
 
-    def getEmailAddress(self) -> Optional[str]:
+    def getEmailAddress(self) -> str:
         return self.__emailAddress
 
     def getRole(self) -> UserRole:
@@ -73,6 +71,3 @@ class User:
 
     def getCreatedAt(self) -> datetime:
         return self.__createdAt
-
-
-
