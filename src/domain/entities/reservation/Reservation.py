@@ -10,6 +10,7 @@ from src.domain.entities.vehicle.value_objects.VehicleId import VehicleId
 
 
 class Reservation:
+
     __id: ReservationId
     __userId: UserId
     __cellId: CellId
