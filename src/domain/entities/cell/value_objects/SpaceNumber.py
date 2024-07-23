@@ -1,8 +1,7 @@
-from enum import unique
-
+from enum import Enum, unique
 
 @unique
-class SpaceNumber:
+class SpaceNumber(Enum):
 
     CELDA_UNO = "1"
     CELDA_DOS = "2"
@@ -14,8 +13,5 @@ class SpaceNumber:
     CELDA_OCHO = "8"
     CELDA_NUEVE = "9"
 
-    def __init__(self, value: str):
-        self.__value = value
-
     def getValue(self) -> str:
-        return self.__value
+        return self.value

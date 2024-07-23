@@ -2,11 +2,11 @@ from enum import Enum, unique
 
 
 @unique
-class UserRole(Enum):
+class UserStatus(Enum):
 
-    ADMIN = "ADMIN"
-    USER = "USER"
-    STAFF = "STAFF"
+    ACTIVE = "ACTIVO"
+    INACTIVE = "INACTIVO"
+    SUSPENDED = "SUSPENDIDO"
 
     def __init__(self, value: str):
         self.__value = value

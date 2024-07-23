@@ -7,6 +7,7 @@ from src.infrastructure.input_adapters.controllers.HealthController import Healt
 
 
 class Main:
+
     __app: FastAPI
     __dbService: DatabaseService
     __healthController: HealthController

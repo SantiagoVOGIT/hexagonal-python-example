@@ -2,11 +2,10 @@ from enum import Enum, unique
 
 
 @unique
-class UserStatus(Enum):
+class VehicleType(Enum):
 
-    ACTIVE = "ACTIVE"
-    INACTIVE = "INACTIVO"
-    SUSPENDED = "SUSPENDIDO"
+    CAR = "AUTOMÓVIL"
+    MOTORCYCLE = "MOTOCICLETA"
 
     def __init__(self, value: str):
         self.__value = value
