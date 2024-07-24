@@ -14,7 +14,7 @@ class User:
     __dniType: DniType
     __firstName: str
     __lastName: str
-    __phoneNumber: Optional[str]
+    __phoneNumber: str
     __emailAddress: str
     __role: UserRole
     __status: UserStatus
@@ -29,7 +29,7 @@ class User:
                  emailAddress: str,
                  role: UserRole,
                  status: UserStatus,
-                 phoneNumber: Optional[str],
+                 phoneNumber: str,
                  createdAt: datetime):
         self.__id = id
         self.__dniNumber = dniNumber
@@ -57,7 +57,7 @@ class User:
     def getLastName(self) -> str:
         return self.__lastName
 
-    def getPhoneNumber(self) -> Optional[str]:
+    def getPhoneNumber(self) -> str:
         return self.__phoneNumber
 
     def getEmailAddress(self) -> str:

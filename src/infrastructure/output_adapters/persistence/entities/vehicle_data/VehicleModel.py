@@ -3,7 +3,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from src.infrastructure.common.DatabaseService import DatabaseService
 
 
-class VehicleModel(DatabaseService.base):
+class VehicleModel(DatabaseService.getBase()):
 
     __tablename__ = '_vehicle'
 

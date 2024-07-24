@@ -19,29 +19,21 @@ class UserFactory:
                firstName: str,
                lastName: str,
                emailAddress: str,
+               phoneNumber: str,
                role: UserRole = UserRole.USER,
                status: UserStatus = UserStatus.ACTIVE,
-               phoneNumber: Optional[str] = None,
                id: Optional[UserId] = None,
                createdAt: Optional[datetime] = None) -> User:
 
-        ensureId = DomainUtils.resolveId(id, UserId)
-        validatedDniNumber = DomainUtils.isValidDniNumber(dniNumber)
-        validatedFirstName = DomainUtils.isValidName(firstName)
-        validatedLastName = DomainUtils.isValidName(lastName)
-        validatedPhoneNumber = DomainUtils.isValidPhoneNumber(phoneNumber) if phoneNumber else None
-        validatedEmailAddress = DomainUtils.isValidEmailAddress(emailAddress)
-        ensureCreatedAt = DomainUtils.resolveCreatedAt(createdAt)
-
         return User(
-            id=ensureId,
-            dniNumber=validatedDniNumber,
+            id=DomainUtils.resolveId(id, UserId),
+            dniNumber=DomainUtils.validateDniNumber(dniNumber),
             dniType=dniType,
-            firstName=validatedFirstName,
-            lastName=validatedLastName,
-            emailAddress=validatedEmailAddress,
+            firstName=DomainUtils.validateName(firstName),
+            lastName=DomainUtils.validateName(lastName),
+            emailAddress=DomainUtils.validateEmailAddress(emailAddress),
             role=role,
             status=status,
-            phoneNumber=validatedPhoneNumber,
-            createdAt=ensureCreatedAt
+            phoneNumber=DomainUtils.validatePhoneNumber(phoneNumber),
+            createdAt=DomainUtils.resolveCreatedAt(createdAt)
         )

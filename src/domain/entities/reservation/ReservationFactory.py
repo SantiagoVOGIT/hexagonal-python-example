@@ -26,25 +26,16 @@ class ReservationFactory:
                id: Optional[ReservationId] = None,
                createdAt: Optional[datetime] = None) -> Reservation:
 
-        ensureId = DomainUtils.resolveId(id, ReservationId)
-        ensureStartTime = DomainUtils.resolveCreatedAt(startTime)
-        ensureCreatedAt = DomainUtils.resolveCreatedAt(createdAt)
-        ensureReservationCode = ReservationFactory.__resolveReservationCode(reservationCode)
-
         return Reservation(
-            id=ensureId,
+            id=DomainUtils.resolveId(id, ReservationId),
             userId=userId,
             cellId=cellId,
             vehicleId=vehicleId,
-            reservationCode=ensureReservationCode,
+            reservationCode=DomainUtils.resolveReservationCode(reservationCode),
             status=status,
-            startTime=ensureStartTime,
+            startTime=DomainUtils.resolveCreatedAt(startTime),
             endTime=endTime,
-            createdAt=ensureCreatedAt
+            createdAt=DomainUtils.resolveCreatedAt(createdAt)
         )
-
-    @staticmethod
-    def __resolveReservationCode(reservationCode: Optional[ReservationCode]) -> ReservationCode:
-        return reservationCode if reservationCode is not None else ReservationCode.generate()
 
 

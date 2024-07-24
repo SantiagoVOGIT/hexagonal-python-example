@@ -20,14 +20,10 @@ class CellFactory:
                id: Optional[CellId] = None,
                createdAt: Optional[datetime] = None) -> Cell:
 
-        ensureId = DomainUtils.resolveId(id, CellId)
-        ensureCreatedAt = DomainUtils.resolveCreatedAt(createdAt)
-
         return Cell(
-            id=ensureId,
+            id=DomainUtils.resolveId(id, CellId),
             spaceNumber=spaceNumber,
             vehicleType=vehicleType,
             status=status,
-            createdAt=ensureCreatedAt
+            createdAt=DomainUtils.resolveCreatedAt(createdAt)
         )
-

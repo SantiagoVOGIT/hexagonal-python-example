@@ -9,23 +9,21 @@ POST http://127.0.0.1:8000/register
 Content-Type: application/json
 
 {
-  "name": "Santiagoooo",
-  "lastName": "Valenciaa",
-  "email": "fenixcaps@gmaajil.com",
-  "password": "hola1235"
+  "dniNumber": "1036928512",
+  "dniType": "CÉDULA CIUDADANÍA",
+  "firstName": "Santiago",
+  "lastName": "Valencia",
+  "phoneNumber": "3024508215",
+  "emailAddress": "fenixcaps@gmail.com"
 }
 
 ###
-
 POST http://127.0.0.1:8000/login
 Content-Type: application/json
 
 {
-"email": "fenixcaps@gmaajil.com",
-"password": "hola1235"
+  "dniNumber": "10369284592",
+  "emailAddress": "santiago@examplfe.com"
 }
 
 ###
-
-GET http://127.0.0.1:8000/users
-Accept: : application/jsonVivi

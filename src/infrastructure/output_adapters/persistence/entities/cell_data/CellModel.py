@@ -3,7 +3,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from src.infrastructure.common.DatabaseService import DatabaseService
 
 
-class CellModel(DatabaseService.base):
+class CellModel(DatabaseService.getBase()):
 
     __tablename__ = '_cell'
 

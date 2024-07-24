@@ -20,15 +20,11 @@ class VehicleFactory:
                registeredAt: Optional[datetime] = None,
                id: Optional[VehicleId] = None) -> Vehicle:
 
-        ensureId = DomainUtils.resolveId(id, VehicleId)
-        validatedLicensePlate = DomainUtils.isValidLicensePlate(licensePlate)
-        ensureRegisteredAt = DomainUtils.resolveCreatedAt(registeredAt)
-
         return Vehicle(
-            id=ensureId,
+            id=DomainUtils.resolveId(id, VehicleId),
             userId=userId,
-            licensePlate=validatedLicensePlate,
+            licensePlate=DomainUtils.validateLicensePlate(licensePlate),
             model=model,
             vehicleType=vehicleType,
-            registeredAt=ensureRegisteredAt
+            registeredAt=DomainUtils.resolveCreatedAt(registeredAt)
         )

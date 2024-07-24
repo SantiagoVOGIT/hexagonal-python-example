@@ -16,7 +16,6 @@ from src.infrastructure.common.enums.InfrastructureInfo import InfrastructureInf
 
 class DatabaseService:
 
-    base: Type[DeclarativeMeta] = declarative_base()
     __DATABASE_URL: str = os.getenv("DATABASE_URL")
     __engine: Engine
     __sessionMaker: sessionmaker = None
@@ -47,8 +46,9 @@ class DatabaseService:
             self.__session = self.__sessionMaker()
         return self.__session
 
-    def createAllTables(self):
-        self.base.metadata.create_all(self.__engine)
+    @staticmethod
+    def getBase() -> Type[DeclarativeMeta]:
+        return declarative_base()
 
     def checkConnection(self) -> bool:
         try:

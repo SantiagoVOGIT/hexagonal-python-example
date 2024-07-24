@@ -5,6 +5,7 @@ from typing import Optional, TypeVar, Type
 from src.common.decorators.UtilityClass import utilityClass
 from src.common.utils.ExceptionFactory import ExceptionFactory
 from src.domain.common.enums.DomainError import DomainError
+from src.domain.entities.reservation.value_objects.ReservationCode import ReservationCode
 
 T = TypeVar('T')
 
@@ -19,7 +20,7 @@ class DomainUtils:
     LICENCE_PLATE_PATTERN = re.compile(r"^[A-Z]{3}\d{3}$")
 
     @staticmethod
-    def isValidName(value: str) -> str:
+    def validateName(value: str) -> str:
         if not DomainUtils.USER_NAME_PATTERN.match(value):
             raise ValueError(
                 ExceptionFactory
@@ -29,7 +30,7 @@ class DomainUtils:
         return value
 
     @staticmethod
-    def isValidDniNumber(value: str) -> str:
+    def validateDniNumber(value: str) -> str:
         if not DomainUtils.DNI_PATTERN.match(value):
             raise ValueError(
                 ExceptionFactory
@@ -38,7 +39,7 @@ class DomainUtils:
         return value
 
     @staticmethod
-    def isValidEmailAddress(value: str) -> str:
+    def validateEmailAddress(value: str) -> str:
         if not DomainUtils.EMAIL_PATTERN.match(value):
             raise ValueError(
                 ExceptionFactory
@@ -48,7 +49,7 @@ class DomainUtils:
         return value
 
     @staticmethod
-    def isValidPhoneNumber(value: str) -> str:
+    def validatePhoneNumber(value: str) -> str:
         if not DomainUtils.PHONE_NUMBER_PATTERN.match(value):
             raise ValueError(
                 ExceptionFactory
@@ -58,7 +59,7 @@ class DomainUtils:
         return value
 
     @staticmethod
-    def isValidLicensePlate(value: str) -> str:
+    def validateLicensePlate(value: str) -> str:
         if not DomainUtils.LICENCE_PLATE_PATTERN.match(value):
             raise ValueError(
                 ExceptionFactory
@@ -66,6 +67,10 @@ class DomainUtils:
                 .getDetail()
             )
         return value
+
+    @staticmethod
+    def resolveReservationCode(reservationCode: Optional[ReservationCode]) -> ReservationCode:
+        return reservationCode if reservationCode is not None else ReservationCode.generate()
 
     @staticmethod
     def resolveId(id: Optional[T], EntityId: Type[T]) -> T:
