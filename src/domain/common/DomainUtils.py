@@ -4,7 +4,6 @@ from typing import Optional, TypeVar, Type
 
 from src.common.decorators.UtilityClass import utilityClass
 from src.common.utils.ErrorHandler import DomainException, ExceptionHandler
-from src.common.utils.ExceptionFactory import ExceptionFactory
 from src.domain.common.enums.DomainErrorType import DomainErrorType
 from src.domain.entities.reservation.value_objects.ReservationCode import ReservationCode
 
@@ -71,4 +70,3 @@ class DomainUtils:
     @staticmethod
     def resolveCreatedAt(createdAt: Optional[datetime]) -> datetime:
         return createdAt if createdAt is not None else datetime.now(timezone.utc)
-

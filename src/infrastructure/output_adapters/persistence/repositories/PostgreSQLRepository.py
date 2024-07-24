@@ -71,6 +71,7 @@ class PostgreSQLRepository(UserRepository):
                     {"dni_number": dniNumber}
                 ))
             return UserMapper.toDomain(userModel)
+
         except SQLAlchemyError as exc:
             ExceptionHandler.raiseException(CustomException(
                 ErrorType.INFRASTRUCTURE_ERROR,
