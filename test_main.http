@@ -9,12 +9,12 @@ POST http://127.0.0.1:8000/register
 Content-Type: application/json
 
 {
-  "dniNumber": "1036928512",
+  "dniNumber": "43855553",
   "dniType": "CÉDULA CIUDADANÍA",
   "firstName": "Santiago",
   "lastName": "Valencia",
   "phoneNumber": "3024508215",
-  "emailAddress": "fenixcaps@gmail.com"
+  "emailAddress": "fenixcap@gmail.com"
 }
 
 ###
@@ -22,8 +22,8 @@ POST http://127.0.0.1:8000/login
 Content-Type: application/json
 
 {
-  "dniNumber": "10369284592",
-  "emailAddress": "santiago@examplfe.com"
+  "dniNumber": "10369528522",
+  "emailAddress": "fenixcaps@gmail.com"
 }
 
 ###

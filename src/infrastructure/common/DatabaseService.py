@@ -2,15 +2,13 @@ import logging
 import os
 from typing import Optional, Type
 
-from sqlalchemy import create_engine, text
-from sqlalchemy.engine import Engine
+from sqlalchemy import Engine, create_engine, text
 from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.orm import Session, sessionmaker, DeclarativeMeta
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker, Session, DeclarativeMeta, declarative_base
 
-from src.common.utils.ExceptionFactory import ExceptionFactory
+from src.common.utils.ErrorHandler import ExceptionHandler, CustomException, ErrorType
 from src.common.utils.MessageFactory import MessageFactory
-from src.infrastructure.common.enums.InfrastructureError import InfrastructureError
+from src.infrastructure.common.enums.InfrastructureErrorType import InfrastructureErrorType
 from src.infrastructure.common.enums.InfrastructureInfo import InfrastructureInfo
 
 
@@ -27,11 +25,11 @@ class DatabaseService:
 
     def __createEngine(self) -> Engine:
         if not self.__DATABASE_URL:
-            raise ValueError(
-                ExceptionFactory
-                .build(InfrastructureError.ENV_DB_NOT_SET)
-                .getDetail()
-            )
+            ExceptionHandler.raiseException(CustomException(
+                ErrorType.INFRASTRUCTURE_ERROR,
+                InfrastructureErrorType.ENV_DB_NOT_SET.name,
+                InfrastructureErrorType.ENV_DB_NOT_SET.value
+            ))
         return create_engine(self.__DATABASE_URL)
 
     def __createSessionMaker(self) -> sessionmaker:
@@ -61,12 +59,12 @@ class DatabaseService:
             )
             return True
         except SQLAlchemyError as exc:
-            logging.error(
-                ExceptionFactory
-                .build(InfrastructureError.ERROR_CONNECTION_DB)
-                .getDetail(exc)
-            )
-            return False
+            ExceptionHandler.raiseException(CustomException(
+                ErrorType.INFRASTRUCTURE_ERROR,
+                InfrastructureErrorType.ERROR_CONNECTION_DB.name,
+                InfrastructureErrorType.ERROR_CONNECTION_DB.value,
+                {"original_error": str(exc)}
+            ))
         finally:
             if session:
                 session.close()

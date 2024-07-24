@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import Optional
 
 from src.domain.entities.user.value_objects.DniType import DniType
 from src.domain.entities.user.value_objects.UserId import UserId

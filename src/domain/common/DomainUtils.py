@@ -3,8 +3,9 @@ from datetime import datetime, timezone
 from typing import Optional, TypeVar, Type
 
 from src.common.decorators.UtilityClass import utilityClass
+from src.common.utils.ErrorHandler import DomainException, ExceptionHandler
 from src.common.utils.ExceptionFactory import ExceptionFactory
-from src.domain.common.enums.DomainError import DomainError
+from src.domain.common.enums.DomainErrorType import DomainErrorType
 from src.domain.entities.reservation.value_objects.ReservationCode import ReservationCode
 
 T = TypeVar('T')
@@ -22,50 +23,41 @@ class DomainUtils:
     @staticmethod
     def validateName(value: str) -> str:
         if not DomainUtils.USER_NAME_PATTERN.match(value):
-            raise ValueError(
-                ExceptionFactory
-                .build(DomainError.INVALID_NAME_FORMAT)
-                .getDetail()
-            )
+            ExceptionHandler.raiseException(DomainException(
+                DomainErrorType.INVALID_NAME_FORMAT
+            ))
         return value
 
     @staticmethod
     def validateDniNumber(value: str) -> str:
         if not DomainUtils.DNI_PATTERN.match(value):
-            raise ValueError(
-                ExceptionFactory
-                .build(DomainError.INVALID_DNI_NUMBER_FORMAT).getDetail()
-            )
+            ExceptionHandler.raiseException(DomainException(
+                DomainErrorType.INVALID_DNI_NUMBER_FORMAT
+            ))
         return value
 
     @staticmethod
     def validateEmailAddress(value: str) -> str:
         if not DomainUtils.EMAIL_PATTERN.match(value):
-            raise ValueError(
-                ExceptionFactory
-                .build(DomainError.INVALID_EMAIL_FORMAT)
-                .getDetail()
-            )
+            ExceptionHandler.raiseException(DomainException(
+                DomainErrorType.INVALID_EMAIL_FORMAT
+            ))
         return value
 
     @staticmethod
     def validatePhoneNumber(value: str) -> str:
         if not DomainUtils.PHONE_NUMBER_PATTERN.match(value):
-            raise ValueError(
-                ExceptionFactory
-                .build(DomainError.INVALID_PHONE_NUMBER_FORMAT)
-                .getDetail()
-            )
+            ExceptionHandler.raiseException(DomainException(
+                DomainErrorType.INVALID_PHONE_NUMBER_FORMAT
+            ))
         return value
 
     @staticmethod
     def validateLicensePlate(value: str) -> str:
         if not DomainUtils.LICENCE_PLATE_PATTERN.match(value):
-            raise ValueError(
-                ExceptionFactory
-                .build(DomainError.INVALID_LICENSE_PLATE_FORMAT)
-                .getDetail()
-            )
+            ExceptionHandler.raiseException(DomainException(
+                DomainErrorType.INVALID_LICENSE_PLATE_FORMAT
+            ))
         return value
 
     @staticmethod

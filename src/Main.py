@@ -4,8 +4,8 @@ import logging
 from src.application.use_cases.AuthUseCase import AuthUseCase
 from src.infrastructure.common.DatabaseService import DatabaseService
 from src.infrastructure.config.CorsConfig import CorsConfig
-from src.infrastructure.input_adapters.controllers.AuthController import AuthController
-from src.infrastructure.input_adapters.controllers.HealthController import HealthController
+from src.infrastructure.input_adapters.auth.AuthController import AuthController
+from src.infrastructure.input_adapters.health.HealthController import HealthController
 from src.infrastructure.output_adapters.persistence.repositories.PostgreSQLRepository import PostgreSQLRepository
 
 
@@ -23,9 +23,10 @@ class Main:
         self.__authController = self.__configAuthController()
 
     def __configAuthController(self) -> AuthController:
-        repository = PostgreSQLRepository(self.__databaseService)
-        authUseCase = AuthUseCase(repository)
-        return AuthController(authUseCase)
+        outputAdapter = PostgreSQLRepository(self.__databaseService)
+        useCase = AuthUseCase(outputAdapter)
+        inputAdapter = AuthController(useCase)
+        return inputAdapter
 
     def setupControllers(self) -> None:
         self.__healthController.setupRoutes(self.__app)

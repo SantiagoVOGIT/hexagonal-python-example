@@ -1,8 +1,8 @@
 from typing import Optional
 
-from src.application.common.enums.ApplicationError import ApplicationError
 from src.application.input_ports.AuthGateway import AuthGateway
-from src.common.utils.ExceptionFactory import ExceptionFactory
+from src.common.utils.ErrorHandler import ExceptionHandler, DomainException
+from src.domain.common.enums.DomainErrorType import DomainErrorType
 from src.domain.entities.user.User import User
 from src.domain.entities.user.UserFactory import UserFactory
 from src.domain.entities.user.value_objects.DniType import DniType
@@ -20,23 +20,20 @@ class AuthUseCase(AuthGateway):
                  emailAddress: str) -> User:
 
         existingEmail: Optional[User] = self.__userRepository.findByEmail(emailAddress)
-        existingDniNumber: Optional[User] = self.__userRepository.findByDniNumber(dniNumber)
-
         if existingEmail is not None:
-            raise ValueError(
-                ExceptionFactory
-                .build(ApplicationError.USER_ALREADY_EXISTS)
-                .getDetail()
-            )
+            ExceptionHandler.raiseException(DomainException(
+                DomainErrorType.USER_ALREADY_EXISTS,
+                {"email": emailAddress}
+            ))
 
+        existingDniNumber: Optional[User] = self.__userRepository.findByDniNumber(dniNumber)
         if existingDniNumber is not None:
-            raise ValueError(
-                ExceptionFactory
-                .build(ApplicationError.USER_ALREADY_EXISTS)
-                .getDetail()
-            )
+            ExceptionHandler.raiseException(DomainException(
+                DomainErrorType.USER_ALREADY_EXISTS,
+                {"dni_number": dniNumber}
+            ))
 
-        newUser = UserFactory.create(
+        newUser: User = UserFactory.create(
             dniNumber=dniNumber,
             dniType=dniType,
             firstName=firstName,
@@ -44,25 +41,23 @@ class AuthUseCase(AuthGateway):
             phoneNumber=phoneNumber,
             emailAddress=emailAddress
         )
+
         self.__userRepository.saveUser(newUser)
         return newUser
 
     def login(self, emailAddress: str, dniNumber: str) -> User:
-
         user: Optional[User] = self.__userRepository.findByEmail(emailAddress)
 
         if user is None:
-            raise ValueError(
-                ExceptionFactory
-                .build(ApplicationError.INCORRECT_LOGIN)
-                .getDetail()
-            )
+            ExceptionHandler.raiseException(DomainException(
+                DomainErrorType.INCORRECT_LOGIN,
+                {"email": emailAddress}
+            ))
 
         if user.getDniNumber() != dniNumber:
-            raise ValueError(
-                ExceptionFactory
-                .build(ApplicationError.INCORRECT_LOGIN)
-                .getDetail()
-            )
+            ExceptionHandler.raiseException(DomainException(
+                DomainErrorType.INCORRECT_LOGIN,
+                {"email": emailAddress}
+            ))
 
         return user

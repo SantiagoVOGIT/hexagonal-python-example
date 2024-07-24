@@ -11,7 +11,7 @@ class AuthGateway(ABC):
 
     @abstractmethod
     def __init__(self, outputPort: Generic[T]):
-        pass
+        self.repository = outputPort
 
     @abstractmethod
     def register(self,
