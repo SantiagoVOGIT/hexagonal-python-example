@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
-from src.common.decorators.UtilityClass import utilityClass
+from src.shared.decorators.UtilityClass import utilityClass
 from src.domain.common.DomainUtils import DomainUtils
 from src.domain.entities.cell.Cell import Cell
 from src.domain.entities.cell.value_objects.CellId import CellId

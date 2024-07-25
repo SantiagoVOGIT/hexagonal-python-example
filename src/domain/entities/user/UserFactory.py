@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
-from src.common.decorators.UtilityClass import utilityClass
+from src.shared.decorators.UtilityClass import utilityClass
 from src.domain.common.DomainUtils import DomainUtils
 from src.domain.entities.user.User import User
 from src.domain.entities.user.value_objects.DniType import DniType

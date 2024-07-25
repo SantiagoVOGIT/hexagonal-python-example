@@ -3,8 +3,8 @@ from typing import Dict, Any
 from fastapi import FastAPI, HTTPException
 
 from src.application.input_ports.AuthGateway import AuthGateway
-from src.common.utils.ErrorHandler import ExceptionHandler
-from src.common.utils.MessageFactory import MessageFactory
+from src.shared.utils.ErrorHandler import ExceptionHandler
+from src.shared.utils.MessageFactory import MessageFactory
 from src.domain.entities.user.User import User
 from src.infrastructure.common.enums.InfrastructureInfo import InfrastructureInfo
 from src.infrastructure.input_adapters.auth.LoginDTO import LoginDTO
@@ -15,8 +15,8 @@ class AuthController:
 
     __authGateway: AuthGateway
 
-    def __init__(self, inputPort: AuthGateway):
-        self.__authGateway = inputPort
+    def __init__(self, useCase: AuthGateway):
+        self.__authGateway = useCase
 
     def setupRoutes(self, app: FastAPI) -> None:
 

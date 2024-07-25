@@ -6,8 +6,8 @@ from sqlalchemy import Engine, create_engine, text
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import sessionmaker, Session, DeclarativeMeta, declarative_base
 
-from src.common.utils.ErrorHandler import ExceptionHandler, CustomException, ErrorType
-from src.common.utils.MessageFactory import MessageFactory
+from src.shared.utils.ErrorHandler import ExceptionHandler, CustomException, ErrorType
+from src.shared.utils.MessageFactory import MessageFactory
 from src.infrastructure.common.enums.InfrastructureErrorType import InfrastructureErrorType
 from src.infrastructure.common.enums.InfrastructureInfo import InfrastructureInfo
 

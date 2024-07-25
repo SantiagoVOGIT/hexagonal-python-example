@@ -1,7 +1,7 @@
 from typing import Optional
 
 from src.application.input_ports.AuthGateway import AuthGateway
-from src.common.utils.ErrorHandler import ExceptionHandler, DomainException
+from src.shared.utils.ErrorHandler import ExceptionHandler, DomainException
 from src.domain.common.enums.DomainErrorType import DomainErrorType
 from src.domain.entities.user.User import User
 from src.domain.entities.user.UserFactory import UserFactory
@@ -13,8 +13,8 @@ class AuthUseCase(AuthGateway):
 
     __userRepository: UserRepository
 
-    def __init__(self, outputPort: UserRepository):
-        self.__userRepository = outputPort
+    def __init__(self, outputAdapter: UserRepository):
+        self.__userRepository = outputAdapter
 
     def register(self, dniNumber: str, dniType: DniType, firstName: str, lastName: str, phoneNumber: str,
                  emailAddress: str) -> User:
@@ -41,8 +41,8 @@ class AuthUseCase(AuthGateway):
             phoneNumber=phoneNumber,
             emailAddress=emailAddress
         )
-
         self.__userRepository.saveUser(newUser)
+
         return newUser
 
     def login(self, emailAddress: str, dniNumber: str) -> User:

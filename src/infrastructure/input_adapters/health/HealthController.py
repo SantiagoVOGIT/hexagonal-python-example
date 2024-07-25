@@ -1,7 +1,7 @@
 from typing import Dict
 from fastapi import FastAPI
 
-from src.common.utils.MessageFactory import MessageFactory
+from src.shared.utils.MessageFactory import MessageFactory
 from src.infrastructure.common.enums.InfrastructureInfo import InfrastructureInfo
 
 

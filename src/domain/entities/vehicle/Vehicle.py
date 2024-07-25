@@ -6,6 +6,7 @@ from src.domain.entities.vehicle.value_objects.VehicleType import VehicleType
 
 
 class Vehicle:
+
     __id: VehicleId
     __userId: UserId
     __licensePlate: str
