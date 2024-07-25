@@ -27,3 +27,16 @@ Content-Type: application/json
 }
 
 ###
+POST http://127.0.0.1:8000/create-user
+Content-Type: application/json
+
+{
+  "dniNumber": "1036928597",
+  "dniType": "CÉDULA CIUDADANÍA",
+  "firstName": "Santiago",
+  "lastName": "Valencia",
+  "phoneNumber": "3012558423",
+  "emailAddress": "holapapu@gmail.com",
+  "rol": "ADMINISTRADOR",
+  "status": "INACTIVO"
+}

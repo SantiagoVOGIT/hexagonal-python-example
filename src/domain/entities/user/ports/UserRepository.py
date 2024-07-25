@@ -1,21 +1,19 @@
 from abc import ABC, abstractmethod
-from typing import TypeVar, Optional
-
+from typing import Optional, List
 from src.domain.entities.user.User import User
-
-T = TypeVar('T')
 
 
 class UserRepository(ABC):
 
     @abstractmethod
-    def saveUser(self, user: User) -> None:
+    def save(self, user: User) -> User:
         pass
 
     @abstractmethod
-    def findByEmail(self, emailAddress: str) -> Optional[User]:
+    def findByEmail(self, email: str) -> Optional[User]:
         pass
 
     @abstractmethod
     def findByDniNumber(self, dniNumber: str) -> Optional[User]:
         pass
+

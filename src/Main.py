@@ -2,6 +2,7 @@ from fastapi import FastAPI
 import logging
 
 from src.application.use_cases.AuthUseCase import AuthUseCase
+from src.application.use_cases.user.UserUseCase import UserUseCase
 from src.infrastructure.common.DatabaseService import DatabaseService
 from src.infrastructure.config.CorsConfig import CorsConfig
 from src.infrastructure.input_adapters.auth.AuthController import AuthController
@@ -24,8 +25,9 @@ class Main:
 
     def __configAuthController(self) -> AuthController:
         outputAdapter = PostgreSQLRepository(self.__databaseService)
-        useCase = AuthUseCase(outputAdapter)
-        inputAdapter = AuthController(useCase)
+        userUseCase = UserUseCase(outputAdapter)
+        authUseCase = AuthUseCase(outputAdapter, userUseCase)
+        inputAdapter = AuthController(authUseCase, userUseCase)
         return inputAdapter
 
     def setupControllers(self) -> None:

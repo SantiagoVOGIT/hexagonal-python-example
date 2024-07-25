@@ -1,11 +1,11 @@
-from typing import Optional
+from typing import Optional, List
 
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
 from src.shared.utils.ErrorHandler import ExceptionHandler, CustomException, ErrorType
 from src.domain.entities.user.User import User
-from src.domain.output_ports.UserRepository import UserRepository
+from src.domain.entities.user.ports.UserRepository import UserRepository
 from src.infrastructure.common.DatabaseService import DatabaseService
 from src.infrastructure.common.enums.InfrastructureErrorType import InfrastructureErrorType
 from src.infrastructure.output_adapters.persistence.entities.user_data.UserMapper import UserMapper
@@ -14,12 +14,13 @@ from src.infrastructure.output_adapters.persistence.entities.user_data.UserData 
 
 class PostgreSQLRepository(UserRepository):
 
+
     __databaseService: DatabaseService
 
     def __init__(self, adapterService: DatabaseService):
         self.__databaseService = adapterService
 
-    def saveUser(self, user: User) -> None:
+    def save(self, user: User) -> None:
         session: Session = self.__databaseService.getSession()
         try:
             userData: UserData = UserMapper.toPersistence(user)
@@ -82,4 +83,12 @@ class PostgreSQLRepository(UserRepository):
         finally:
             session.close()
 
+    def findById(self, userId: str) -> Optional[User]:
+        pass
+
+    def update(self, user: User) -> User:
+        pass
+
+    def findAll(self) -> List[User]:
+        pass
 
