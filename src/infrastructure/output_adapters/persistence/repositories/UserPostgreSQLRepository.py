@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional
 
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
@@ -12,8 +12,7 @@ from src.infrastructure.output_adapters.persistence.entities.user_data.UserMappe
 from src.infrastructure.output_adapters.persistence.entities.user_data.UserData import UserData
 
 
-class PostgreSQLRepository(UserRepository):
-
+class UserPostgreSQLRepository(UserRepository):
 
     __databaseService: DatabaseService
 
@@ -42,14 +41,8 @@ class PostgreSQLRepository(UserRepository):
         try:
             dniNumberData: Optional[UserData] = session.query(UserData).filter_by(dni_number=dniNumber).first()
             if dniNumberData is None:
-                ExceptionHandler.raiseException(CustomException(
-                    ErrorType.INFRASTRUCTURE_ERROR,
-                    InfrastructureErrorType.USER_NOT_FOUND.name,
-                    InfrastructureErrorType.USER_NOT_FOUND.value,
-                    {"dni_number": dniNumber}
-                ))
+                return None
             return UserMapper.toDomain(dniNumberData)
-
         except SQLAlchemyError as exc:
             ExceptionHandler.raiseException(CustomException(
                 ErrorType.INFRASTRUCTURE_ERROR,
@@ -65,14 +58,8 @@ class PostgreSQLRepository(UserRepository):
         try:
             emailAddressData: Optional[UserData] = session.query(UserData).filter_by(email_address=emailAddress).first()
             if emailAddressData is None:
-                ExceptionHandler.raiseException(CustomException(
-                    ErrorType.INFRASTRUCTURE_ERROR,
-                    InfrastructureErrorType.USER_NOT_FOUND.name,
-                    InfrastructureErrorType.USER_NOT_FOUND.value,
-                    {"email": emailAddress}
-                ))
+                return None
             return UserMapper.toDomain(emailAddressData)
-
         except SQLAlchemyError as exc:
             ExceptionHandler.raiseException(CustomException(
                 ErrorType.INFRASTRUCTURE_ERROR,
@@ -82,13 +69,4 @@ class PostgreSQLRepository(UserRepository):
             ))
         finally:
             session.close()
-
-    def findById(self, userId: str) -> Optional[User]:
-        pass
-
-    def update(self, user: User) -> User:
-        pass
-
-    def findAll(self) -> List[User]:
-        pass
 

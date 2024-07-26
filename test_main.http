@@ -9,12 +9,12 @@ POST http://127.0.0.1:8000/register
 Content-Type: application/json
 
 {
-  "dniNumber": "43855553",
+  "dniNumber": "4385555736",
   "dniType": "CÉDULA CIUDADANÍA",
   "firstName": "Santiago",
   "lastName": "Valencia",
   "phoneNumber": "3024508215",
-  "emailAddress": "fenixcap@gmail.com"
+  "emailAddress": "hlapgapu@gmail.com"
 }
 
 ###
@@ -22,21 +22,7 @@ POST http://127.0.0.1:8000/login
 Content-Type: application/json
 
 {
-  "dniNumber": "1036928592",
-  "emailAddress": "fnixcap@gmail.com"
+  "dniNumber": "4855553",
+  "emailAddress": "fenicap@gmail.com"
 }
 
-###
-POST http://127.0.0.1:8000/create-user
-Content-Type: application/json
-
-{
-  "dniNumber": "1036928597",
-  "dniType": "CÉDULA CIUDADANÍA",
-  "firstName": "Santiago",
-  "lastName": "Valencia",
-  "phoneNumber": "3012558423",
-  "emailAddress": "holapapu@gmail.com",
-  "rol": "ADMINISTRADOR",
-  "status": "INACTIVO"
-}

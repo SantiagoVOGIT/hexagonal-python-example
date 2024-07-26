@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from typing import Optional, List
 from src.domain.entities.cell.Cell import Cell
 
 

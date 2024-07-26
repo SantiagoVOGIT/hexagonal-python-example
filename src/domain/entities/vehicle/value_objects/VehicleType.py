@@ -1,7 +1,6 @@
-from enum import Enum, unique
+from enum import Enum
 
 
-@unique
 class VehicleType(Enum):
 
     CAR = "AUTOMÓVIL"

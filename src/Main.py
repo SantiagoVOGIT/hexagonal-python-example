@@ -2,12 +2,12 @@ from fastapi import FastAPI
 import logging
 
 from src.application.use_cases.AuthUseCase import AuthUseCase
-from src.application.use_cases.user.UserUseCase import UserUseCase
 from src.infrastructure.common.DatabaseService import DatabaseService
 from src.infrastructure.config.CorsConfig import CorsConfig
-from src.infrastructure.input_adapters.auth.AuthController import AuthController
-from src.infrastructure.input_adapters.health.HealthController import HealthController
-from src.infrastructure.output_adapters.persistence.repositories.PostgreSQLRepository import PostgreSQLRepository
+
+from src.infrastructure.input_adapters.controllers.AuthController import AuthController
+from src.infrastructure.input_adapters.controllers.HealthController import HealthController
+from src.infrastructure.output_adapters.persistence.repositories.UserPostgreSQLRepository import UserPostgreSQLRepository
 
 
 class Main:
@@ -20,19 +20,18 @@ class Main:
     def __init__(self):
         self.__app = FastAPI()
         self.__databaseService = DatabaseService()
-        self.__healthController = HealthController()
         self.__authController = self.__configAuthController()
+        self.__healthController = HealthController()
 
     def __configAuthController(self) -> AuthController:
-        outputAdapter = PostgreSQLRepository(self.__databaseService)
-        userUseCase = UserUseCase(outputAdapter)
-        authUseCase = AuthUseCase(outputAdapter, userUseCase)
-        inputAdapter = AuthController(authUseCase, userUseCase)
+        outputAdapter = UserPostgreSQLRepository(self.__databaseService)
+        useCase = AuthUseCase(outputAdapter)
+        inputAdapter = AuthController(useCase)
         return inputAdapter
 
     def setupControllers(self) -> None:
-        self.__healthController.setupRoutes(self.__app)
         self.__authController.setupRoutes(self.__app)
+        self.__healthController.setupRoutes(self.__app)
 
     def ensureConnection(self) -> None:
         self.__databaseService.checkConnection()

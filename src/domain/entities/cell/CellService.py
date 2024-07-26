@@ -14,11 +14,3 @@ class CellService(CellGateway):
     def __init__(self, outputAdapter: CellRepository):
         self.cellRepository = outputAdapter
 
-    def createCell(self, spaceNumber: SpaceNumber, vehicleType: VehicleType, status: CellStatus) -> Cell:
-        newCell = CellFactory.create(
-            spaceNumber=spaceNumber,
-            vehicleType=vehicleType,
-            status=status,
-        )
-        self.cellRepository.saveCell(newCell)
-        return newCell

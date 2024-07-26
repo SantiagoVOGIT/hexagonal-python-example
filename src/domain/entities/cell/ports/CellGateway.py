@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Generic, TypeVar, List
+from typing import TypeVar
 
 from src.domain.entities.cell.Cell import Cell
 from src.domain.entities.cell.value_objects.CellStatus import CellStatus
@@ -12,7 +12,8 @@ T = TypeVar('T')
 class CellGateway(ABC):
 
     @abstractmethod
-    def createCell(self, spaceNumber: SpaceNumber, vehicleType: VehicleType, status: CellStatus) -> Cell:
+    def createCell(self,
+                   spaceNumber: SpaceNumber,
+                   vehicleType: VehicleType,
+                   status: CellStatus) -> Cell:
         pass
-
-

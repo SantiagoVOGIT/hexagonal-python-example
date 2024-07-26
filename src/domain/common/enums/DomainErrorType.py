@@ -11,3 +11,5 @@ class DomainErrorType(Enum):
     INVALID_PHONE_NUMBER_FORMAT = "Formato de número de teléfono inválido"
     INVALID_LICENSE_PLATE_FORMAT = "Formato de placa de vehiculo inválido"
     INVALID_NAME_FORMAT = "Formato de nombre o apellido inválido"
+    INVALID_SALARY_FORMAT = "Formato de salario inválido"
+    INVALID_ENUM_VALUE = "Propiedad inválida"

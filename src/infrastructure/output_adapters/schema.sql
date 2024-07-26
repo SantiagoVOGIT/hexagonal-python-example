@@ -43,3 +43,13 @@ CREATE TABLE _reservation (
                               FOREIGN KEY (cell_id) REFERENCES _cell(id),
                               FOREIGN KEY (vehicle_id) REFERENCES _vehicle(id)
 );
+
+CREATE TABLE _employee (
+                           id UUID PRIMARY KEY,
+                           user_id UUID NOT NULL,
+                           position VARCHAR(20) NOT NULL,
+                           hire_date DATE NOT NULL,
+                           salary DECIMAL(10, 2) NOT NULL,
+                           created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+                           FOREIGN KEY (user_id) REFERENCES _user(id)
+);

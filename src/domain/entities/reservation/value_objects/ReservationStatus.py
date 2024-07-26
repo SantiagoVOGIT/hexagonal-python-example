@@ -1,7 +1,6 @@
-from enum import Enum, unique
+from enum import Enum
 
 
-@unique
 class ReservationStatus(Enum):
 
     PENDING = "PENDIENTE"

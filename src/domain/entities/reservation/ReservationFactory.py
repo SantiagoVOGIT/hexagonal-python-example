@@ -19,23 +19,21 @@ class ReservationFactory:
     def create(userId: UserId,
                cellId: CellId,
                vehicleId: VehicleId,
-               reservationCode: Optional[ReservationCode] = None,
-               status: ReservationStatus = ReservationStatus.PENDING,
-               startTime: Optional[datetime] = None,
+               status: ReservationStatus,
                endTime: Optional[datetime] = None,
+               startTime: Optional[datetime] = None,
+               reservationCode: Optional[ReservationCode] = None,
                id: Optional[ReservationId] = None,
                createdAt: Optional[datetime] = None) -> Reservation:
 
         return Reservation(
-            id=DomainUtils.resolveId(id, ReservationId),
             userId=userId,
             cellId=cellId,
             vehicleId=vehicleId,
-            reservationCode=DomainUtils.resolveReservationCode(reservationCode),
-            status=status,
-            startTime=DomainUtils.resolveCreatedAt(startTime),
             endTime=endTime,
-            createdAt=DomainUtils.resolveCreatedAt(createdAt)
+            status=DomainUtils.validateEnum(status, ReservationStatus),
+            reservationCode=DomainUtils.resolveReservationCode(reservationCode),
+            startTime=DomainUtils.resolveCreatedAt(startTime),
+            id=DomainUtils.resolveId(id, ReservationId),
+            createdAt=DomainUtils.resolveCreatedAt(createdAt),
         )
-
-

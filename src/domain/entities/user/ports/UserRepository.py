@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import Optional, List
+from typing import Optional
+
 from src.domain.entities.user.User import User
 
 

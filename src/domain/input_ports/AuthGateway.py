@@ -1,17 +1,14 @@
 from abc import ABC, abstractmethod
-from typing import TypeVar, Generic
+from typing import TypeVar, Generic, Optional
 
 from src.domain.entities.user.User import User
 from src.domain.entities.user.value_objects.DniType import DniType
+from src.domain.entities.user.value_objects.UserRole import UserRole
 
 T = TypeVar('T')
 
 
 class AuthGateway(ABC):
-
-    @abstractmethod
-    def __init__(self, outputPort: Generic[T]):
-        self.repository = outputPort
 
     @abstractmethod
     def register(self,
@@ -20,7 +17,8 @@ class AuthGateway(ABC):
                  firstName: str,
                  lastName: str,
                  phoneNumber: str,
-                 emailAddress: str) -> User:
+                 emailAddress: str
+                 ) -> User:
         pass
 
     @abstractmethod

@@ -1,25 +1,31 @@
 from typing import Optional
 
-from src.application.use_cases.user.UserUseCase import UserUseCase
+from src.domain.entities.user.UserFactory import UserFactory
+from src.domain.entities.user.value_objects.UserRole import UserRole
+from src.domain.entities.user.value_objects.UserStatus import UserStatus
 from src.domain.input_ports.AuthGateway import AuthGateway
 from src.shared.utils.ErrorHandler import ExceptionHandler, DomainException
 from src.domain.common.enums.DomainErrorType import DomainErrorType
 from src.domain.entities.user.User import User
-from src.domain.entities.user.UserFactory import UserFactory
 from src.domain.entities.user.value_objects.DniType import DniType
 from src.domain.entities.user.ports.UserRepository import UserRepository
 
 
 class AuthUseCase(AuthGateway):
+
     __userRepository: UserRepository
-    __userUseCase: UserUseCase
 
-    def __init__(self, outputAdapter: UserRepository, userUseCase: UserUseCase):
+    def __init__(self, outputAdapter: UserRepository):
         self.__userRepository = outputAdapter
-        self.__userUseCase = userUseCase
 
-    def register(self, dniNumber: str, dniType: DniType, firstName: str, lastName: str, phoneNumber: str,
-                 emailAddress: str) -> User:
+    def register(self,
+                 dniNumber: str,
+                 dniType: DniType,
+                 firstName: str,
+                 lastName: str,
+                 phoneNumber: str,
+                 emailAddress: str,
+                 ) -> User:
 
         existingEmail: Optional[User] = self.__userRepository.findByEmail(emailAddress)
         if existingEmail is not None:
@@ -35,9 +41,18 @@ class AuthUseCase(AuthGateway):
                 {"dni_number": dniNumber}
             ))
 
-        newUser = self.__userUseCase.createUser(
-            dniNumber, dniType, firstName, lastName, phoneNumber, emailAddress, None, None
+        newUser = UserFactory.create(
+            dniNumber=dniNumber,
+            dniType=dniType,
+            firstName=firstName,
+            lastName=lastName,
+            phoneNumber=phoneNumber,
+            emailAddress=emailAddress,
+            role=UserRole.USER,
+            status=UserStatus.ACTIVE
         )
+        self.__userRepository.save(newUser)
+        return newUser
 
     def login(self, emailAddress: str, dniNumber: str) -> User:
         user: Optional[User] = self.__userRepository.findByEmail(emailAddress)
@@ -51,7 +66,7 @@ class AuthUseCase(AuthGateway):
         if user.getDniNumber() != dniNumber:
             ExceptionHandler.raiseException(DomainException(
                 DomainErrorType.INCORRECT_LOGIN,
-                {"email": emailAddress}
+                {"dniNumber": dniNumber}
             ))
 
         return user

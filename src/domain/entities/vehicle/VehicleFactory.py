@@ -21,10 +21,10 @@ class VehicleFactory:
                id: Optional[VehicleId] = None) -> Vehicle:
 
         return Vehicle(
-            id=DomainUtils.resolveId(id, VehicleId),
             userId=userId,
-            licensePlate=DomainUtils.validateLicensePlate(licensePlate),
             model=model,
-            vehicleType=vehicleType,
+            licensePlate=DomainUtils.validateLicensePlate(licensePlate),
+            vehicleType=DomainUtils.validateEnum(vehicleType, VehicleType),
+            id=DomainUtils.resolveId(id, VehicleId),
             registeredAt=DomainUtils.resolveCreatedAt(registeredAt)
         )

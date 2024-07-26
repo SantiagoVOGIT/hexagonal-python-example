@@ -1,6 +1,6 @@
 import re
 from datetime import datetime, timezone
-from typing import Optional, TypeVar, Type
+from typing import Optional, TypeVar, Type, Union
 
 from src.shared.decorators.UtilityClass import utilityClass
 from src.shared.utils.ErrorHandler import DomainException, ExceptionHandler
@@ -13,11 +13,12 @@ T = TypeVar('T')
 @utilityClass
 class DomainUtils:
 
-    USER_NAME_PATTERN = re.compile(r'^[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ\s]{1,49}(-[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ\s]{1,49})?$')
+    USER_NAME_PATTERN = re.compile(r'^[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ\s]{1,50}$')
     DNI_PATTERN = re.compile(r"^\d{8,10}$")
     EMAIL_PATTERN = re.compile(r"^[A-Za-z0-9+_.-]+@(.+)$")
     PHONE_NUMBER_PATTERN = re.compile(r"^\d{10}$")
-    LICENCE_PLATE_PATTERN = re.compile(r"^[A-Z]{3}\d{3}$")
+    LICENCE_PLATE_PATTERN = re.compile(r"^[A-Z0-9]{1,7}$")
+    SALARY_PATTERN = re.compile(r"^\d{1,8}(\.\d{1,2})?$")
 
     @staticmethod
     def validateName(value: str) -> str:
@@ -37,7 +38,7 @@ class DomainUtils:
 
     @staticmethod
     def validateEmailAddress(value: str) -> str:
-        if not DomainUtils.EMAIL_PATTERN.match(value):
+        if not DomainUtils.EMAIL_PATTERN.match(value) or len(value) > 70:
             ExceptionHandler.raiseException(DomainException(
                 DomainErrorType.INVALID_EMAIL_FORMAT
             ))
@@ -58,6 +59,28 @@ class DomainUtils:
                 DomainErrorType.INVALID_LICENSE_PLATE_FORMAT
             ))
         return value
+
+    @staticmethod
+    def validateSalary(value: float) -> float:
+        if not DomainUtils.SALARY_PATTERN.match(str(value)):
+            ExceptionHandler.raiseException(DomainException(
+                DomainErrorType.INVALID_SALARY_FORMAT
+            ))
+        return value
+
+    @staticmethod
+    def validateEnum(value: Union[str, T], enumType: Type[T]) -> T:
+        if isinstance(value, enumType):
+            return value
+        elif isinstance(value, str):
+            try:
+                return enumType(value)
+            except ValueError:
+                pass
+
+        ExceptionHandler.raiseException(DomainException(
+            DomainErrorType.INVALID_ENUM_VALUE
+        ))
 
     @staticmethod
     def resolveId(id: Optional[T], EntityId: Type[T]) -> T:

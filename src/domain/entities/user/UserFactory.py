@@ -20,20 +20,21 @@ class UserFactory:
                lastName: str,
                emailAddress: str,
                phoneNumber: str,
-               role: UserRole = UserRole.USER,
+               role: UserRole,
                status: UserStatus = UserStatus.ACTIVE,
                id: Optional[UserId] = None,
-               createdAt: Optional[datetime] = None) -> User:
-
+               createdAt: Optional[datetime] = None
+               ) -> User:
         return User(
-            id=DomainUtils.resolveId(id, UserId),
             dniNumber=DomainUtils.validateDniNumber(dniNumber),
-            dniType=dniType,
             firstName=DomainUtils.validateName(firstName),
             lastName=DomainUtils.validateName(lastName),
             emailAddress=DomainUtils.validateEmailAddress(emailAddress),
-            role=role,
-            status=status,
             phoneNumber=DomainUtils.validatePhoneNumber(phoneNumber),
+            dniType=DomainUtils.validateEnum(dniType, DniType),
+            role=DomainUtils.validateEnum(role, UserRole),
+            status=DomainUtils.validateEnum(status, UserStatus),
+            id=DomainUtils.resolveId(id, UserId),
             createdAt=DomainUtils.resolveCreatedAt(createdAt)
         )
+
