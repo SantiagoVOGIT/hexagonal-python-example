@@ -51,7 +51,7 @@ class AuthUseCase(AuthGateway):
             role=UserRole.USER,
             status=UserStatus.ACTIVE
         )
-        self.__userRepository.save(newUser)
+        self.__userRepository.saveUser(newUser)
         return newUser
 
     def login(self, emailAddress: str, dniNumber: str) -> User:

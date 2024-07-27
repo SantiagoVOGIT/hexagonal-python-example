@@ -17,13 +17,11 @@ class EmployeeFactory:
                userId: UserId,
                position: EmployeePosition,
                salary: float,
-               hireDate: datetime,
                id: Optional[EmployeeId] = None,
                createAt: Optional[datetime] = None) -> Employee:
 
         return Employee(
             userId=userId,
-            hireDate=hireDate,
             salary=DomainUtils.validateSalary(salary),
             position=DomainUtils.validateEnum(position, EmployeePosition),
             id=DomainUtils.resolveId(id, EmployeeId),

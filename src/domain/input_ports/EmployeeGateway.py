@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from datetime import datetime
 from typing import TypeVar
 
 from src.domain.entities.employee.Employee import Employee
@@ -16,7 +15,5 @@ class EmployeeGateway(ABC):
                        userId: UserId,
                        position: EmployeePosition,
                        salary: float,
-                       hireDate: datetime) -> Employee:
+                       ) -> Employee:
         pass
-
-

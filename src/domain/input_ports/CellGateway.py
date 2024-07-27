@@ -15,5 +15,6 @@ class CellGateway(ABC):
     def createCell(self,
                    spaceNumber: SpaceNumber,
                    vehicleType: VehicleType,
-                   status: CellStatus) -> Cell:
+                   status: CellStatus
+                   ) -> Cell:
         pass

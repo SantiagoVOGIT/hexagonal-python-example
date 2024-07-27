@@ -1,23 +1,24 @@
 from src.domain.entities.user.value_objects.UserId import UserId
 from src.domain.entities.vehicle.Vehicle import Vehicle
 from src.domain.entities.vehicle.VehicleFactory import VehicleFactory
-from src.domain.entities.vehicle.ports.VehicleGateway import VehicleGateway
 from src.domain.entities.vehicle.ports.VehicleRepository import VehicleRepository
 from src.domain.entities.vehicle.value_objects.VehicleType import VehicleType
+from src.domain.input_ports.VehicleGateway import VehicleGateway
 
 
-class VehicleService(VehicleGateway):
+class VehicleUseCase(VehicleGateway):
 
-    __vehicleRepository: VehicleRepository
+    vehicleRepository: VehicleRepository
 
-    def __init__(self, outputAdapter: VehicleRepository):
-        self.__vehicleRepository = outputAdapter
+    def __init__(self, outputAdapter):
+        self.vehicleRepository = outputAdapter
 
     def createVehicle(self,
                       userId: UserId,
                       licensePlate: str,
                       model: str,
-                      vehicleType: VehicleType) -> Vehicle:
+                      vehicleType: VehicleType
+                      ) -> Vehicle:
 
         newVehicle: Vehicle = VehicleFactory.create(
             userId=userId,
@@ -25,5 +26,5 @@ class VehicleService(VehicleGateway):
             model=model,
             vehicleType=vehicleType
         )
-        self.__vehicleRepository.saveVehicle(newVehicle)
+        self.vehicleRepository.saveVehicle(newVehicle)
         return newVehicle

@@ -1,6 +1,7 @@
-from datetime import datetime
 from typing import Optional
+
 from pydantic import BaseModel
+
 from src.domain.entities.user.value_objects.UserId import UserId
 from src.domain.entities.vehicle.value_objects.VehicleType import VehicleType
 
@@ -11,4 +12,3 @@ class VehicleDTO(BaseModel):
     licensePlate: Optional[str] = None
     model: Optional[str] = None
     vehicleType: Optional[VehicleType] = None
-

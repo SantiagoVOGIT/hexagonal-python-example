@@ -12,14 +12,14 @@ from src.infrastructure.output_adapters.persistence.entities.user_data.UserMappe
 from src.infrastructure.output_adapters.persistence.entities.user_data.UserData import UserData
 
 
-class UserPostgreSQLRepository(UserRepository):
+class UserPostgreRepository(UserRepository):
 
     __databaseService: DatabaseService
 
     def __init__(self, adapterService: DatabaseService):
         self.__databaseService = adapterService
 
-    def save(self, user: User) -> None:
+    def saveUser(self, user: User) -> None:
         session: Session = self.__databaseService.getSession()
         try:
             userData: UserData = UserMapper.toPersistence(user)
@@ -69,4 +69,3 @@ class UserPostgreSQLRepository(UserRepository):
             ))
         finally:
             session.close()
-

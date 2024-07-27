@@ -1,5 +1,7 @@
 from sqlalchemy import Column, String, DateTime
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import relationship
+
 from src.infrastructure.common.DatabaseService import DatabaseService
 
 
@@ -12,3 +14,5 @@ class CellData(DatabaseService.getBase()):
     vehicle_type = Column(String(20), nullable=False)
     status = Column(String(20), nullable=False)
     created_at = Column(DateTime(timezone=True), nullable=False)
+
+    reservations = relationship("ReservationData", back_populates="cell")

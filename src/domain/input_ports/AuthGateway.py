@@ -1,9 +1,8 @@
 from abc import ABC, abstractmethod
-from typing import TypeVar, Generic, Optional
+from typing import TypeVar
 
 from src.domain.entities.user.User import User
 from src.domain.entities.user.value_objects.DniType import DniType
-from src.domain.entities.user.value_objects.UserRole import UserRole
 
 T = TypeVar('T')
 

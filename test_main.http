@@ -5,24 +5,13 @@ Accept: application/json
 
 ###
 
-POST http://127.0.0.1:8000/register
+POST http://127.0.0.1:8000/create-vehicle
 Content-Type: application/json
 
 {
-  "dniNumber": "4385555736",
-  "dniType": "CÉDULA CIUDADANÍA",
-  "firstName": "Santiago",
-  "lastName": "Valencia",
-  "phoneNumber": "3024508215",
-  "emailAddress": "hlapgapu@gmail.com"
-}
-
-###
-POST http://127.0.0.1:8000/login
-Content-Type: application/json
-
-{
-  "dniNumber": "4855553",
-  "emailAddress": "fenicap@gmail.com"
+  "userId": "c16833d6-0b59-4833-8b21-9e166801ecab",
+  "licensePlate": "AAA888",
+  "model": "Nisan 2021",
+  "vehicleType": "AUTOMÓVIL"
 }
 

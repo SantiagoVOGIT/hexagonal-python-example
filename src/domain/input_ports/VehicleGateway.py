@@ -12,5 +12,6 @@ class VehicleGateway(ABC):
                       userId: UserId,
                       licensePlate: str,
                       model: str,
-                      vehicleType: VehicleType) -> Vehicle:
+                      vehicleType: VehicleType
+                      ) -> Vehicle:
         pass

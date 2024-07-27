@@ -1,14 +1,12 @@
-from datetime import datetime
-
 from src.domain.entities.employee.Employee import Employee
 from src.domain.entities.employee.EmployeeFactory import EmployeeFactory
-from src.domain.entities.employee.ports.EmployeeGateway import EmployeeGateway
 from src.domain.entities.employee.ports.EmployeeRepository import EmployeeRepository
 from src.domain.entities.employee.value_objects.EmployeePosition import EmployeePosition
 from src.domain.entities.user.value_objects.UserId import UserId
+from src.domain.input_ports.EmployeeGateway import EmployeeGateway
 
 
-class EmployeeService(EmployeeGateway):
+class EmployeeUseCase(EmployeeGateway):
 
     __employeeRepository: EmployeeRepository
 
@@ -19,13 +17,12 @@ class EmployeeService(EmployeeGateway):
                        userId: UserId,
                        position: EmployeePosition,
                        salary: float,
-                       hireDate: datetime) -> Employee:
+                       ) -> Employee:
 
         newEmployee = EmployeeFactory.create(
             userId=userId,
             position=position,
             salary=salary,
-            hireDate=hireDate
         )
         self.__employeeRepository.saveEmployee(newEmployee)
         return newEmployee

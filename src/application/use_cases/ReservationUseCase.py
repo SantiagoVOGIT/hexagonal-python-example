@@ -8,7 +8,7 @@ from src.domain.entities.vehicle.value_objects.VehicleId import VehicleId
 from src.domain.input_ports.ReservationGateway import ReservationGateway
 
 
-class ReserveUseCase(ReservationGateway):
+class ReservationUseCase(ReservationGateway):
 
     __reservationRepository: ReservationRepository
 
@@ -26,5 +26,5 @@ class ReserveUseCase(ReservationGateway):
             vehicleId=vehicleId,
             status=ReservationStatus.PENDING
         )
-        self.__reservationRepository.save(newReservation)
+        self.__reservationRepository.saveReservation(newReservation)
         return newReservation
