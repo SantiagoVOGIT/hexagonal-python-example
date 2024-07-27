@@ -18,7 +18,8 @@ class CellFactory:
                vehicleType: VehicleType,
                status: CellStatus,
                id: Optional[CellId] = None,
-               createdAt: Optional[datetime] = None) -> Cell:
+               createdAt: Optional[datetime] = None
+               ) -> Cell:
 
         return Cell(
             spaceNumber=DomainUtils.validateEnum(spaceNumber, SpaceNumber),
@@ -27,4 +28,3 @@ class CellFactory:
             id=DomainUtils.resolveId(id, CellId),
             createdAt=DomainUtils.resolveCreatedAt(createdAt),
         )
-

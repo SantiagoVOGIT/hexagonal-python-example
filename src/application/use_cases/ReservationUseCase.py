@@ -1,3 +1,4 @@
+from src.domain.common.enums.DomainErrorType import DomainErrorType
 from src.domain.entities.cell.value_objects.CellId import CellId
 from src.domain.entities.reservation.Reservation import Reservation
 from src.domain.entities.reservation.ReservationFactory import ReservationFactory
@@ -6,6 +7,7 @@ from src.domain.entities.reservation.value_objects.ReservationStatus import Rese
 from src.domain.entities.user.value_objects.UserId import UserId
 from src.domain.entities.vehicle.value_objects.VehicleId import VehicleId
 from src.domain.input_ports.ReservationGateway import ReservationGateway
+from src.shared.utils.ErrorHandler import ExceptionHandler, DomainException
 
 
 class ReservationUseCase(ReservationGateway):
@@ -20,6 +22,12 @@ class ReservationUseCase(ReservationGateway):
                           cellId: CellId,
                           vehicleId: VehicleId
                           ) -> Reservation:
+
+        if userId is None:
+            ExceptionHandler.raiseException(DomainException(
+                DomainErrorType.USER_ID_REQUIRED,
+            ))
+
         newReservation: Reservation = ReservationFactory.create(
             userId=userId,
             cellId=cellId,

@@ -1,9 +1,11 @@
+from src.domain.common.enums.DomainErrorType import DomainErrorType
 from src.domain.entities.user.value_objects.UserId import UserId
 from src.domain.entities.vehicle.Vehicle import Vehicle
 from src.domain.entities.vehicle.VehicleFactory import VehicleFactory
 from src.domain.entities.vehicle.ports.VehicleRepository import VehicleRepository
 from src.domain.entities.vehicle.value_objects.VehicleType import VehicleType
 from src.domain.input_ports.VehicleGateway import VehicleGateway
+from src.shared.utils.ErrorHandler import ExceptionHandler, DomainException
 
 
 class VehicleUseCase(VehicleGateway):
@@ -19,6 +21,11 @@ class VehicleUseCase(VehicleGateway):
                       model: str,
                       vehicleType: VehicleType
                       ) -> Vehicle:
+
+        if userId is None:
+            ExceptionHandler.raiseException(DomainException(
+                DomainErrorType.USER_ID_REQUIRED,
+            ))
 
         newVehicle: Vehicle = VehicleFactory.create(
             userId=userId,

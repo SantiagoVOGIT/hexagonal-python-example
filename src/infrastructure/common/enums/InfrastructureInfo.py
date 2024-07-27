@@ -11,4 +11,5 @@ class InfrastructureInfo(Enum):
     SUCCES_LOGIN = "Inicio de sesión exitoso"
     SUCCESS_CREATED_RESERVATION = "Reserva creada exitosamente"
     SUCCES_CREATED_CELL = "Celda creada exitosamente"
-    SUCCES_CREATED_VEHICLE = "Vehículo credo exitosamente"
+    SUCCES_CREATED_VEHICLE = "Vehículo creado exitosamente"
+    SUCCES_CREATED_EMPLOYEE = "Empleado creado correctamente"

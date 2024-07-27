@@ -17,4 +17,3 @@ class UserRepository(ABC):
     @abstractmethod
     def findByDniNumber(self, dniNumber: str) -> Optional[User]:
         pass
-

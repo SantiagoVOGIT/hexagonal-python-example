@@ -18,6 +18,7 @@ class CellController:
         self.cellGateway = useCase
 
     def setupRoutes(self, app: FastAPI) -> None:
+
         @app.post("/create-cell")
         async def createReservation(request: CellDTO):
             try:
@@ -27,8 +28,11 @@ class CellController:
                     request.status
                 )
                 return {
-                    "detail": MessageFactory.build(InfrastructureInfo.SUCCES_CREATED_CELL).getDetail(),
-                    "reservation": cell.getSpaceNumber()
+                    "detail": MessageFactory
+                    .build(InfrastructureInfo.SUCCES_CREATED_CELL)
+                    .getDetail(),
+                    "cell": f"{cell.getSpaceNumber().getValue()},"
+                            f"{cell.getStatus().getValue()}"
                 }
             except Exception as exc:
                 errorResponse: Dict[str, Any] = ExceptionHandler.handleException(exc)

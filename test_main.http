@@ -5,13 +5,69 @@ Accept: application/json
 
 ###
 
+POST http://127.0.0.1:8000/register
+Content-Type: application/json
+
+{
+  "dniNumber": "1036928592",
+  "dniType": "CÉDULA CIUDADANÍA",
+  "firstName": "Santiago",
+  "lastName": "Valencia",
+  "phoneNumber": "3024508215",
+  "emailAddress": "svalenciao@cesde.net"
+}
+
+###
+
+POST http://127.0.0.1:8000/login
+Content-Type: application/json
+
+{
+"dniNumber": "43855553",
+"emailAddress": "fenixcap@gail.com"
+}
+
+###
+
+POST http://127.0.0.1:8000/create-cell
+Content-Type: application/json
+
+{
+"spaceNumber": "4",
+"vehicleType": "MOTOCICLETA",
+"status": "DISPONIBLE"
+}
+
+###
+
 POST http://127.0.0.1:8000/create-vehicle
 Content-Type: application/json
 
 {
-  "userId": "c16833d6-0b59-4833-8b21-9e166801ecab",
-  "licensePlate": "AAA888",
+  "userId": "38822c1f-d2a1-4e8d-ba97-67794a857",
+  "licensePlate": "AAA277",
   "model": "Nisan 2021",
-  "vehicleType": "AUTOMÓVIL"
+  "vehicleType": "MOTOCICLETA"
 }
 
+###
+
+POST http://127.0.0.1:8000/create-reservation
+Content-Type: application/json
+
+{
+  "userId": "38822c1f-d2a1-4e8d-ba97-67794f7ea857",
+  "cellId": "c43183a0-d4f7-4766-930b-9c321ecb03e9",
+  "vehicleId": "e8c5605b-49af-412d-a49b-ffcc86ae3e55"
+}
+
+###
+
+POST http://127.0.0.1:8000/create-employee
+Content-Type: application/json
+
+{
+  "userId": "38822c1f-d2a1-4e8d-ba97-67794f7ea857",
+  "position": "GERENTE",
+  "salary": "1000000"
+}

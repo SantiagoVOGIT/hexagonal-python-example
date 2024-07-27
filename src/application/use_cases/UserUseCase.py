@@ -24,6 +24,7 @@ class UserUseCase(UserGateway):
                        role: UserRole,
                        status: UserStatus
                        ) -> User:
+
         newUser: User = UserFactory.create(
             dniNumber=dniNumber,
             dniType=dniType,

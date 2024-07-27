@@ -1,4 +1,4 @@
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any
 
 from src.shared.decorators.UtilityClass import utilityClass
 

@@ -37,4 +37,3 @@ class UserFactory:
             id=DomainUtils.resolveId(id, UserId),
             createdAt=DomainUtils.resolveCreatedAt(createdAt)
         )
-

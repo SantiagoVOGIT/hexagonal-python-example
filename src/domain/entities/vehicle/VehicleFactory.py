@@ -18,11 +18,12 @@ class VehicleFactory:
                model: str,
                vehicleType: VehicleType,
                registeredAt: Optional[datetime] = None,
-               id: Optional[VehicleId] = None) -> Vehicle:
+               id: Optional[VehicleId] = None
+               ) -> Vehicle:
 
         return Vehicle(
             userId=userId,
-            model=model,
+            model=DomainUtils.validateModel(model),
             licensePlate=DomainUtils.validateLicensePlate(licensePlate),
             vehicleType=DomainUtils.validateEnum(vehicleType, VehicleType),
             id=DomainUtils.resolveId(id, VehicleId),

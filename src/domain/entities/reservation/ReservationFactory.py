@@ -24,7 +24,8 @@ class ReservationFactory:
                startTime: Optional[datetime] = None,
                reservationCode: Optional[ReservationCode] = None,
                id: Optional[ReservationId] = None,
-               createdAt: Optional[datetime] = None) -> Reservation:
+               createdAt: Optional[datetime] = None
+               ) -> Reservation:
 
         return Reservation(
             userId=userId,

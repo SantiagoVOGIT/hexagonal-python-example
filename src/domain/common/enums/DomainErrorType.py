@@ -12,4 +12,6 @@ class DomainErrorType(Enum):
     INVALID_LICENSE_PLATE_FORMAT = "Formato de placa de vehiculo inválido"
     INVALID_NAME_FORMAT = "Formato de nombre o apellido inválido"
     INVALID_SALARY_FORMAT = "Formato de salario inválido"
+    INVALID_MODEL_FORMAT = "Formato de modelo de vehículo inválido"
     INVALID_ENUM_VALUE = "Propiedad inválida"
+    USER_ID_REQUIRED = "El Id de usuario requerido para realizar está acción"

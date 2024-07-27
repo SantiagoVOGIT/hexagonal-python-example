@@ -7,4 +7,3 @@ class ReservationRepository(ABC):
     @abstractmethod
     def saveReservation(self, reservation: Reservation) -> Reservation:
         pass
-

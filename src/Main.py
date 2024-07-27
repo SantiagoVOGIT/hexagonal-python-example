@@ -3,6 +3,7 @@ import logging
 
 from src.application.use_cases.AuthUseCase import AuthUseCase
 from src.application.use_cases.CellUseCase import CellUseCase
+from src.application.use_cases.EmployeeUseCase import EmployeeUseCase
 from src.application.use_cases.ReservationUseCase import ReservationUseCase
 from src.application.use_cases.VehicleUseCase import VehicleUseCase
 from src.infrastructure.common.DatabaseService import DatabaseService
@@ -10,12 +11,14 @@ from src.infrastructure.config.CorsConfig import CorsConfig
 
 from src.infrastructure.input_adapters.controllers.AuthController import AuthController
 from src.infrastructure.input_adapters.controllers.CellController import CellController
+from src.infrastructure.input_adapters.controllers.EmployeeController import EmployeeController
 from src.infrastructure.input_adapters.controllers.HealthController import HealthController
 from src.infrastructure.input_adapters.controllers.ReservationController import ReservationController
 from src.infrastructure.input_adapters.controllers.VehicleController import VehicleController
 from src.infrastructure.output_adapters.persistence.repositories.CellPostgreRepository import CellPostgreRepository
-from src.infrastructure.output_adapters.persistence.repositories.ReservationPostgreRepository import \
-    ReservationPostgreRepository
+from src.infrastructure.output_adapters.persistence.repositories.EmployeePostgreRepository import \
+    EmployeePostgreRepository
+from src.infrastructure.output_adapters.persistence.repositories.ReservationPostgreRepository import ReservationPostgreRepository
 from src.infrastructure.output_adapters.persistence.repositories.UserPostgreRepository import UserPostgreRepository
 from src.infrastructure.output_adapters.persistence.repositories.VehiclePostgreRepository import VehiclePostgreRepository
 
@@ -30,6 +33,7 @@ class Main:
     __cellController: CellController
     __vehicleController: VehicleController
     __reservationController: ReservationController
+    __employeeController: EmployeeController
 
     def __init__(self):
         self.__app = FastAPI()
@@ -39,6 +43,7 @@ class Main:
         self.__cellController = self.__configCellController()
         self.__vehicleController = self.__configVehicleController()
         self.__reservationController = self.__configReservationController()
+        self.__employeeController = self.__configEmployeeController()
 
     def __configAuthController(self) -> AuthController:
         outputAdapter = UserPostgreRepository(self.__databaseService)
@@ -64,12 +69,19 @@ class Main:
         inputAdapter = ReservationController(useCase)
         return inputAdapter
 
+    def __configEmployeeController(self) -> EmployeeController:
+        outputAdapter = EmployeePostgreRepository(self.__databaseService)
+        useCase = EmployeeUseCase(outputAdapter)
+        inputAdapter = EmployeeController(useCase)
+        return inputAdapter
+
     def setupControllers(self) -> None:
         self.__healthController.setupRoutes(self.__app)
         self.__authController.setupRoutes(self.__app)
         self.__cellController.setupRoutes(self.__app)
         self.__vehicleController.setupRoutes(self.__app)
         self.__reservationController.setupRoutes(self.__app)
+        self.__employeeController.setupRoutes(self.__app)
 
     def ensureConnection(self) -> None:
         self.__databaseService.checkConnection()

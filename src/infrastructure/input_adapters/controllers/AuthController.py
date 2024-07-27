@@ -22,7 +22,7 @@ class AuthController:
         @app.post("/register")
         async def register(request: UserDTO):
             try:
-                user: User = self.__authGateway.register(
+                newUser: User = self.__authGateway.register(
                     request.dniNumber,
                     request.dniType,
                     request.firstName,
@@ -31,8 +31,10 @@ class AuthController:
                     request.emailAddress
                 )
                 return {
-                    "detail": MessageFactory.build(InfrastructureInfo.SUCCES_REGISTERED_USER).getDetail(),
-                    "user": user.getFirstName()
+                    "detail": MessageFactory
+                    .build(InfrastructureInfo.SUCCES_REGISTERED_USER)
+                    .getDetail(),
+                    "user": f"{newUser.getFirstName()}, {newUser.getLastName()}"
                 }
             except Exception as exc:
                 errorResponse: Dict[str, Any] = ExceptionHandler.handleException(exc)
@@ -48,8 +50,10 @@ class AuthController:
                     request.dniNumber
                 )
                 return {
-                    "detail": MessageFactory.build(InfrastructureInfo.SUCCES_LOGIN).getDetail(),
-                    "user": user.getFirstName()
+                    "detail": MessageFactory
+                    .build(InfrastructureInfo.SUCCES_LOGIN)
+                    .getDetail(),
+                    "user": f"{user.getFirstName()}, {user.getLastName()}"
                 }
             except Exception as exc:
                 errorResponse: Dict[str, Any] = ExceptionHandler.handleException(exc)

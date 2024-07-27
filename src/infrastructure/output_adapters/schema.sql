@@ -8,7 +8,7 @@ CREATE TABLE _user (
                        email_address VARCHAR(70) NOT NULL UNIQUE,
                        role VARCHAR(20) NOT NULL,
                        status VARCHAR(20) NOT NULL,
-                       created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+                       created_at TIMESTAMP WITH TIME ZONE NOT NULL
 );
 
 CREATE TABLE _vehicle (

@@ -19,6 +19,7 @@ class DomainUtils:
     PHONE_NUMBER_PATTERN = re.compile(r"^\d{10}$")
     LICENCE_PLATE_PATTERN = re.compile(r"^[A-Z0-9]{1,7}$")
     SALARY_PATTERN = re.compile(r"^\d{1,8}(\.\d{1,2})?$")
+    MODEL_PATTERN = re.compile(r'^[\w\s]{1,50}$')
 
     @staticmethod
     def validateName(value: str) -> str:
@@ -65,6 +66,14 @@ class DomainUtils:
         if not DomainUtils.SALARY_PATTERN.match(str(value)):
             ExceptionHandler.raiseException(DomainException(
                 DomainErrorType.INVALID_SALARY_FORMAT
+            ))
+        return value
+
+    @staticmethod
+    def validateModel(value: str) -> str:
+        if not DomainUtils.MODEL_PATTERN.match(value):
+            ExceptionHandler.raiseException(DomainException(
+                DomainErrorType.INVALID_MODEL_FORMAT
             ))
         return value
 

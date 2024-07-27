@@ -1,6 +1,5 @@
 from sqlalchemy import Column, String, DateTime, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import relationship
 
 from src.infrastructure.common.DatabaseService import DatabaseService
 
@@ -19,6 +18,4 @@ class ReservationData(DatabaseService.getBase()):
     end_time = Column(DateTime(timezone=True))
     created_at = Column(DateTime(timezone=True), nullable=False)
 
-    user = relationship("UserData", back_populates="reservations")
-    cell = relationship("CellData", back_populates="reservations")
-    vehicle = relationship("VehicleData", back_populates="reservations")
+

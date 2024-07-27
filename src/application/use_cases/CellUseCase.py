@@ -19,6 +19,7 @@ class CellUseCase(CellGateway):
                    vehicleType: VehicleType,
                    status: CellStatus
                    ) -> Cell:
+
         newCell: Cell = CellFactory.create(
             spaceNumber=spaceNumber,
             vehicleType=vehicleType,

@@ -19,7 +19,7 @@ class EmployeeUseCase(EmployeeGateway):
                        salary: float,
                        ) -> Employee:
 
-        newEmployee = EmployeeFactory.create(
+        newEmployee: Employee = EmployeeFactory.create(
             userId=userId,
             position=position,
             salary=salary,

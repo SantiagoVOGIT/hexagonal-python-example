@@ -11,6 +11,7 @@ from src.shared.utils.MessageFactory import MessageFactory
 
 
 class ReservationController:
+
     __reservationGateway: ReservationGateway
 
     def __init__(self, useCase: ReservationGateway):
@@ -21,14 +22,17 @@ class ReservationController:
         @app.post("/create-reservation")
         async def createReservation(request: ReservationDTO):
             try:
-                reservation: Reservation = self.__reservationGateway.createReservation(
+                newReservation: Reservation = self.__reservationGateway.createReservation(
                     request.userId,
                     request.cellId,
                     request.vehicleId
                 )
                 return {
-                    "detail": MessageFactory.build(InfrastructureInfo.SUCCESS_CREATED_RESERVATION).getDetail(),
-                    "reservation": reservation.getReservationCode()
+                    "detail": MessageFactory
+                    .build(InfrastructureInfo.SUCCESS_CREATED_RESERVATION)
+                    .getDetail(),
+                    "reservation": f"{newReservation.getStatus().getValue()},"
+                                   f"{newReservation.getReservationCode().getValue()}"
                 }
             except Exception as exc:
                 errorResponse: Dict[str, Any] = ExceptionHandler.handleException(exc)

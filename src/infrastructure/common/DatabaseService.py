@@ -4,8 +4,9 @@ from typing import Optional, Type
 
 from sqlalchemy import Engine, create_engine, text
 from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.orm import sessionmaker, Session, DeclarativeMeta, declarative_base
+from sqlalchemy.orm import sessionmaker, Session, DeclarativeMeta, declarative_base, DeclarativeBase
 
+from src.infrastructure.output_adapters.persistence.entities.setupRelationships import setupRelationships
 from src.shared.utils.ErrorHandler import ExceptionHandler, CustomException, ErrorType
 from src.shared.utils.MessageFactory import MessageFactory
 from src.infrastructure.common.enums.InfrastructureErrorType import InfrastructureErrorType
@@ -18,10 +19,12 @@ class DatabaseService:
     __engine: Engine
     __sessionMaker: sessionmaker = None
     __session: Optional[Session] = None
+    __base: DeclarativeMeta = declarative_base()
 
     def __init__(self) -> None:
         self.__engine = self.__createEngine()
         self.__sessionMaker = self.__createSessionMaker()
+        self.__setupRelationships()
 
     def __createEngine(self) -> Engine:
         if not self.__DATABASE_URL:
@@ -44,9 +47,13 @@ class DatabaseService:
             self.__session = self.__sessionMaker()
         return self.__session
 
+    @classmethod
+    def getBase(cls) -> Type[DeclarativeBase]:
+        return cls.__base
+
     @staticmethod
-    def getBase() -> Type[DeclarativeMeta]:
-        return declarative_base()
+    def __setupRelationships():
+        setupRelationships()
 
     def checkConnection(self) -> bool:
         try:
