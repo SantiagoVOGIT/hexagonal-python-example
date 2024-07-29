@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Optional
 
 from src.domain.entities.user.User import User
+from src.domain.entities.user.value_objects.UserId import UserId
 
 
 class UserRepository(ABC):
@@ -16,4 +17,8 @@ class UserRepository(ABC):
 
     @abstractmethod
     def findByDniNumber(self, dniNumber: str) -> Optional[User]:
+        pass
+
+    @abstractmethod
+    def findById(self, id: UserId) -> Optional[User]:
         pass

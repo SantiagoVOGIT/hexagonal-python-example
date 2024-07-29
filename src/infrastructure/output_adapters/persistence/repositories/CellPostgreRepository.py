@@ -1,8 +1,11 @@
+from typing import Optional
+
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
 from src.domain.entities.cell.Cell import Cell
 from src.domain.entities.cell.ports.CellRepository import CellRepository
+from src.domain.entities.cell.value_objects.SpaceNumber import SpaceNumber
 from src.infrastructure.common.DatabaseService import DatabaseService
 from src.infrastructure.common.enums.InfrastructureErrorType import InfrastructureErrorType
 from src.infrastructure.output_adapters.persistence.entities.cell_data.CellData import CellData
@@ -25,6 +28,25 @@ class CellPostgreRepository(CellRepository):
             session.commit()
         except SQLAlchemyError as exc:
             session.rollback()
+            ExceptionHandler.raiseException(CustomException(
+                ErrorType.INFRASTRUCTURE_ERROR,
+                InfrastructureErrorType.DATABASE_ERROR.name,
+                InfrastructureErrorType.DATABASE_ERROR.value,
+                {"original_error": str(exc)}
+            ))
+        finally:
+            session.close()
+
+    def finBySpaceNumber(self, spaceNumber: SpaceNumber) -> Optional[Cell]:
+        session: Session = self.__databaseService.getSession()
+        try:
+            spaceNumberData: Optional[CellData] = session.query(CellData).filter_by(
+                space_number=spaceNumber
+            ).first()
+            if spaceNumberData is None:
+                return None
+            return CellMapper.toDomain(spaceNumberData)
+        except SQLAlchemyError as exc:
             ExceptionHandler.raiseException(CustomException(
                 ErrorType.INFRASTRUCTURE_ERROR,
                 InfrastructureErrorType.DATABASE_ERROR.name,

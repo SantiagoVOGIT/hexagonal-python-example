@@ -11,12 +11,14 @@ from src.shared.utils.MessageFactory import MessageFactory
 
 
 class EmployeeController:
+
     employeeGateway: EmployeeGateway
 
     def __init__(self, useCase: EmployeeGateway):
         self.employeeGateway = useCase
 
     def setupRoutes(self, app: FastAPI) -> None:
+
         @app.post("/create-employee")
         async def createEmployee(request: EmployeeDTO):
             try:

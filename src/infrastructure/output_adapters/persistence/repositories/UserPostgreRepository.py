@@ -3,6 +3,7 @@ from typing import Optional
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
+from src.domain.entities.user.value_objects.UserId import UserId
 from src.shared.utils.ErrorHandler import ExceptionHandler, CustomException, ErrorType
 from src.domain.entities.user.User import User
 from src.domain.entities.user.ports.UserRepository import UserRepository
@@ -39,7 +40,9 @@ class UserPostgreRepository(UserRepository):
     def findByDniNumber(self, dniNumber: str) -> Optional[User]:
         session: Session = self.__databaseService.getSession()
         try:
-            dniNumberData: Optional[UserData] = session.query(UserData).filter_by(dni_number=dniNumber).first()
+            dniNumberData: Optional[UserData] = session.query(UserData).filter_by(
+                dni_number=dniNumber
+            ).first()
             if dniNumberData is None:
                 return None
             return UserMapper.toDomain(dniNumberData)
@@ -56,10 +59,33 @@ class UserPostgreRepository(UserRepository):
     def findByEmail(self, emailAddress: str) -> Optional[User]:
         session: Session = self.__databaseService.getSession()
         try:
-            emailAddressData: Optional[UserData] = session.query(UserData).filter_by(email_address=emailAddress).first()
+            emailAddressData: Optional[UserData] = session.query(UserData).filter_by(
+                email_address=emailAddress
+            ).first()
             if emailAddressData is None:
                 return None
             return UserMapper.toDomain(emailAddressData)
+
+        except SQLAlchemyError as exc:
+            ExceptionHandler.raiseException(CustomException(
+                ErrorType.INFRASTRUCTURE_ERROR,
+                InfrastructureErrorType.DATABASE_ERROR.name,
+                InfrastructureErrorType.DATABASE_ERROR.value,
+                {"original_error": str(exc)}
+            ))
+        finally:
+            session.close()
+
+    def findById(self, id: UserId) -> Optional[User]:
+        session: Session = self.__databaseService.getSession()
+        try:
+            userIdData: Optional[UserData] = session.query(UserData).filter_by(
+                id=id.getValue()
+            ).first()
+            if userIdData is None:
+                return None
+            return UserMapper.toDomain(userIdData)
+
         except SQLAlchemyError as exc:
             ExceptionHandler.raiseException(CustomException(
                 ErrorType.INFRASTRUCTURE_ERROR,

@@ -1,3 +1,5 @@
+from typing import Optional
+
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
@@ -23,8 +25,29 @@ class VehiclePostgreRepository(VehicleRepository):
             vehicleData: VehicleData = VehicleMapper.toPersistence(vehicle)
             session.add(vehicleData)
             session.commit()
+
         except SQLAlchemyError as exc:
             session.rollback()
+            ExceptionHandler.raiseException(CustomException(
+                ErrorType.INFRASTRUCTURE_ERROR,
+                InfrastructureErrorType.DATABASE_ERROR.name,
+                InfrastructureErrorType.DATABASE_ERROR.value,
+                {"original_error": str(exc)}
+            ))
+        finally:
+            session.close()
+
+    def findByLicensePlate(self, licensePlate: str) -> Optional[Vehicle]:
+        session: Session = self.__databaseService.getSession()
+        try:
+            licensePlateData: Optional[VehicleData] = session.query(VehicleData).filter_by(
+                license_plate=licensePlate
+            ).first()
+            if licensePlateData is None:
+                return None
+            return VehicleMapper.toDomain(licensePlateData)
+
+        except SQLAlchemyError as exc:
             ExceptionHandler.raiseException(CustomException(
                 ErrorType.INFRASTRUCTURE_ERROR,
                 InfrastructureErrorType.DATABASE_ERROR.name,

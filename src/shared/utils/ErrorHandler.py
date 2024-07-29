@@ -1,6 +1,7 @@
 from enum import Enum
 from typing import Dict, Any, Optional
 
+from src.domain.common.EntityId import EntityId
 from src.domain.common.enums.DomainErrorType import DomainErrorType
 
 
@@ -55,12 +56,23 @@ class ExceptionHandler:
 
     @staticmethod
     def handleException(exception: Exception) -> Dict[str, Any]:
+        def make_serializable(obj):
+            if isinstance(obj, EntityId):
+                return str(obj)
+            elif isinstance(obj, Enum):
+                return obj.value
+            elif isinstance(obj, dict):
+                return {k: make_serializable(v) for k, v in obj.items()}
+            elif isinstance(obj, (list, tuple)):
+                return [make_serializable(item) for item in obj]
+            return obj
+
         if isinstance(exception, CustomException):
             return {
-                "error_type": exception.getErrorType().value,
+                "error_type": make_serializable(exception.getErrorType()),
                 "error_code": exception.getErrorCode(),
                 "error_message": exception.getErrorMessage(),
-                "additional_info": exception.getAdditionalInfo()
+                "additional_info": make_serializable(exception.getAdditionalInfo())
             }
         else:
             return {

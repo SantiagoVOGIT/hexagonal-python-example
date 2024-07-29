@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import Optional
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, Field, field_validator
 from src.domain.entities.cell.value_objects.CellId import CellId
 from src.domain.entities.reservation.value_objects.ReservationStatus import ReservationStatus
 from src.domain.entities.user.value_objects.UserId import UserId
@@ -8,48 +8,51 @@ from src.domain.entities.vehicle.value_objects.VehicleId import VehicleId
 
 
 class ReservationDTO(BaseModel):
-    userId: Optional[UserId] = None
-    cellId: Optional[CellId] = None
-    vehicleId: Optional[VehicleId] = None
-    status: Optional[ReservationStatus] = None
-    endTime: Optional[datetime] = None
 
-    @validator('userId', pre=True)
-    def validate_user_id(cls, v):
+    userId: Optional[UserId] = Field(default=None)
+    cellId: Optional[CellId] = Field(default=None)
+    vehicleId: Optional[VehicleId] = Field(default=None)
+    status: Optional[ReservationStatus] = Field(default=None)
+    endTime: Optional[datetime] = Field(default=None)
+
+    @field_validator('userId', 'cellId', 'vehicleId', mode='before')
+    def validateId(cls, v, info):
         if v is None:
             return None
-        if isinstance(v, UserId):
+        id_class = globals()[info.field_name[0].upper() + info.field_name[1:]]
+        if isinstance(v, id_class):
             return v
         try:
-            return UserId(v)
-        except ValueError as e:
-            raise ValueError(f'Invalid UserId format: {e}')
+            return id_class(v)
+        except ValueError as ex:
+            raise ValueError(f'Invalid {info.field_name} format: {ex}')
 
-    @validator('cellId', pre=True)
-    def validate_cell_id(cls, v):
+    @field_validator('status', mode='before')
+    def validateStatus(cls, v):
         if v is None:
             return None
-        if isinstance(v, CellId):
+        if isinstance(v, ReservationStatus):
             return v
         try:
-            return CellId(v)
-        except ValueError as e:
-            raise ValueError(f'Invalid CellId format: {e}')
-
-    @validator('vehicleId', pre=True)
-    def validate_vehicle_id(cls, v):
-        if v is None:
-            return None
-        if isinstance(v, VehicleId):
-            return v
-        try:
-            return VehicleId(v)
-        except ValueError as e:
-            raise ValueError(f'Invalid VehicleId format: {e}')
+            return ReservationStatus(v)
+        except ValueError as ex:
+            raise ValueError(f'Invalid ReservationStatus format: {ex}')
 
     class Config:
+        use_enum_values = True
         arbitrary_types_allowed = True
+        json_encoders = {
+            UserId: lambda v: str(v.getValue()) if v else None,
+            CellId: lambda v: str(v.getValue()) if v else None,
+            VehicleId: lambda v: str(v.getValue()) if v else None,
+            ReservationStatus: lambda v: v.value if v else None,
+        }
 
-    def dict(self, *args, **kwargs):
-        d = super().dict(*args, **kwargs)
-        return {k: (v.getValue() if hasattr(v, 'getValue') else v) for k, v in d.items() if v is not None}
+    def model_dump(self, *args, **kwargs):
+        d = super().model_dump(*args, **kwargs)
+        for field in ['userId', 'cellId', 'vehicleId']:
+            if d[field] is not None:
+                d[field] = str(d[field].getValue())
+        if d['status'] is not None:
+            d['status'] = d['status'].value
+        return d

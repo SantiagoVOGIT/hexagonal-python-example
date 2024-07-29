@@ -34,3 +34,4 @@ class EmployeePostgreRepository(EmployeeRepository):
             ))
         finally:
             session.close()
+

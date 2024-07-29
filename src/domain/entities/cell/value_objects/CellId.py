@@ -1,16 +1,17 @@
 import uuid
 
+from src.domain.common.EntityId import EntityId
 
-class CellId:
 
-    __value: str
+class CellId(EntityId):
 
     def __init__(self, value: str):
+        super().__init__(value)
         self.__value = value
 
     def getValue(self) -> str:
         return self.__value
 
-    @staticmethod
-    def generate() -> 'CellId':
-        return CellId(str(uuid.uuid4()))
+    @classmethod
+    def generate(cls) -> 'CellId':
+        return cls(str(uuid.uuid4()))

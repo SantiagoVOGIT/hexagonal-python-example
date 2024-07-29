@@ -1,3 +1,5 @@
+from typing import Optional
+
 from src.domain.common.enums.DomainErrorType import DomainErrorType
 from src.domain.entities.user.value_objects.UserId import UserId
 from src.domain.entities.vehicle.Vehicle import Vehicle
@@ -25,6 +27,13 @@ class VehicleUseCase(VehicleGateway):
         if userId is None:
             ExceptionHandler.raiseException(DomainException(
                 DomainErrorType.USER_ID_REQUIRED,
+            ))
+
+        existingVehicle: Optional[Vehicle] = self.vehicleRepository.findByLicensePlate(licensePlate)
+        if existingVehicle is not None:
+            ExceptionHandler.raiseException(DomainException(
+                DomainErrorType.VEHICLE_ALREADY_EXISTS ,
+                {"licensePlate": licensePlate}
             ))
 
         newVehicle: Vehicle = VehicleFactory.create(
