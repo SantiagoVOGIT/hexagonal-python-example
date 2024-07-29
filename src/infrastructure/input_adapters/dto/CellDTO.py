@@ -1,5 +1,7 @@
 from typing import Optional
 from pydantic import BaseModel, Field, field_validator
+
+from src.domain.entities.cell.value_objects.CellId import CellId
 from src.domain.entities.cell.value_objects.CellStatus import CellStatus
 from src.domain.entities.cell.value_objects.SpaceNumber import SpaceNumber
 from src.domain.entities.vehicle.value_objects.VehicleType import VehicleType
@@ -7,20 +9,21 @@ from src.domain.entities.vehicle.value_objects.VehicleType import VehicleType
 
 class CellDTO(BaseModel):
 
+    id: Optional[CellId] = Field(default=None)
     spaceNumber: Optional[SpaceNumber] = Field(default=None)
     vehicleType: Optional[VehicleType] = Field(default=None)
     status: Optional[CellStatus] = Field(default=None)
 
-    @field_validator('spaceNumber', mode='before')
-    def validateSpaceNumber(cls, v):
+    @field_validator('id', mode='before')
+    def validateId(cls, v):
         if v is None:
             return None
-        if isinstance(v, SpaceNumber):
+        if isinstance(v, CellId):
             return v
         try:
-            return SpaceNumber(v)
+            return CellId(v)
         except ValueError as ex:
-            raise ValueError(f'Invalid SpaceNumber format: {ex}')
+            raise ValueError(f'Invalid CellId format: {ex}')
 
     @field_validator('vehicleType', mode='before')
     def validateVehicleType(cls, v):

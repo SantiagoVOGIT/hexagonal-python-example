@@ -11,8 +11,8 @@ class UserUseCase(UserGateway):
 
     __userRepository: UserRepository
 
-    def __init__(self, outputAdapter: UserRepository):
-        self.__userRepository = outputAdapter
+    def __init__(self, userOutputAdapter: UserRepository):
+        self.__userRepository = userOutputAdapter
 
     def createFullUser(self,
                        dniNumber: str,

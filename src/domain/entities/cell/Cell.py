@@ -40,3 +40,6 @@ class Cell:
 
     def getCreatedAt(self) -> datetime:
         return self.__createdAt
+
+    def isAvailable(self) -> bool:
+        return self.getStatus() == CellStatus.AVAILABLE

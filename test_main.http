@@ -57,7 +57,7 @@ Content-Type: application/json
 
 {
   "userId": "6eb5d283-4ad9-4fc3-b7e0-7f4476e1a564",
-  "cellId": "de5775b4-681d-41f3-aa76-2a9398cd744a",
+  "cellId": "43e9b81a-cc52-4646-bd82-b21c90916026",
   "vehicleId": "7229d94a-0e67-4eb9-9ee6-a4e61b1c8fd9"
 }
 
@@ -71,3 +71,5 @@ Content-Type: application/json
   "position": "GERENTE",
   "salary": "1000000"
 }
+
+###

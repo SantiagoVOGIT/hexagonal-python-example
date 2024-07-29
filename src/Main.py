@@ -63,8 +63,10 @@ class Main:
         return inputAdapter
 
     def __configReservationController(self) -> ReservationController:
-        outputAdapter = ReservationPostgreRepository(self.__databaseService)
-        useCase = ReservationUseCase(outputAdapter)
+        reservationOutputAdapter = ReservationPostgreRepository(self.__databaseService)
+        cellOutputAdapter = CellPostgreRepository(self.__databaseService)
+        vehicleOutputAdapter = VehiclePostgreRepository(self.__databaseService)
+        useCase = ReservationUseCase(reservationOutputAdapter, cellOutputAdapter, vehicleOutputAdapter)
         inputAdapter = ReservationController(useCase)
         return inputAdapter
 

@@ -11,11 +11,10 @@ from src.shared.utils.ErrorHandler import ExceptionHandler, DomainException
 
 
 class VehicleUseCase(VehicleGateway):
-
     vehicleRepository: VehicleRepository
 
-    def __init__(self, outputAdapter):
-        self.vehicleRepository = outputAdapter
+    def __init__(self, vehicleOutputAdapter):
+        self.vehicleRepository = vehicleOutputAdapter
 
     def createVehicle(self,
                       userId: UserId,
@@ -32,7 +31,7 @@ class VehicleUseCase(VehicleGateway):
         existingVehicle: Optional[Vehicle] = self.vehicleRepository.findByLicensePlate(licensePlate)
         if existingVehicle is not None:
             ExceptionHandler.raiseException(DomainException(
-                DomainErrorType.VEHICLE_ALREADY_EXISTS ,
+                DomainErrorType.VEHICLE_ALREADY_EXISTS,
                 {"licensePlate": licensePlate}
             ))
 

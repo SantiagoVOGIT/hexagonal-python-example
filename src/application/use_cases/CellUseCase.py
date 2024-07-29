@@ -3,6 +3,7 @@ from typing import Optional
 from src.domain.common.enums.DomainErrorType import DomainErrorType
 from src.domain.entities.cell.Cell import Cell
 from src.domain.entities.cell.CellFactory import CellFactory
+from src.domain.entities.cell.value_objects.CellId import CellId
 from src.domain.input_ports.CellGateway import CellGateway
 from src.domain.entities.cell.ports.CellRepository import CellRepository
 from src.domain.entities.cell.value_objects.CellStatus import CellStatus
@@ -15,8 +16,8 @@ class CellUseCase(CellGateway):
 
     __cellRepository: CellRepository
 
-    def __init__(self, outputAdapter: CellRepository):
-        self.__cellRepository = outputAdapter
+    def __init__(self, cellOutputAdapter: CellRepository):
+        self.__cellRepository = cellOutputAdapter
 
     def createCell(self,
                    spaceNumber: SpaceNumber,
@@ -38,3 +39,4 @@ class CellUseCase(CellGateway):
         )
         self.__cellRepository.saveCell(newCell)
         return newCell
+

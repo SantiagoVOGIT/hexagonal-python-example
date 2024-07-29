@@ -15,9 +15,12 @@ class EmployeeUseCase(EmployeeGateway):
     __employeeRepository: EmployeeRepository
     __userRepository: UserRepository
 
-    def __init__(self, outputAdapter: EmployeeRepository, outputAdapterHelper: UserRepository):
-        self.__employeeRepository = outputAdapter
-        self.__userRepository = outputAdapterHelper
+    def __init__(self,
+                 employeeOutputAdapter: EmployeeRepository,
+                 userOutputAdapter: UserRepository
+                 ):
+        self.__employeeRepository = employeeOutputAdapter
+        self.__userRepository = userOutputAdapter
 
     def createEmployee(self,
                        userId: UserId,

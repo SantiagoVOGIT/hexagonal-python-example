@@ -3,6 +3,9 @@ from enum import Enum
 
 class DomainErrorType(Enum):
 
+    INCOMPATIBLE_VEHICLE_TYPE_CELL = "Su tipo de vehiculo no es compatible con esta celda"
+    CELL_NOT_AVAILABLE = "No es posible reservar esta celda en estos momentos"
+    CELL_NOT_FOUND = "Esta celda no existe"
     EMPLOYEE_ALREADY_EXISTS = "Este empleado ya se encuentra asociado a un usuario"
     USER_ALREADY_EXISTS = "Este usuario ya existe en el sistema."
     CELL_ALREADY_EXISTS = "Este número de celda ya está asociado con otra celda."

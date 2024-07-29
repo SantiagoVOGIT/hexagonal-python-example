@@ -1,5 +1,6 @@
 from sqlalchemy.orm import relationship
 
+
 def setupRelationships():
 
     from src.infrastructure.output_adapters.persistence.entities.user_data.UserData import UserData

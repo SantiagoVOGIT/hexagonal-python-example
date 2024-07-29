@@ -5,6 +5,7 @@ from src.infrastructure.config.Environments import Environments
 
 class InfrastructureInfo(Enum):
 
+    SUCCES_UPDATED_CELL = "Celda modificada exitosamente"
     SUCCESS_CONNECTION_DATABASE = "Conexión exitosa a la base de datos."
     CURRENT_ENVIRONMENT_API = f"Ambiente actual de la API: {Environments.getCurrentEnvironment()}."
     SUCCES_REGISTERED_USER = "Usuario registrado exitosamente."
