@@ -1,10 +1,18 @@
-# Test your FastAPI endpoints
-
+# Endpoint raíz
+# Validaciones:
+# - Que la API este funcionando en el ambiente esperado
 GET http://127.0.0.1:8000/
 Accept: application/json
 
 ###
 
+# Usuarios
+
+# Registrar un nuevo usuario
+# Rol requerido: usuario
+# Validaciones:
+# - Que no exista un usuario ya registrado mediante el DNI o correo eléctronico
+# - Que el formato de los campos coincidan con los del dominio
 POST http://127.0.0.1:8000/register
 Content-Type: application/json
 
@@ -19,27 +27,46 @@ Content-Type: application/json
 
 ###
 
+# Iniciar sesión de un usuario
+# Rol requerido: usuario
+# Validaciones:
+# - Que DNI y correo electrónico coincidian con los de un usuario registrado
 POST http://127.0.0.1:8000/login
 Content-Type: application/json
 
 {
-"dniNumber": "1036928592",
-"emailAddress": "fenixcaps@gmail.com"
+  "dniNumber": "1036928592",
+  "emailAddress": "fenixcaps@gmail.com"
 }
 
 ###
 
+# Celdas
+
+# Crear una nueva celda
+# Rol requerido: administrador
+# Validaciones:
+# - Que no se registre una celda con un número de espacio ya asociado a otra celda
+# - Que el formato de los campos coincidan con los del dominio
 POST http://127.0.0.1:8000/create-cell
 Content-Type: application/json
 
 {
-"spaceNumber": "1",
-"vehicleType": "AUTOMÓVIL",
-"status": "DISPONIBLE"
+  "spaceNumber": "1",
+  "vehicleType": "AUTOMÓVIL",
+  "status": "DISPONIBLE"
 }
 
 ###
 
+# Vehículos
+
+# Crear un nuevo vehículo
+# Rol requerido: usuario
+# Validaciones:
+# - Que no se registre un vehículo sin un ID de usuario asociado
+# - Que no se registre un vehiculo con un número de placa ya asociado a otro vehículo
+# - Que el formato de los campos coincidan con los del dominio
 POST http://127.0.0.1:8000/create-vehicle
 Content-Type: application/json
 
@@ -52,6 +79,14 @@ Content-Type: application/json
 
 ###
 
+# Reservas
+
+# Crear una nueva reserva
+# Rol requerido: usuario
+# Validaciones:
+# - Que no se registre una reserva sin un ID de usuario asociado
+# - Que no se registre una reserva si la celda se encuentra en un estado diferente a disponible
+# - Que no se registre una reserva si el tipo de vehiculo es incompatible con la celda
 POST http://127.0.0.1:8000/create-reservation
 Content-Type: application/json
 
@@ -63,17 +98,10 @@ Content-Type: application/json
 
 ###
 
-POST http://127.0.0.1:8000/create-employee
-Content-Type: application/json
-
-{
-  "userId": "6eb5d283-4ad9-4fc3-b7e0-7f4476e1a564",
-  "position": "GERENTE",
-  "salary": "1000000"
-}
-
-###
-
+# Cancelar una reserva
+# Rol requerido: usuario
+# Validaciones:
+# - Que exista la reserva
 POST http://127.0.0.1:8000/cancel-reservation
 Content-Type: application/json
 
@@ -82,21 +110,71 @@ Content-Type: application/json
 }
 
 ###
+# Rechazar una reserva
+# Rol requerido: administrador
+# Validaciones:
+# - Que exista la reserva
+POST http://127.0.0.1:8000/reject-reservation
+Content-Type: application/json
 
+{
+  "reservationId": "20843587-3b38-4d32-b50f-95fdb25340d2"
+}
+
+###
+
+# Confirmar una reserva
+# Validaciones:
+# - Que exista la reserva
 POST http://127.0.0.1:8000/confirm-reservation
 Content-Type: application/json
 
 {
-  "reservationId": "be3974b1-4398-4b36-a76b-15aba7eaaf1f"
+  "reservationId": "b0170041-a243-4c3c-83d4-8ba165c50b65"
 }
 
 ###
 
+# Completar una reserva
+# Validaciones:
+# - Que exista la reserva
 POST http://127.0.0.1:8000/complete-reservation
 Content-Type: application/json
 
 {
-  "reservationId": "be3974b1-4398-4b36-a76b-15aba7eaaf1f"
+  "reservationId": "b1a1769a-6fd1-467d-a649-39778ab69965"
 }
 
 ###
+
+# Obtener todas las reservas
+# Validaciones:
+# - Que existan reservas
+GET http://127.0.0.1:8000/reservations
+Content-Type: application/json
+
+###
+
+# Obtener una reserva por su ID
+# Validaciones:
+# - Que exista la reserva
+GET http://127.0.0.1:8000/reservation/20843587-3b38-4d32-b50f-95fdb25340d2
+Content-Type: application/json
+
+###
+
+# Empleados
+
+# Crear un nuevo empleado
+# Validaciones:
+# - Que no se registre un empleado sin un ID de usuario asociado
+# - Que no se registre un empleado con un ID de usuario ya asociado a otro empleado
+# - Que el formato de los campos coincidan con los del dominio
+POST http://127.0.0.1:8000/create-employee
+Content-Type: application/json
+
+{
+  "userId": "6eb5d283-4ad9-4fc3-b7e0-7f4476e1a564",
+  "position": "GERENTE",
+  "salary": "1000000"
+}

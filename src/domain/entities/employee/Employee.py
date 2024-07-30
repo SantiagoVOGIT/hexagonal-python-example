@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Dict, Any
 
 from src.domain.entities.employee.value_objects.EmployeeId import EmployeeId
 from src.domain.entities.employee.value_objects.EmployeePosition import EmployeePosition
@@ -39,3 +40,13 @@ class Employee:
 
     def getCreatedAt(self) -> datetime:
         return self.__createdAt
+
+    @staticmethod
+    def toDict(employee: 'Employee') -> Dict[str, Any]:
+        return {
+            "id": employee.getId().getValue(),
+            "userId": employee.getUserId().getValue(),
+            "position": employee.getPosition().value,
+            "salary": employee.getSalary(),
+            "createdAt": employee.getCreatedAt().isoformat()
+        }

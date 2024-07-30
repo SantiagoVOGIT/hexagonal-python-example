@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import TypeVar
+from typing import TypeVar, List, Optional
 
 from src.domain.entities.cell.value_objects.CellId import CellId
 from src.domain.entities.reservation.Reservation import Reservation
@@ -25,9 +25,21 @@ class ReservationGateway(ABC):
         pass
 
     @abstractmethod
+    def rejectReservation(self, reservationId: ReservationId) -> None:
+        pass
+
+    @abstractmethod
     def confirmReservation(self, reservationId: ReservationId) -> None:
         pass
 
     @abstractmethod
     def completeReservation(self, reservationId: ReservationId) -> None:
+        pass
+
+    @abstractmethod
+    def getAllReservations(self) -> Optional[List[Reservation]]:
+        pass
+
+    @abstractmethod
+    def getReservationById(self, reservationId: ReservationId) -> Optional[Reservation]:
         pass

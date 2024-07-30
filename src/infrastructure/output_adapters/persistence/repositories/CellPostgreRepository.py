@@ -30,6 +30,7 @@ class CellPostgreRepository(CellRepository):
             cellData: CellData = CellMapper.toPersistence(cell)
             session.add(cellData)
             session.commit()
+
         except SQLAlchemyError as exc:
             session.rollback()
             ExceptionHandler.raiseException(CustomException(
@@ -44,12 +45,13 @@ class CellPostgreRepository(CellRepository):
     def finBySpaceNumber(self, spaceNumber: SpaceNumber) -> Optional[Cell]:
         session: Session = self.__databaseService.getSession()
         try:
-            spaceNumberData: Optional[CellData] = session.query(CellData).filter_by(
+            cellData: Optional[CellData] = session.query(CellData).filter_by(
                 space_number=spaceNumber
             ).first()
-            if spaceNumberData is None:
+            if cellData is None:
                 return None
-            return CellMapper.toDomain(spaceNumberData)
+            return CellMapper.toDomain(cellData)
+
         except SQLAlchemyError as exc:
             ExceptionHandler.raiseException(CustomException(
                 ErrorType.INFRASTRUCTURE_ERROR,
@@ -63,12 +65,12 @@ class CellPostgreRepository(CellRepository):
     def findById(self, cellId: CellId) -> Optional[Cell]:
         session: Session = self.__databaseService.getSession()
         try:
-            cellIdData: Optional[CellData] = session.query(CellData).filter_by(
+            cellData: Optional[CellData] = session.query(CellData).filter_by(
                 id=cellId.getValue()
             ).first()
-            if cellIdData is None:
+            if cellData is None:
                 return None
-            return CellMapper.toDomain(cellIdData)
+            return CellMapper.toDomain(cellData)
 
         except SQLAlchemyError as exc:
             ExceptionHandler.raiseException(CustomException(
@@ -103,11 +105,11 @@ class CellPostgreRepository(CellRepository):
         finally:
             session.close()
 
-    def getVehicleType(self, id: CellId) -> VehicleType:
+    def getVehicleType(self, cellId: CellId) -> VehicleType:
         session: Session = self.__databaseService.getSession()
         try:
             cellIdData = session.query(CellData).filter(
-                CellData.id == id.getValue()
+                CellData.id == cellId.getValue()
             ).first()
             if cellIdData is None:
                 ExceptionHandler.raiseException(CustomException(

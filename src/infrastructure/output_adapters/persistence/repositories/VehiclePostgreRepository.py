@@ -43,12 +43,12 @@ class VehiclePostgreRepository(VehicleRepository):
     def findByLicensePlate(self, licensePlate: str) -> Optional[Vehicle]:
         session: Session = self.__databaseService.getSession()
         try:
-            licensePlateData: Optional[VehicleData] = session.query(VehicleData).filter_by(
+            vehicleData: Optional[VehicleData] = session.query(VehicleData).filter_by(
                 license_plate=licensePlate
             ).first()
-            if licensePlateData is None:
+            if vehicleData is None:
                 return None
-            return VehicleMapper.toDomain(licensePlateData)
+            return VehicleMapper.toDomain(vehicleData)
 
         except SQLAlchemyError as exc:
             ExceptionHandler.raiseException(CustomException(
@@ -60,17 +60,19 @@ class VehiclePostgreRepository(VehicleRepository):
         finally:
             session.close()
 
-    def getVehicleType(self, id: VehicleId) -> VehicleType:
+    def getVehicleType(self, vehicleId: VehicleId) -> VehicleType:
         session: Session = self.__databaseService.getSession()
         try:
-            vehicleIdData = session.query(VehicleData).filter(VehicleData.id == str(id)).first()
-            if vehicleIdData is None:
+            vehicleData = session.query(VehicleData).filter(
+                VehicleData.id == vehicleId.getValue()
+            ).first()
+            if vehicleData is None:
                 ExceptionHandler.raiseException(CustomException(
                     ErrorType.DOMAIN_ERROR,
                     DomainErrorType.CELL_NOT_FOUND.name,
                     DomainErrorType.CELL_NOT_FOUND.value
                 ))
-            return VehicleType(vehicleIdData.vehicle_type)
+            return VehicleType(vehicleData.vehicle_type)
         except SQLAlchemyError as exc:
             ExceptionHandler.raiseException(CustomException(
                 ErrorType.INFRASTRUCTURE_ERROR,
@@ -80,4 +82,3 @@ class VehiclePostgreRepository(VehicleRepository):
             ))
         finally:
             session.close()
-

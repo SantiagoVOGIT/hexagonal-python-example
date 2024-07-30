@@ -7,6 +7,7 @@ class ReservationStatus(Enum):
     CONFIRMED = "CONFIRMADA"
     CANCELLED = "CANCELADA"
     COMPLETED = "COMPLETADA"
+    REJECTED = "RECHAZADA"
 
     def __init__(self, value: str):
         self.__value = value

@@ -40,12 +40,12 @@ class UserPostgreRepository(UserRepository):
     def findByDniNumber(self, dniNumber: str) -> Optional[User]:
         session: Session = self.__databaseService.getSession()
         try:
-            dniNumberData: Optional[UserData] = session.query(UserData).filter_by(
+            userData: Optional[UserData] = session.query(UserData).filter_by(
                 dni_number=dniNumber
             ).first()
-            if dniNumberData is None:
+            if userData is None:
                 return None
-            return UserMapper.toDomain(dniNumberData)
+            return UserMapper.toDomain(userData)
         except SQLAlchemyError as exc:
             ExceptionHandler.raiseException(CustomException(
                 ErrorType.INFRASTRUCTURE_ERROR,

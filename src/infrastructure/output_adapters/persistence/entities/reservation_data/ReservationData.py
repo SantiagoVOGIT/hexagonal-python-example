@@ -19,6 +19,6 @@ class ReservationData(DatabaseService.getBase()):
     vehicle_id = Column(EntityIdAdapter(VehicleId), ForeignKey('_vehicle.id'), nullable=False)
     reservation_code = Column(String(10), unique=True)
     status = Column(String(20), nullable=False)
-    start_time = Column(DateTime(timezone=True), nullable=False)
+    start_time = Column(DateTime(timezone=True))
     end_time = Column(DateTime(timezone=True))
     created_at = Column(DateTime(timezone=True), nullable=False)

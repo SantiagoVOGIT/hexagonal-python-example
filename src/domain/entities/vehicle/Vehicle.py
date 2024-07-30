@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Dict, Any
 
 from src.domain.entities.user.value_objects.UserId import UserId
 from src.domain.entities.vehicle.value_objects.VehicleId import VehicleId
@@ -45,3 +46,14 @@ class Vehicle:
 
     def getRegisteredAt(self) -> datetime:
         return self.__registeredAt
+
+    @staticmethod
+    def toDict(vehicle: 'Vehicle') -> Dict[str, Any]:
+        return {
+            "id": vehicle.getId().getValue(),
+            "userId": vehicle.getUserId().getValue(),
+            "licensePlate": vehicle.getLicensePlate(),
+            "model": vehicle.getModel(),
+            "vehicleType": vehicle.getVehicleType().value,
+            "registeredAt": vehicle.getRegisteredAt().isoformat()
+        }

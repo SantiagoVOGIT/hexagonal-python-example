@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Dict, Any
 
 from src.domain.entities.user.value_objects.DniType import DniType
 from src.domain.entities.user.value_objects.UserId import UserId
@@ -70,3 +71,18 @@ class User:
 
     def getCreatedAt(self) -> datetime:
         return self.__createdAt
+
+    @staticmethod
+    def toDict(user: 'User') -> Dict[str, Any]:
+        return {
+            "id": user.getId().getValue(),
+            "dniNumber": user.getDniNumber(),
+            "dniType": user.getDniType().value,
+            "firstName": user.getFirstName(),
+            "lastName": user.getLastName(),
+            "phoneNumber": user.getPhoneNumber(),
+            "emailAddress": user.getEmailAddress(),
+            "role": user.getRole().value,
+            "status": user.getStatus().value,
+            "createdAt": user.getCreatedAt().isoformat()
+        }

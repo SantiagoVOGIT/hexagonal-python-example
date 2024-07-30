@@ -17,6 +17,5 @@ class VehicleRepository(ABC):
         pass
 
     @abstractmethod
-    def getVehicleType(self, id: VehicleId) -> VehicleType:
+    def getVehicleType(self, vehicleId: VehicleId) -> VehicleType:
         pass
-

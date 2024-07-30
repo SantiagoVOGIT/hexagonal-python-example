@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Dict, Any
 
 from src.domain.entities.cell.value_objects.CellId import CellId
 from src.domain.entities.cell.value_objects.CellStatus import CellStatus
@@ -41,5 +42,12 @@ class Cell:
     def getCreatedAt(self) -> datetime:
         return self.__createdAt
 
-    def isAvailable(self) -> bool:
-        return self.getStatus() == CellStatus.AVAILABLE
+    @staticmethod
+    def toDict(cell: 'Cell') -> Dict[str, Any]:
+        return {
+            "id": cell.getId().getValue(),
+            "spaceNumber": cell.getSpaceNumber().getValue(),
+            "vehicleType": cell.getVehicleType().value,
+            "status": cell.getStatus().value,
+            "createdAt": cell.getCreatedAt().isoformat()
+        }

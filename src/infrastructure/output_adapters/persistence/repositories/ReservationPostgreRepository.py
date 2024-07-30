@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List, cast
 
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
@@ -44,7 +44,7 @@ class ReservationPostgreRepository(ReservationRepository):
         session: Session = self.__databaseService.getSession()
         try:
             reservationData = session.query(ReservationData).filter(
-                ReservationData.id == str(reservationId)
+                ReservationData.id == reservationId.getValue()
             ).first()
             if reservationData is None:
                 ExceptionHandler.raiseException(CustomException(
@@ -69,7 +69,7 @@ class ReservationPostgreRepository(ReservationRepository):
         session: Session = self.__databaseService.getSession()
         try:
             reservationData = session.query(ReservationData).filter(
-                ReservationData.id == str(reservationId)
+                ReservationData.id == reservationId.getValue()
             ).first()
             if reservationData is None:
                 ExceptionHandler.raiseException(CustomException(
@@ -94,7 +94,7 @@ class ReservationPostgreRepository(ReservationRepository):
         session: Session = self.__databaseService.getSession()
         try:
             reservationData = session.query(ReservationData).filter(
-                ReservationData.id == str(reservationId)
+                ReservationData.id == reservationId.getValue()
             ).first()
             if reservationData is None:
                 ExceptionHandler.raiseException(CustomException(
@@ -126,6 +126,23 @@ class ReservationPostgreRepository(ReservationRepository):
                 return None
 
             return ReservationMapper.toDomain(reservationData)
+        except SQLAlchemyError as exc:
+            ExceptionHandler.raiseException(CustomException(
+                ErrorType.INFRASTRUCTURE_ERROR,
+                InfrastructureErrorType.DATABASE_ERROR.name,
+                InfrastructureErrorType.DATABASE_ERROR.value,
+                {"original_error": str(exc)}
+            ))
+        finally:
+            session.close()
+
+    def getAllReservations(self) -> Optional[List[Reservation]]:
+        session: Session = self.__databaseService.getSession()
+        try:
+            reservationDataList = cast(List[ReservationData], session.query(ReservationData).all())
+            if reservationDataList is None:
+                return None
+            return [ReservationMapper.toDomain(reservationData) for reservationData in reservationDataList]
         except SQLAlchemyError as exc:
             ExceptionHandler.raiseException(CustomException(
                 ErrorType.INFRASTRUCTURE_ERROR,

@@ -22,3 +22,4 @@ class DomainErrorType(Enum):
     CELL_NOT_AVAILABLE = "No es posible reservar esta celda en estos momentos"
     INCOMPATIBLE_VEHICLE_TYPE_CELL = "Su tipo de vehiculo no es compatible con esta celda"
     RESERVATION_NOT_FOUND = "Esta reserva no existe"
+    RESERVATIONS_NOT_FOUND = "No se encontró ninguna reserva"

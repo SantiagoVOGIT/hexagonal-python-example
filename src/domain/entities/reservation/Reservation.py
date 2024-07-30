@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional
+from typing import Optional, Dict, Any
 
 from src.domain.entities.cell.value_objects.CellId import CellId
 from src.domain.entities.reservation.value_objects.ReservationCode import ReservationCode
@@ -68,3 +68,16 @@ class Reservation:
     def getCreatedAt(self) -> datetime:
         return self.__createdAt
 
+    @staticmethod
+    def toDict(reservation: 'Reservation') -> Dict[str, Any]:
+        return {
+            "id": reservation.getId().getValue(),
+            "userId": reservation.getUserId().getValue(),
+            "cellId": reservation.getCellId().getValue(),
+            "vehicleId": reservation.getVehicleId().getValue(),
+            "reservationCode": reservation.getReservationCode().getValue(),
+            "status": reservation.getStatus().value,
+            "startTime": reservation.getStartTime().isoformat() if reservation.getStartTime() else None,
+            "endTime": reservation.getEndTime().isoformat() if reservation.getEndTime() else None,
+            "createdAt": reservation.getCreatedAt().isoformat()
+        }

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
 
 from src.domain.entities.reservation.Reservation import Reservation
 from src.domain.entities.reservation.value_objects.ReservationId import ReservationId
@@ -27,4 +27,8 @@ class ReservationRepository(ABC):
 
     @abstractmethod
     def getReservationById(self, reservationId: ReservationId) -> Optional[Reservation]:
+        pass
+
+    @abstractmethod
+    def getAllReservations(self) -> Optional[List[Reservation]]:
         pass
