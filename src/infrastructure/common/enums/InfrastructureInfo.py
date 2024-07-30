@@ -5,6 +5,7 @@ from src.infrastructure.config.Environments import Environments
 
 class InfrastructureInfo(Enum):
 
+    SUCCESS_UPDATED_EMPLOYEE = "Empleado actualizado exitosamente"
     SUCCESS_COMPLETE_RESERVATION = "Reserva completa exitosamente"
     SUCCESS_CONFIRM_RESERVATION = "Reserva confirmada exitosamente"
     SUCCESS_CANCEL_RESERVATION = "Reserva cancelada exitosamente"

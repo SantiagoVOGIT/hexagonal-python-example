@@ -17,12 +17,12 @@ POST http://127.0.0.1:8000/register
 Content-Type: application/json
 
 {
-  "dniNumber": "1036928592",
+  "dniNumber": "43855553",
   "dniType": "CÉDULA CIUDADANÍA",
   "firstName": "Santiago",
   "lastName": "Valencia",
   "phoneNumber": "3024508215",
-  "emailAddress": "fenixcaps@gmail.com"
+  "emailAddress": "santiagovalenciaochoa2005@gmail.com"
 }
 
 ###
@@ -124,6 +124,7 @@ Content-Type: application/json
 ###
 
 # Confirmar una reserva
+# Rol requerido: administrador
 # Validaciones:
 # - Que exista la reserva
 POST http://127.0.0.1:8000/confirm-reservation
@@ -136,6 +137,7 @@ Content-Type: application/json
 ###
 
 # Completar una reserva
+# Rol requerido: administrador
 # Validaciones:
 # - Que exista la reserva
 POST http://127.0.0.1:8000/complete-reservation
@@ -148,6 +150,7 @@ Content-Type: application/json
 ###
 
 # Obtener todas las reservas
+# Rol requerido: administrador
 # Validaciones:
 # - Que existan reservas
 GET http://127.0.0.1:8000/reservations
@@ -166,6 +169,7 @@ Content-Type: application/json
 # Empleados
 
 # Crear un nuevo empleado
+# Rol requerido: administrador
 # Validaciones:
 # - Que no se registre un empleado sin un ID de usuario asociado
 # - Que no se registre un empleado con un ID de usuario ya asociado a otro empleado
@@ -174,7 +178,22 @@ POST http://127.0.0.1:8000/create-employee
 Content-Type: application/json
 
 {
-  "userId": "6eb5d283-4ad9-4fc3-b7e0-7f4476e1a564",
+  "userId": "c95905d5-45dc-4088-a479-92be9133c107",
   "position": "GERENTE",
   "salary": "1000000"
 }
+
+###
+
+# Modificar un empleado
+# Rol requerido: administrador
+# Validaciones:
+# - Que exista el empleado
+PUT http://127.0.0.1:8000/update-employee/1c947a6b-fae8-476b-a902-9b2535deda7a
+Content-Type: application/json
+
+{
+  "position": "GERENTE",
+  "salary": "50"
+}
+

@@ -26,7 +26,7 @@ class ReservationRepository(ABC):
         pass
 
     @abstractmethod
-    def getReservationById(self, reservationId: ReservationId) -> Optional[Reservation]:
+    def findById(self, reservationId: ReservationId) -> Optional[Reservation]:
         pass
 
     @abstractmethod

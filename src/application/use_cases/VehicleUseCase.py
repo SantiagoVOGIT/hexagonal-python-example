@@ -32,8 +32,7 @@ class VehicleUseCase(VehicleGateway):
         existingVehicle: Optional[Vehicle] = self.vehicleRepository.findByLicensePlate(licensePlate)
         if existingVehicle is not None:
             ExceptionHandler.raiseException(DomainException(
-                DomainErrorType.VEHICLE_ALREADY_EXISTS,
-                {"licensePlate": licensePlate}
+                DomainErrorType.VEHICLE_ALREADY_EXISTS
             ))
 
         newVehicle: Vehicle = VehicleFactory.create(

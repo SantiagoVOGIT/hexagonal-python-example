@@ -52,8 +52,9 @@ class ReservationPostgreRepository(ReservationRepository):
                     DomainErrorType.RESERVATION_NOT_FOUND.name,
                     DomainErrorType.RESERVATION_NOT_FOUND.value
                 ))
-            reservationData.status = status.value
+            reservationData.status = status.getValue()
             session.commit()
+
         except SQLAlchemyError as exc:
             session.rollback()
             ExceptionHandler.raiseException(CustomException(
@@ -115,7 +116,7 @@ class ReservationPostgreRepository(ReservationRepository):
         finally:
             session.close()
 
-    def getReservationById(self, reservationId: ReservationId) -> Optional[Reservation]:
+    def findById(self, reservationId: ReservationId) -> Optional[Reservation]:
         session: Session = self.__databaseService.getSession()
         try:
             reservationData: Optional[ReservationData] = session.query(ReservationData).filter(

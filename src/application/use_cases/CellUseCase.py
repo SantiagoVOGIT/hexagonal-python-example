@@ -27,8 +27,7 @@ class CellUseCase(CellGateway):
         existingCell: Optional[Cell] = self.__cellRepository.finBySpaceNumber(spaceNumber)
         if existingCell is not None:
             ExceptionHandler.raiseException(DomainException(
-                DomainErrorType.CELL_ALREADY_EXISTS,
-                {"spaceNumber": spaceNumber}
+                DomainErrorType.CELL_ALREADY_EXISTS
             ))
 
         newCell: Cell = CellFactory.create(

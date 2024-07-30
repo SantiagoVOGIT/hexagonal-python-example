@@ -75,8 +75,7 @@ class Main:
 
     def __configEmployeeController(self) -> EmployeeController:
         outputAdapter = EmployeePostgreRepository(self.__databaseService)
-        outputAdapterHelper = UserPostgreRepository(self.__databaseService)
-        useCase = EmployeeUseCase(outputAdapter, outputAdapterHelper)
+        useCase = EmployeeUseCase(outputAdapter)
         inputAdapter = EmployeeController(useCase)
         return inputAdapter
 

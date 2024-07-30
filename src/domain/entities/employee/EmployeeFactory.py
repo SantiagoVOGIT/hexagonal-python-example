@@ -14,16 +14,29 @@ class EmployeeFactory:
 
     @staticmethod
     def create(
-               userId: UserId,
-               position: EmployeePosition,
-               salary: float,
-               id: Optional[EmployeeId] = None,
-               createAt: Optional[datetime] = None) -> Employee:
-
+            userId: UserId,
+            position: EmployeePosition,
+            salary: float,
+            id: Optional[EmployeeId] = None,
+            createAt: Optional[datetime] = None) -> Employee:
         return Employee(
             userId=userId,
             salary=DomainUtils.validateSalary(salary),
             position=DomainUtils.validateEnum(position, EmployeePosition),
             id=DomainUtils.resolveId(id, EmployeeId),
             createdAt=DomainUtils.resolveCreatedAt(createAt),
+        )
+
+    @staticmethod
+    def update(
+            employee: Employee,
+            userId: Optional[UserId] = None,
+            position: Optional[EmployeePosition] = None,
+            salary: Optional[float] = None) -> Employee:
+        return Employee(
+            id=employee.getId(),
+            userId=userId if userId is not None else employee.getUserId(),
+            position=DomainUtils.validateEnum(position, EmployeePosition) if position is not None else employee.getPosition(),
+            salary=DomainUtils.validateSalary(salary) if salary is not None else employee.getSalary(),
+            createdAt=employee.getCreatedAt()
         )

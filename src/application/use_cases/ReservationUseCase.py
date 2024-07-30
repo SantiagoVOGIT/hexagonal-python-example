@@ -47,7 +47,6 @@ class ReservationUseCase(ReservationGateway):
         if cellStatus != CellStatus.AVAILABLE:
             ExceptionHandler.raiseException(DomainException(
                 DomainErrorType.CELL_NOT_AVAILABLE,
-                {"status": f"{cellStatus.getValue()}"}
             ))
 
         userVehicleType = self.__vehicleRepository.getVehicleType(vehicleId)
@@ -68,14 +67,13 @@ class ReservationUseCase(ReservationGateway):
         return newReservation
 
     def cancelReservation(self, reservationId: ReservationId) -> None:
-        reservation = self.__reservationRepository.getReservationById(reservationId)
+        reservation = self.__reservationRepository.findById(reservationId)
         if reservation is None:
             ExceptionHandler.raiseException(DomainException(
                 DomainErrorType.RESERVATION_NOT_FOUND
             ))
 
         endTime: datetime = datetime.now(timezone.utc)
-
         self.__reservationRepository.updateStatus(reservationId, ReservationStatus.CANCELLED)
         self.__reservationRepository.updateEndTime(reservationId, endTime)
 
@@ -83,14 +81,13 @@ class ReservationUseCase(ReservationGateway):
         self.__cellRepository.updateStatus(cellId, CellStatus.AVAILABLE)
 
     def rejectReservation(self, reservationId: ReservationId) -> None:
-        reservation = self.__reservationRepository.getReservationById(reservationId)
+        reservation = self.__reservationRepository.findById(reservationId)
         if reservation is None:
             ExceptionHandler.raiseException(DomainException(
                 DomainErrorType.RESERVATION_NOT_FOUND
             ))
 
         endTime: datetime = datetime.now(timezone.utc)
-
         self.__reservationRepository.updateStatus(reservationId, ReservationStatus.REJECTED)
         self.__reservationRepository.updateEndTime(reservationId, endTime)
 
@@ -98,7 +95,7 @@ class ReservationUseCase(ReservationGateway):
         self.__cellRepository.updateStatus(cellId, CellStatus.AVAILABLE)
 
     def confirmReservation(self, reservationId: ReservationId) -> None:
-        reservation = self.__reservationRepository.getReservationById(reservationId)
+        reservation = self.__reservationRepository.findById(reservationId)
         if reservation is None:
             ExceptionHandler.raiseException(DomainException(
                 DomainErrorType.RESERVATION_NOT_FOUND
@@ -112,7 +109,7 @@ class ReservationUseCase(ReservationGateway):
         self.__cellRepository.updateStatus(cellId, CellStatus.OCCUPIED)
 
     def completeReservation(self, reservationId: ReservationId) -> None:
-        reservation = self.__reservationRepository.getReservationById(reservationId)
+        reservation = self.__reservationRepository.findById(reservationId)
         if reservation is None:
             ExceptionHandler.raiseException(DomainException(
                 DomainErrorType.RESERVATION_NOT_FOUND
@@ -134,7 +131,7 @@ class ReservationUseCase(ReservationGateway):
         return reservations
 
     def getReservationById(self, reservationId: ReservationId) -> Optional[Reservation]:
-        reservation = self.__reservationRepository.getReservationById(reservationId)
+        reservation = self.__reservationRepository.findById(reservationId)
         if reservation is None:
             ExceptionHandler.raiseException(DomainException(
                 DomainErrorType.RESERVATION_NOT_FOUND

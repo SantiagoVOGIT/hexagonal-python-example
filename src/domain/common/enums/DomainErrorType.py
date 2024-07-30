@@ -3,6 +3,7 @@ from enum import Enum
 
 class DomainErrorType(Enum):
 
+    EMPLOYEE_NOT_FOUND = "Este empleado no existe"
     INVALID_INPUT = "Datos de entrada inválidos."
     INVALID_ENUM_VALUE = "Propiedad inválida."
     INVALID_DNI_NUMBER_FORMAT = "Formato de documento inválido."
