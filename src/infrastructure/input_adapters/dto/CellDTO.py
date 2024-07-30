@@ -9,12 +9,12 @@ from src.domain.entities.vehicle.value_objects.VehicleType import VehicleType
 
 class CellDTO(BaseModel):
 
-    id: Optional[CellId] = Field(default=None)
+    cellId: Optional[CellId] = Field(default=None)
     spaceNumber: Optional[SpaceNumber] = Field(default=None)
     vehicleType: Optional[VehicleType] = Field(default=None)
     status: Optional[CellStatus] = Field(default=None)
 
-    @field_validator('id', mode='before')
+    @field_validator('cellId', mode='before')
     def validateId(cls, v):
         if v is None:
             return None

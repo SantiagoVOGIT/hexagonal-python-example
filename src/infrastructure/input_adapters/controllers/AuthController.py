@@ -3,7 +3,7 @@ from typing import Dict, Any
 from fastapi import FastAPI, HTTPException
 
 from src.domain.entities.user.User import User
-from src.domain.input_ports.AuthGateway import AuthGateway
+from src.domain.entities.user.ports.AuthGateway import AuthGateway
 from src.infrastructure.common.enums.InfrastructureInfo import InfrastructureInfo
 from src.infrastructure.input_adapters.dto.UserDTO import UserDTO
 from src.shared.utils.ErrorHandler import ExceptionHandler

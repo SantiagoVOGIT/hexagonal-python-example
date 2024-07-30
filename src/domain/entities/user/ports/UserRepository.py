@@ -20,5 +20,5 @@ class UserRepository(ABC):
         pass
 
     @abstractmethod
-    def findById(self, id: UserId) -> Optional[User]:
+    def findById(self, userId: UserId) -> Optional[User]:
         pass

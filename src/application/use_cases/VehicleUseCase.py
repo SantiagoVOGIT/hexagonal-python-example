@@ -6,11 +6,12 @@ from src.domain.entities.vehicle.Vehicle import Vehicle
 from src.domain.entities.vehicle.VehicleFactory import VehicleFactory
 from src.domain.entities.vehicle.ports.VehicleRepository import VehicleRepository
 from src.domain.entities.vehicle.value_objects.VehicleType import VehicleType
-from src.domain.input_ports.VehicleGateway import VehicleGateway
+from src.domain.entities.vehicle.ports.VehicleGateway import VehicleGateway
 from src.shared.utils.ErrorHandler import ExceptionHandler, DomainException
 
 
 class VehicleUseCase(VehicleGateway):
+
     vehicleRepository: VehicleRepository
 
     def __init__(self, vehicleOutputAdapter):

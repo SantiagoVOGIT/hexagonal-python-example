@@ -19,7 +19,7 @@ class CellRepository(ABC):
         pass
 
     @abstractmethod
-    def findById(self, id: CellId) -> Optional[Cell]:
+    def findById(self, cellId: CellId) -> Optional[Cell]:
         pass
 
     @abstractmethod

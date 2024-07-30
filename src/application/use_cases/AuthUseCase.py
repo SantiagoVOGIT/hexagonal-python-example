@@ -3,7 +3,7 @@ from typing import Optional
 from src.domain.entities.user.UserFactory import UserFactory
 from src.domain.entities.user.value_objects.UserRole import UserRole
 from src.domain.entities.user.value_objects.UserStatus import UserStatus
-from src.domain.input_ports.AuthGateway import AuthGateway
+from src.domain.entities.user.ports.AuthGateway import AuthGateway
 from src.shared.utils.ErrorHandler import ExceptionHandler, DomainException
 from src.domain.common.enums.DomainErrorType import DomainErrorType
 from src.domain.entities.user.User import User

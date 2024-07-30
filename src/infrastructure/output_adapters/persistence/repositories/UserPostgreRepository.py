@@ -76,11 +76,11 @@ class UserPostgreRepository(UserRepository):
         finally:
             session.close()
 
-    def findById(self, id: UserId) -> Optional[User]:
+    def findById(self, userId: UserId) -> Optional[User]:
         session: Session = self.__databaseService.getSession()
         try:
             userIdData: Optional[UserData] = session.query(UserData).filter_by(
-                id=id.getValue()
+                id=userId.getValue()
             ).first()
             if userIdData is None:
                 return None

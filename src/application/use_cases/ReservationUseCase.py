@@ -1,3 +1,5 @@
+from datetime import datetime, timezone
+
 from src.domain.common.enums.DomainErrorType import DomainErrorType
 from src.domain.entities.cell.ports.CellRepository import CellRepository
 from src.domain.entities.cell.value_objects.CellId import CellId
@@ -5,11 +7,12 @@ from src.domain.entities.cell.value_objects.CellStatus import CellStatus
 from src.domain.entities.reservation.Reservation import Reservation
 from src.domain.entities.reservation.ReservationFactory import ReservationFactory
 from src.domain.entities.reservation.ports.ReservationRepository import ReservationRepository
+from src.domain.entities.reservation.value_objects.ReservationId import ReservationId
 from src.domain.entities.reservation.value_objects.ReservationStatus import ReservationStatus
 from src.domain.entities.user.value_objects.UserId import UserId
 from src.domain.entities.vehicle.ports.VehicleRepository import VehicleRepository
 from src.domain.entities.vehicle.value_objects.VehicleId import VehicleId
-from src.domain.input_ports.ReservationGateway import ReservationGateway
+from src.domain.entities.reservation.ports.ReservationGateway import ReservationGateway
 from src.shared.utils.ErrorHandler import ExceptionHandler, DomainException
 
 
@@ -62,3 +65,46 @@ class ReservationUseCase(ReservationGateway):
         self.__reservationRepository.saveReservation(newReservation)
         self.__cellRepository.updateStatus(cellId, CellStatus.RESERVED)
         return newReservation
+
+    def cancelReservation(self, reservationId: ReservationId) -> None:
+        reservation = self.__reservationRepository.getReservationById(reservationId)
+        if reservation is None:
+            ExceptionHandler.raiseException(DomainException(
+                DomainErrorType.RESERVATION_NOT_FOUND
+            ))
+
+        endTime: datetime = datetime.now(timezone.utc)
+
+        self.__reservationRepository.updateStatus(reservationId, ReservationStatus.CANCELLED)
+        self.__reservationRepository.updateEndTime(reservationId, endTime)
+
+        cellId = reservation.getCellId()
+        self.__cellRepository.updateStatus(cellId, CellStatus.AVAILABLE)
+
+    def confirmReservation(self, reservationId: ReservationId) -> None:
+        reservation = self.__reservationRepository.getReservationById(reservationId)
+        if reservation is None:
+            ExceptionHandler.raiseException(DomainException(
+                DomainErrorType.RESERVATION_NOT_FOUND
+            ))
+
+        startTime: datetime = datetime.now(timezone.utc)
+        self.__reservationRepository.updateStatus(reservationId, ReservationStatus.CONFIRMED)
+        self.__reservationRepository.updateStarTime(reservationId, startTime)
+
+        cellId = reservation.getCellId()
+        self.__cellRepository.updateStatus(cellId, CellStatus.OCCUPIED)
+
+    def completeReservation(self, reservationId: ReservationId) -> None:
+        reservation = self.__reservationRepository.getReservationById(reservationId)
+        if reservation is None:
+            ExceptionHandler.raiseException(DomainException(
+                DomainErrorType.RESERVATION_NOT_FOUND
+            ))
+
+        endTime: datetime = datetime.now(timezone.utc)
+        self.__reservationRepository.updateStatus(reservationId, ReservationStatus.COMPLETED)
+        self.__reservationRepository.updateEndTime(reservationId, endTime)
+
+        cellId = reservation.getCellId()
+        self.__cellRepository.updateStatus(cellId, CellStatus.AVAILABLE)

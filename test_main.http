@@ -14,7 +14,7 @@ Content-Type: application/json
   "firstName": "Santiago",
   "lastName": "Valencia",
   "phoneNumber": "3024508215",
-  "emailAddress": "svalnciao@cesde.net"
+  "emailAddress": "fenixcaps@gmail.com"
 }
 
 ###
@@ -24,7 +24,7 @@ Content-Type: application/json
 
 {
 "dniNumber": "1036928592",
-"emailAddress": "svalenciao@cesde.net"
+"emailAddress": "fenixcaps@gmail.com"
 }
 
 ###
@@ -33,8 +33,8 @@ POST http://127.0.0.1:8000/create-cell
 Content-Type: application/json
 
 {
-"spaceNumber": "8",
-"vehicleType": "MOTOCICLETA",
+"spaceNumber": "1",
+"vehicleType": "AUTOMÓVIL",
 "status": "DISPONIBLE"
 }
 
@@ -44,10 +44,10 @@ POST http://127.0.0.1:8000/create-vehicle
 Content-Type: application/json
 
 {
-  "userId": "6eb5d283-4ad9-4fc3-b7e0-7f4476e1a564",
-  "licensePlate": "AAB277",
-  "model": "Nisan 2021",
-  "vehicleType": "MOTOCICLETA"
+  "userId": "c95905d5-45dc-4088-a479-92be9133c107",
+  "licensePlate": "AAA777",
+  "model": "Zephyr X1",
+  "vehicleType": "AUTOMÓVIL"
 }
 
 ###
@@ -56,9 +56,9 @@ POST http://127.0.0.1:8000/create-reservation
 Content-Type: application/json
 
 {
-  "userId": "6eb5d283-4ad9-4fc3-b7e0-7f4476e1a564",
-  "cellId": "43e9b81a-cc52-4646-bd82-b21c90916026",
-  "vehicleId": "7229d94a-0e67-4eb9-9ee6-a4e61b1c8fd9"
+  "userId": "c95905d5-45dc-4088-a479-92be9133c107",
+  "cellId": "c5f96e48-479b-4d05-8ea1-14a6a7c899bb",
+  "vehicleId": "5d4d0b1c-375e-406b-9953-f9e78da18f02"
 }
 
 ###
@@ -70,6 +70,33 @@ Content-Type: application/json
   "userId": "6eb5d283-4ad9-4fc3-b7e0-7f4476e1a564",
   "position": "GERENTE",
   "salary": "1000000"
+}
+
+###
+
+POST http://127.0.0.1:8000/cancel-reservation
+Content-Type: application/json
+
+{
+  "reservationId": "b0170041-a243-4c3c-83d4-8ba165c50b65"
+}
+
+###
+
+POST http://127.0.0.1:8000/confirm-reservation
+Content-Type: application/json
+
+{
+  "reservationId": "be3974b1-4398-4b36-a76b-15aba7eaaf1f"
+}
+
+###
+
+POST http://127.0.0.1:8000/complete-reservation
+Content-Type: application/json
+
+{
+  "reservationId": "be3974b1-4398-4b36-a76b-15aba7eaaf1f"
 }
 
 ###

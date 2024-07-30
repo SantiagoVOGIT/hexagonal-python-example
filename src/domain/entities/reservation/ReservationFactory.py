@@ -32,9 +32,9 @@ class ReservationFactory:
             cellId=cellId,
             vehicleId=vehicleId,
             endTime=endTime,
+            startTime=startTime,
             status=DomainUtils.validateEnum(status, ReservationStatus),
             reservationCode=DomainUtils.resolveReservationCode(reservationCode),
-            startTime=DomainUtils.resolveCreatedAt(startTime),
             id=DomainUtils.resolveId(id, ReservationId),
             createdAt=DomainUtils.resolveCreatedAt(createdAt),
         )

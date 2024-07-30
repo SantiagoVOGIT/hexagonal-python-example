@@ -1,10 +1,10 @@
 from sqlalchemy.types import TypeDecorator, CHAR
 from sqlalchemy.dialects.postgresql import UUID
 
-
 class EntityIdAdapter(TypeDecorator):
 
     impl = CHAR
+    cache_ok = True  # Añade esta línea
 
     def __init__(self, id_class):
         self.impl = UUID(as_uuid=True)

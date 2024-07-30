@@ -4,7 +4,7 @@ from src.domain.entities.user.ports.UserRepository import UserRepository
 from src.domain.entities.user.value_objects.DniType import DniType
 from src.domain.entities.user.value_objects.UserRole import UserRole
 from src.domain.entities.user.value_objects.UserStatus import UserStatus
-from src.domain.input_ports.UserGateway import UserGateway
+from src.domain.entities.user.ports.UserGateway import UserGateway
 
 
 class UserUseCase(UserGateway):

@@ -3,12 +3,11 @@ from typing import Optional
 from src.domain.common.enums.DomainErrorType import DomainErrorType
 from src.domain.entities.cell.Cell import Cell
 from src.domain.entities.cell.CellFactory import CellFactory
-from src.domain.entities.cell.value_objects.CellId import CellId
-from src.domain.input_ports.CellGateway import CellGateway
 from src.domain.entities.cell.ports.CellRepository import CellRepository
 from src.domain.entities.cell.value_objects.CellStatus import CellStatus
 from src.domain.entities.cell.value_objects.SpaceNumber import SpaceNumber
 from src.domain.entities.vehicle.value_objects.VehicleType import VehicleType
+from src.domain.entities.cell.ports.CellGateway import CellGateway
 from src.shared.utils.ErrorHandler import DomainException, ExceptionHandler
 
 
@@ -39,4 +38,3 @@ class CellUseCase(CellGateway):
         )
         self.__cellRepository.saveCell(newCell)
         return newCell
-

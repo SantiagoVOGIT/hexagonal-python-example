@@ -36,7 +36,7 @@ CREATE TABLE _reservation (
                               vehicle_id UUID NOT NULL,
                               reservation_code VARCHAR(10) UNIQUE,
                               status VARCHAR(20) NOT NULL,
-                              start_time TIMESTAMP WITH TIME ZONE NOT NULL,
+                              start_time TIMESTAMP WITH TIME ZONE,
                               end_time TIMESTAMP WITH TIME ZONE,
                               created_at TIMESTAMP WITH TIME ZONE NOT NULL,
                               FOREIGN KEY (user_id) REFERENCES _user(id),

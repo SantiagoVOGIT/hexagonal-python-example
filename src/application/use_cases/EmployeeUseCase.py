@@ -6,7 +6,7 @@ from src.domain.entities.employee.ports.EmployeeRepository import EmployeeReposi
 from src.domain.entities.employee.value_objects.EmployeePosition import EmployeePosition
 from src.domain.entities.user.ports.UserRepository import UserRepository
 from src.domain.entities.user.value_objects.UserId import UserId
-from src.domain.input_ports.EmployeeGateway import EmployeeGateway
+from src.domain.entities.employee.ports.EmployeeGateway import EmployeeGateway
 from src.shared.utils.ErrorHandler import ExceptionHandler, DomainException
 
 

@@ -17,7 +17,7 @@ class Reservation:
     __vehicleId: VehicleId
     __reservationCode: ReservationCode
     __status: ReservationStatus
-    __startTime: datetime
+    __startTime: Optional[datetime]
     __endTime: Optional[datetime]
     __createdAt: datetime
 
@@ -28,7 +28,7 @@ class Reservation:
                  vehicleId: VehicleId,
                  reservationCode: ReservationCode,
                  status: ReservationStatus,
-                 startTime: datetime,
+                 startTime: Optional[datetime],
                  endTime: Optional[datetime],
                  createdAt: datetime):
         self.__id = id
@@ -59,7 +59,7 @@ class Reservation:
     def getStatus(self) -> ReservationStatus:
         return self.__status
 
-    def getStartTime(self) -> datetime:
+    def getStartTime(self) -> Optional[datetime]:
         return self.__startTime
 
     def getEndTime(self) -> Optional[datetime]:

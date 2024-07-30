@@ -16,10 +16,13 @@ from src.infrastructure.input_adapters.controllers.HealthController import Healt
 from src.infrastructure.input_adapters.controllers.ReservationController import ReservationController
 from src.infrastructure.input_adapters.controllers.VehicleController import VehicleController
 from src.infrastructure.output_adapters.persistence.repositories.CellPostgreRepository import CellPostgreRepository
-from src.infrastructure.output_adapters.persistence.repositories.EmployeePostgreRepository import EmployeePostgreRepository
-from src.infrastructure.output_adapters.persistence.repositories.ReservationPostgreRepository import ReservationPostgreRepository
+from src.infrastructure.output_adapters.persistence.repositories.EmployeePostgreRepository import \
+    EmployeePostgreRepository
+from src.infrastructure.output_adapters.persistence.repositories.ReservationPostgreRepository import \
+    ReservationPostgreRepository
 from src.infrastructure.output_adapters.persistence.repositories.UserPostgreRepository import UserPostgreRepository
-from src.infrastructure.output_adapters.persistence.repositories.VehiclePostgreRepository import VehiclePostgreRepository
+from src.infrastructure.output_adapters.persistence.repositories.VehiclePostgreRepository import \
+    VehiclePostgreRepository
 
 
 class Main:

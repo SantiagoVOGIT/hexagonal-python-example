@@ -5,6 +5,9 @@ from src.infrastructure.config.Environments import Environments
 
 class InfrastructureInfo(Enum):
 
+    SUCCESS_COMPLETE_RESERVATION = "Reserva completa exitosamente"
+    SUCCESS_CONFIRM_RESERVATION = "Reserva confirmada exitosamente"
+    SUCCESS_CANCEL_RESERVATION = "Reserva cancelada exitosamente"
     SUCCES_UPDATED_CELL = "Celda modificada exitosamente"
     SUCCESS_CONNECTION_DATABASE = "Conexión exitosa a la base de datos."
     CURRENT_ENVIRONMENT_API = f"Ambiente actual de la API: {Environments.getCurrentEnvironment()}."

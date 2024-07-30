@@ -60,11 +60,11 @@ class CellPostgreRepository(CellRepository):
         finally:
             session.close()
 
-    def findById(self, id: CellId) -> Optional[Cell]:
+    def findById(self, cellId: CellId) -> Optional[Cell]:
         session: Session = self.__databaseService.getSession()
         try:
             cellIdData: Optional[CellData] = session.query(CellData).filter_by(
-                id=id.getValue()
+                id=cellId.getValue()
             ).first()
             if cellIdData is None:
                 return None
@@ -83,7 +83,9 @@ class CellPostgreRepository(CellRepository):
     def getStatus(self, cellId: CellId) -> CellStatus:
         session: Session = self.__databaseService.getSession()
         try:
-            cellIdData = session.query(CellData).filter(CellData.id == str(cellId)).first()
+            cellIdData = session.query(CellData).filter(
+                CellData.id == cellId.getValue()
+            ).first()
             if cellIdData is None:
                 ExceptionHandler.raiseException(CustomException(
                     ErrorType.DOMAIN_ERROR,
@@ -104,7 +106,9 @@ class CellPostgreRepository(CellRepository):
     def getVehicleType(self, id: CellId) -> VehicleType:
         session: Session = self.__databaseService.getSession()
         try:
-            cellIdData = session.query(CellData).filter(CellData.id == str(id)).first()
+            cellIdData = session.query(CellData).filter(
+                CellData.id == id.getValue()
+            ).first()
             if cellIdData is None:
                 ExceptionHandler.raiseException(CustomException(
                     ErrorType.DOMAIN_ERROR,
@@ -122,10 +126,12 @@ class CellPostgreRepository(CellRepository):
         finally:
             session.close()
 
-    def updateStatus(self, id: CellId, status: CellStatus) -> None:
+    def updateStatus(self, cellId: CellId, status: CellStatus) -> None:
         session: Session = self.__databaseService.getSession()
         try:
-            cellData = session.query(CellData).filter(CellData.id == str(id)).first()
+            cellData = session.query(CellData).filter(
+                CellData.id == cellId.getValue()
+            ).first()
             if cellData is None:
                 ExceptionHandler.raiseException(CustomException(
                     ErrorType.DOMAIN_ERROR,
