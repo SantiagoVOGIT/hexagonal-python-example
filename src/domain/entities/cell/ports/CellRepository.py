@@ -33,3 +33,7 @@ class CellRepository(ABC):
     @abstractmethod
     def updateStatus(self, cellId: CellId, status: CellStatus) -> None:
         pass
+
+    @abstractmethod
+    def updateCell(self, cell: Cell) -> None:
+        pass

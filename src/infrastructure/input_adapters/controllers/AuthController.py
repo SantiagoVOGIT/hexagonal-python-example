@@ -18,28 +18,6 @@ class AuthController:
 
     def setupRoutes(self, app: FastAPI) -> None:
 
-        @app.post("/register")
-        async def register(request: UserDTO):
-            try:
-                self.__authGateway.register(
-                    request.dniNumber,
-                    request.dniType,
-                    request.firstName,
-                    request.lastName,
-                    request.phoneNumber,
-                    request.emailAddress
-                )
-                return {
-                    "detail": MessageFactory
-                    .build(InfrastructureInfo.SUCCES_REGISTERED_USER)
-                    .getDetail()
-                }
-            except Exception as exc:
-                errorResponse: Dict[str, Any] = ExceptionHandler.handleException(exc)
-                raise HTTPException(
-                    status_code=400, detail=errorResponse
-                )
-
         @app.post("/login")
         async def login(request: UserDTO):
             try:

@@ -18,7 +18,6 @@ from src.shared.utils.ErrorHandler import ExceptionHandler, CustomException, Err
 
 
 class CellPostgreRepository(CellRepository):
-
     __databaseService: DatabaseService
 
     def __init__(self, adapterService: DatabaseService):
@@ -141,6 +140,36 @@ class CellPostgreRepository(CellRepository):
                     DomainErrorType.CELL_NOT_FOUND.value
                 ))
             cellData.status = status.value
+            session.commit()
+        except SQLAlchemyError as exc:
+            session.rollback()
+            ExceptionHandler.raiseException(CustomException(
+                ErrorType.INFRASTRUCTURE_ERROR,
+                InfrastructureErrorType.DATABASE_ERROR.name,
+                InfrastructureErrorType.DATABASE_ERROR.value,
+                {"original_error": str(exc)}
+            ))
+        finally:
+            session.close()
+
+    def updateCell(self, cell: Cell) -> None:
+        session: Session = self.__databaseService.getSession()
+        try:
+            cellData = session.query(CellData).filter(
+                CellData.id == cell.getId().getValue()
+            ).first()
+
+            if cellData is None:
+                ExceptionHandler.raiseException(CustomException(
+                    ErrorType.DOMAIN_ERROR,
+                    DomainErrorType.CELL_NOT_FOUND.name,
+                    DomainErrorType.CELL_NOT_FOUND.value
+                ))
+
+            cellData.space_number = cell.getSpaceNumber().getValue()
+            cellData.vehicle_type = cell.getVehicleType().getValue()
+            cellData.status = cell.getStatus().getValue()
+
             session.commit()
         except SQLAlchemyError as exc:
             session.rollback()

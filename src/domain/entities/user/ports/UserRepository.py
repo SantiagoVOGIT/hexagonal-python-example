@@ -12,6 +12,10 @@ class UserRepository(ABC):
         pass
 
     @abstractmethod
+    def updateUser(self, user: User) -> None:
+        pass
+
+    @abstractmethod
     def findByEmail(self, email: str) -> Optional[User]:
         pass
 

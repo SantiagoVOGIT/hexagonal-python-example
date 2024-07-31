@@ -131,9 +131,10 @@ class ReservationUseCase(ReservationGateway):
         return reservations
 
     def getReservationById(self, reservationId: ReservationId) -> Optional[Reservation]:
-        reservation = self.__reservationRepository.findById(reservationId)
+        reservation: Optional[Reservation] = self.__reservationRepository.findById(reservationId)
         if reservation is None:
             ExceptionHandler.raiseException(DomainException(
                 DomainErrorType.RESERVATION_NOT_FOUND
             ))
         return reservation
+

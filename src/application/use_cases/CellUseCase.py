@@ -4,6 +4,7 @@ from src.domain.common.enums.DomainErrorType import DomainErrorType
 from src.domain.entities.cell.Cell import Cell
 from src.domain.entities.cell.CellFactory import CellFactory
 from src.domain.entities.cell.ports.CellRepository import CellRepository
+from src.domain.entities.cell.value_objects.CellId import CellId
 from src.domain.entities.cell.value_objects.CellStatus import CellStatus
 from src.domain.entities.cell.value_objects.SpaceNumber import SpaceNumber
 from src.domain.entities.vehicle.value_objects.VehicleType import VehicleType
@@ -24,11 +25,7 @@ class CellUseCase(CellGateway):
                    status: CellStatus
                    ) -> Cell:
 
-        existingCell: Optional[Cell] = self.__cellRepository.finBySpaceNumber(spaceNumber)
-        if existingCell is not None:
-            ExceptionHandler.raiseException(DomainException(
-                DomainErrorType.CELL_ALREADY_EXISTS
-            ))
+        self._validateNewSpaceNumber(spaceNumber)
 
         newCell: Cell = CellFactory.create(
             spaceNumber=spaceNumber,
@@ -37,3 +34,37 @@ class CellUseCase(CellGateway):
         )
         self.__cellRepository.saveCell(newCell)
         return newCell
+
+    def updateCell(self,
+                   cellId: CellId,
+                   spaceNumber: SpaceNumber,
+                   vehicleType: VehicleType,
+                   status: CellStatus
+                   ) -> Cell:
+
+        existingCell: Optional[Cell] = self.__cellRepository.findById(cellId)
+        currentSpaceNumber: str = existingCell.getSpaceNumber().getValue()
+
+        if existingCell is None:
+            ExceptionHandler.raiseException(DomainException(
+                DomainErrorType.CELL_NOT_FOUND
+            ))
+
+        if currentSpaceNumber != spaceNumber:
+            self._validateNewSpaceNumber(spaceNumber)
+
+        updatedCell: Cell = CellFactory.update(
+            cell=existingCell,
+            spaceNumber=spaceNumber,
+            vehicleType=vehicleType,
+            status=status
+        )
+        self.__cellRepository.updateCell(updatedCell)
+        return updatedCell
+
+    def _validateNewSpaceNumber(self, spaceNumber: SpaceNumber):
+        existingSpaceNumber: Optional[Cell] = self.__cellRepository.finBySpaceNumber(spaceNumber)
+        if existingSpaceNumber is not None:
+            ExceptionHandler.raiseException(DomainException(
+                DomainErrorType.SPACE_NUMBER_ALREADY_EXISTS
+            ))

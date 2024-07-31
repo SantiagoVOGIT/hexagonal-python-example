@@ -20,11 +20,24 @@ class CellFactory:
                id: Optional[CellId] = None,
                createdAt: Optional[datetime] = None
                ) -> Cell:
-
         return Cell(
             spaceNumber=DomainUtils.validateEnum(spaceNumber, SpaceNumber),
             vehicleType=DomainUtils.validateEnum(vehicleType, VehicleType),
             status=DomainUtils.validateEnum(status, CellStatus),
             id=DomainUtils.resolveId(id, CellId),
             createdAt=DomainUtils.resolveCreatedAt(createdAt),
+        )
+
+    @staticmethod
+    def update(
+            cell: Cell,
+            spaceNumber: Optional[SpaceNumber] = None,
+            vehicleType: Optional[VehicleType] = None,
+            status: Optional[CellStatus] = None) -> Cell:
+        return Cell(
+            id=cell.getId(),
+            spaceNumber=DomainUtils.validateEnum(spaceNumber, SpaceNumber) if spaceNumber is not None else cell.getSpaceNumber(),
+            vehicleType=DomainUtils.validateEnum(vehicleType, VehicleType) if vehicleType is not None else cell.getVehicleType(),
+            status=DomainUtils.validateEnum(status, CellStatus) if status is not None else cell.getStatus(),
+            createdAt=cell.getCreatedAt()
         )

@@ -10,16 +10,5 @@ T = TypeVar('T')
 class AuthGateway(ABC):
 
     @abstractmethod
-    def register(self,
-                 dniNumber: str,
-                 dniType: DniType,
-                 firstName: str,
-                 lastName: str,
-                 phoneNumber: str,
-                 emailAddress: str
-                 ) -> User:
-        pass
-
-    @abstractmethod
     def login(self, emailAddress: str, dniNumber: str) -> User:
         pass

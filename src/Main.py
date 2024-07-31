@@ -5,6 +5,7 @@ from src.application.use_cases.AuthUseCase import AuthUseCase
 from src.application.use_cases.CellUseCase import CellUseCase
 from src.application.use_cases.EmployeeUseCase import EmployeeUseCase
 from src.application.use_cases.ReservationUseCase import ReservationUseCase
+from src.application.use_cases.UserUseCase import UserUseCase
 from src.application.use_cases.VehicleUseCase import VehicleUseCase
 from src.infrastructure.common.DatabaseService import DatabaseService
 from src.infrastructure.config.CorsConfig import CorsConfig
@@ -14,6 +15,7 @@ from src.infrastructure.input_adapters.controllers.CellController import CellCon
 from src.infrastructure.input_adapters.controllers.EmployeeController import EmployeeController
 from src.infrastructure.input_adapters.controllers.HealthController import HealthController
 from src.infrastructure.input_adapters.controllers.ReservationController import ReservationController
+from src.infrastructure.input_adapters.controllers.UserController import UserController
 from src.infrastructure.input_adapters.controllers.VehicleController import VehicleController
 from src.infrastructure.output_adapters.persistence.repositories.CellPostgreRepository import CellPostgreRepository
 from src.infrastructure.output_adapters.persistence.repositories.EmployeePostgreRepository import \
@@ -32,6 +34,7 @@ class Main:
 
     __healthController: HealthController
     __authController: AuthController
+    __userController: UserController
     __cellController: CellController
     __vehicleController: VehicleController
     __reservationController: ReservationController
@@ -42,6 +45,7 @@ class Main:
         self.__databaseService = DatabaseService()
         self.__healthController = HealthController()
         self.__authController = self.__configAuthController()
+        self.__userController = self.__configUserController()
         self.__cellController = self.__configCellController()
         self.__vehicleController = self.__configVehicleController()
         self.__reservationController = self.__configReservationController()
@@ -79,9 +83,16 @@ class Main:
         inputAdapter = EmployeeController(useCase)
         return inputAdapter
 
+    def __configUserController(self) -> UserController:
+        outputAdapter = UserPostgreRepository(self.__databaseService)
+        useCase = UserUseCase(outputAdapter)
+        inputAdapter = UserController(useCase)
+        return inputAdapter
+
     def setupControllers(self) -> None:
         self.__healthController.setupRoutes(self.__app)
         self.__authController.setupRoutes(self.__app)
+        self.__userController.setupRoutes(self.__app)
         self.__cellController.setupRoutes(self.__app)
         self.__vehicleController.setupRoutes(self.__app)
         self.__reservationController.setupRoutes(self.__app)

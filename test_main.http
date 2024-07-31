@@ -9,7 +9,7 @@ Accept: application/json
 # Usuarios
 
 # Registrar un nuevo usuario
-# Rol requerido: usuario
+# Rol requerido: invitado
 # Validaciones:
 # - Que no exista un usuario ya registrado mediante el DNI o correo eléctronico
 # - Que el formato de los campos coincidan con los del dominio
@@ -17,18 +17,60 @@ POST http://127.0.0.1:8000/register
 Content-Type: application/json
 
 {
-  "dniNumber": "43855553",
+  "dniNumber": "08825553",
   "dniType": "CÉDULA CIUDADANÍA",
-  "firstName": "Santiago",
-  "lastName": "Valencia",
-  "phoneNumber": "3024508215",
-  "emailAddress": "santiagovalenciaochoa2005@gmail.com"
+  "firstName": "XD",
+  "lastName": "Ochoa",
+  "phoneNumber": "0012558423",
+  "emailAddress": "xdjnumdibba@gmail.com"
 }
 
 ###
 
+# Modificar un usuario
+# Rol requerido: usuario/administrador
+# Validaciones:
+# - Que el usuario exista
+# - Que el email o el DNI no coincidan con los de otro usuario
+# - Que el formato de los campos coincidan con los del dominio
+PUT http://127.0.0.1:8000/update-user/49d57c69-4898-481e-b51f-b03333aaaad9
+Content-Type: application/json
+
+{
+  "dniNumber": "1236928592",
+  "dniType": "CÉDULA CIUDADANÍA",
+  "firstName": "Pablo",
+  "lastName": "Hernandez",
+  "phoneNumber": "3024508215",
+  "emailAddress": "clxudia@gmail.com"
+}
+
+###
+
+# Crear un usuario
+# Rol requerido: administrador
+# Validaciones:
+# - Que el email o el DNI no coincidan con los de otro usuario
+# - Que el formato de los campos coincidan con los del dominio
+POST http://127.0.0.1:8000/create-user
+Content-Type: application/json
+
+{
+  "dniNumber": "2036928592",
+  "dniType": "CÉDULA CIUDADANÍA",
+  "firstName": "Pablo",
+  "lastName": "Hernandez",
+  "phoneNumber": "3024508215",
+  "emailAddress": "pablo@gmail.com",
+  "status": "ACTIVO",
+  "role": "USUARIO"
+}
+
+
+###
+
 # Iniciar sesión de un usuario
-# Rol requerido: usuario
+# Rol requerido: invitado
 # Validaciones:
 # - Que DNI y correo electrónico coincidian con los de un usuario registrado
 POST http://127.0.0.1:8000/login
@@ -59,6 +101,25 @@ Content-Type: application/json
 
 ###
 
+# Modificar una celda
+# Rol requerido: administrador
+# Validaciones:
+# - Que exista la celda
+# - Que el número de celda no coincida con el de otra celda
+# - Que el formato de los campos coincidan con los del dominio
+
+PUT http://127.0.0.1:8000/update-cell/c5f96e48-479b-4d05-8ea1-14a6a7c899bb
+Content-Type: application/json
+
+{
+  "spaceNumber": "3",
+  "vehicleType": "AUTOMÓVIL",
+  "status": "MANTENIMIENTO"
+}
+
+
+###
+
 # Vehículos
 
 # Crear un nuevo vehículo
@@ -72,7 +133,7 @@ Content-Type: application/json
 
 {
   "userId": "c95905d5-45dc-4088-a479-92be9133c107",
-  "licensePlate": "AAA777",
+  "licensePlate": "AAA727",
   "model": "Zephyr X1",
   "vehicleType": "AUTOMÓVIL"
 }
@@ -144,7 +205,7 @@ POST http://127.0.0.1:8000/complete-reservation
 Content-Type: application/json
 
 {
-  "reservationId": "b1a1769a-6fd1-467d-a649-39778ab69965"
+  "reservationId": "932a7e9b-d95f-4923-bbdc-f9e0f84ad812"
 }
 
 ###

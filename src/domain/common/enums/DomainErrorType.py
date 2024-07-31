@@ -2,7 +2,11 @@ from enum import Enum
 
 
 class DomainErrorType(Enum):
-
+    
+    SPACE_NUMBER_ALREADY_EXISTS = "Este número de celda ya se encuentra asociado a otra celda"
+    EMAIL_ALREADY_EXISTS = "Este correo electrónico ya se encuentra asociado a otro usuario"
+    DNI_NUMBER_ALREADY_EXISTS = "Este número de identificación ya se encuentra asociado a otro usuario"
+    USER_NOT_FOUND = "Este usuario no existe"
     EMPLOYEE_NOT_FOUND = "Este empleado no existe"
     INVALID_INPUT = "Datos de entrada inválidos."
     INVALID_ENUM_VALUE = "Propiedad inválida."
@@ -16,7 +20,7 @@ class DomainErrorType(Enum):
     INCORRECT_LOGIN = "Credenciales de inicio de sesión incorrectas."
     USER_ID_REQUIRED = "No se puede realizar esta acción sin un usuario asociado."
     USER_ALREADY_EXISTS = "Este usuario ya existe en el sistema."
-    EMPLOYEE_ALREADY_EXISTS = "Este empleado ya se encuentra asociado a un usuario"
+    EMPLOYEE_ALREADY_EXISTS = "Este empleado ya se encuentra asociado a otro usuario"
     VEHICLE_ALREADY_EXISTS = "Este vehículo ya existe en el sistema"
     CELL_ALREADY_EXISTS = "Este número de celda ya está asociado con otra celda."
     CELL_NOT_FOUND = "Esta celda no existe"
