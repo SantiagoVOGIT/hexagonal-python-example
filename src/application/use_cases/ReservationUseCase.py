@@ -90,7 +90,7 @@ class ReservationUseCase(ReservationGateway):
         reservations: Optional[List[Reservation]] = self.__reservationRepository.getReservationsByUserId(userId)
         if not reservations:
             ExceptionHandler.raiseException(DomainException(
-                DomainErrorType.USER_RESERVATIONS_NOT_FOUND
+                DomainErrorType.RESERVATIONS_NOT_FOUND
             ))
         return reservations
 
