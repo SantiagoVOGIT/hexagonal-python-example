@@ -20,7 +20,7 @@ class UserFactory:
             lastName: str,
             emailAddress: str,
             phoneNumber: str,
-            role: UserRole = UserRole.USER,
+            role: UserRole,
             status: UserStatus = UserStatus.ACTIVE,
             id: Optional[UserId] = None,
             createdAt: Optional[datetime] = None

@@ -89,7 +89,8 @@ class DomainUtils:
                 pass
 
         ExceptionHandler.raiseException(DomainException(
-            DomainErrorType.INVALID_ENUM_VALUE
+            DomainErrorType.INVALID_ENUM_VALUE,
+            {"message": f"{value}, {enumType}"}
         ))
 
     @staticmethod

@@ -5,6 +5,8 @@ from src.infrastructure.config.Environments import Environments
 
 class InfrastructureInfo(Enum):
 
+    SUCCESS_UPDATE_VEHICLE = "Vehículo actualizado exitosamente"
+    SUCCESS_CREATED_CELL = "Celda creada exitosamente"
     SUCCES_UPDATED_USER_BASIC_INFO = "Información personal actualizada exitosamente"
     SUCCESS_UPDATED_VEHICLE = "Vehiculo actualizado exitosamente"
     SUCCESS_CREATED_USER = "Usuario creado exitosamente"
@@ -17,7 +19,7 @@ class InfrastructureInfo(Enum):
     SUCCESS_REJECT_RESERVATION = "Reserva rechazada exitosamente"
     SUCCES_UPDATED_CELL = "Celda modificada exitosamente"
     SUCCESS_CONNECTION_DATABASE = "Conexión exitosa a la base de datos."
-    SUCCES_REGISTERED_USER = "Usuario registrado exitosamente."
+    SUCCES_REGISTERED_USER = "Cuenta creada exitosamente."
     SUCCES_LOGIN = "Inicio de sesión exitoso"
     SUCCESS_CREATED_RESERVATION = "Reserva creada exitosamente"
     SUCCES_CREATED_CELL = "Celda creada exitosamente"

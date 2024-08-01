@@ -86,6 +86,14 @@ class ReservationUseCase(ReservationGateway):
         reservation: Optional[Reservation] = self.__reservationRepository.findById(reservationId)
         return reservation
 
+    def getReservationsByUserId(self, userId: UserId) -> List[Reservation]:
+        reservations: Optional[List[Reservation]] = self.__reservationRepository.getReservationsByUserId(userId)
+        if not reservations:
+            ExceptionHandler.raiseException(DomainException(
+                DomainErrorType.USER_RESERVATIONS_NOT_FOUND
+            ))
+        return reservations
+
     def __validateCellAvailability(self, cellId: CellId) -> None:
         cellStatus: CellStatus = self.__cellRepository.getStatus(cellId)
         if cellStatus != CellStatus.AVAILABLE:

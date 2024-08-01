@@ -8,6 +8,7 @@ from src.domain.entities.reservation.Reservation import Reservation
 from src.domain.entities.reservation.ports.ReservationRepository import ReservationRepository
 from src.domain.entities.reservation.value_objects.ReservationId import ReservationId
 from src.domain.entities.reservation.value_objects.ReservationStatus import ReservationStatus
+from src.domain.entities.user.value_objects.UserId import UserId
 from src.infrastructure.common.DatabaseService import DatabaseService
 from src.shared.error.CustomException import CustomException
 from src.shared.error.ExceptionHandler import ExceptionHandler
@@ -18,7 +19,6 @@ from src.infrastructure.output_adapters.persistence.entities.reservation_data.Re
 
 
 class ReservationPostgreRepository(ReservationRepository):
-
     __databaseService: DatabaseService
 
     def __init__(self, adapterService: DatabaseService):
@@ -131,6 +131,26 @@ class ReservationPostgreRepository(ReservationRepository):
                 ReservationMapper.toDomain(reservationData)
                 for reservationData
                 in reservationDataList
+            ]
+        except SQLAlchemyError as exc:
+            ExceptionHandler.raiseException(CustomException(
+                ErrorType.INFRASTRUCTURE_ERROR,
+                InfrastructureErrorType.DATABASE_ERROR.name,
+                InfrastructureErrorType.DATABASE_ERROR.value,
+                {"original_error": str(exc)}
+            ))
+        finally:
+            session.close()
+
+    def getReservationsByUserId(self, userId: UserId) -> Optional[List[Reservation]]:
+        session: Session = self.__databaseService.getSession()
+        try:
+            reservationDataList = cast(List[ReservationData], session.query(ReservationData).filter(
+                ReservationData.user_id == userId.getValue()
+            ).all())
+            return [
+                ReservationMapper.toDomain(reservationData)
+                for reservationData in reservationDataList
             ]
         except SQLAlchemyError as exc:
             ExceptionHandler.raiseException(CustomException(

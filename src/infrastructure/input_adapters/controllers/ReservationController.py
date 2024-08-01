@@ -5,6 +5,7 @@ from fastapi import FastAPI, HTTPException
 from src.domain.entities.reservation.Reservation import Reservation
 from src.domain.entities.reservation.ports.ReservationGateway import ReservationGateway
 from src.domain.entities.reservation.value_objects.ReservationId import ReservationId
+from src.domain.entities.user.value_objects.UserId import UserId
 from src.infrastructure.common.enums.InfrastructureInfo import InfrastructureInfo
 from src.infrastructure.input_adapters.dto.ReservationDTO import ReservationDTO
 from src.shared.error.ExceptionHandler import ExceptionHandler
@@ -12,7 +13,6 @@ from src.shared.utils.MessageFactory import MessageFactory
 
 
 class ReservationController:
-
     __reservationGateway: ReservationGateway
 
     def __init__(self, useCase: ReservationGateway):
@@ -136,6 +136,24 @@ class ReservationController:
                 reservation = self.__reservationGateway.getReservationById(reservationId)
                 return {
                     "reservation": Reservation.toDict(reservation)
+                }
+            except Exception as exc:
+                errorResponse: Dict[str, Any] = ExceptionHandler.handleException(exc)
+                raise HTTPException(
+                    status_code=400,
+                    detail=errorResponse
+                )
+
+        @app.get("/reservations/{user_id}")
+        async def getReservationsByUserId(user_id: str):
+            try:
+                userId = UserId(user_id)
+                reservations: List[Reservation] = self.__reservationGateway.getReservationsByUserId(userId)
+                return {
+                    "reservations": [
+                        Reservation.toDict(reservation)
+                        for reservation in reservations
+                    ]
                 }
             except Exception as exc:
                 errorResponse: Dict[str, Any] = ExceptionHandler.handleException(exc)

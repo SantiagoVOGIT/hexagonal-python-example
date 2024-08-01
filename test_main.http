@@ -17,12 +17,12 @@ POST http://127.0.0.1:8000/register
 Content-Type: application/json
 
 {
-  "dniNumber": "1036928592",
+  "dniNumber": "43855553",
   "dniType": "CÉDULA CIUDADANÍA",
-  "firstName": "Santiago",
-  "lastName": "Valencia Ochoa",
-  "phoneNumber": "3024508215",
-  "emailAddress": "fenixcaps@gmail.com"
+  "firstName": "Claudia",
+  "lastName": "Arelis Ochoa",
+  "phoneNumber": "3012558423",
+  "emailAddress": "claudia@gmail.com"
 }
 
 ###
@@ -36,7 +36,7 @@ POST http://127.0.0.1:8000/admin/create-user
 Content-Type: application/json
 
 {
-  "dniNumber": "2036928592",
+  "dniNumber": "1036928592",
   "dniType": "CÉDULA CIUDADANÍA",
   "firstName": "Pablo",
   "lastName": "Hernandez",
@@ -76,15 +76,15 @@ Content-Type: application/json
 # - Que el usuario exista
 # - Que el email o el DNI no coincidan con los de otro usuario
 # - Que el formato de los campos coincidan con los del dominio
-PUT http://127.0.0.1:8000/update-user/498466cc-b5c8-4a1e-9820-2bd39ed65429
+PUT http://127.0.0.1:8000/update-user/9d963fef-0c1f-48b7-99eb-03840a95fe5b
 Content-Type: application/json
 
 {
   "dniType": "CÉDULA CIUDADANÍA",
-  "firstName": "Claudia",
-  "lastName": "Arelis Ochoa",
+  "firstName": "Santiago",
+  "lastName": "Valencia",
   "phoneNumber": "3024508215",
-  "emailAddress": "claudia@gmail.com"
+  "emailAddress": "santiagovalenciaochoa2005@gmail.com"
 }
 
 ###
@@ -114,7 +114,7 @@ POST http://127.0.0.1:8000/admin/create-cell
 Content-Type: application/json
 
 {
-  "spaceNumber": "1",
+  "spaceNumber": "7",
   "vehicleType": "AUTOMÓVIL",
   "status": "DISPONIBLE"
 }
@@ -128,7 +128,7 @@ Content-Type: application/json
 # - Que el número de celda no coincida con el de otra celda
 # - Que el formato de los campos coincidan con los del dominio
 
-PUT http://127.0.0.1:8000//admin/update-cell/{cell_id}
+PUT http://127.0.0.1:8000/admin/update-cell/c5f96e48-479b-4d05-8ea1-14a6a7c899bb
 Content-Type: application/json
 
 {
@@ -152,9 +152,9 @@ POST http://127.0.0.1:8000/create-vehicle
 Content-Type: application/json
 
 {
-  "userId": "9abb2fdd-7658-4c39-8906-2831f3fe2424",
-  "licensePlate": "ABC123",
-  "model": "Ferrari 296 GTB",
+  "userId": "f71516bb-24e7-428e-8df6-716a8c80f307",
+  "licensePlate": "XDD123",
+  "model": "Lambo 296 GTB",
   "vehicleType": "AUTOMÓVIL"
 }
 
@@ -166,7 +166,7 @@ Content-Type: application/json
 # - Queel vehiculo exista
 # - Que no se modifique un vehiculo con un número de placa ya asociado a otro vehículo
 # - Que el formato de los campos coincidan con los del dominio
-PUT http://127.0.0.1:8000/update-vehicle/4d268463-bbb5-4025-b643-c1f3564eeea0
+PUT http://127.0.0.1:8000/update-vehicle/4423877f-808f-4dde-b8e4-4c66a7f56338
 Content-Type: application/json
 
 {
@@ -189,9 +189,9 @@ POST http://127.0.0.1:8000/create-reservation
 Content-Type: application/json
 
 {
-  "cellId": "f89bb89d-11c2-4dbe-823c-47648c61e946",
-  "userId": "9abb2fdd-7658-4c39-8906-2831f3fe2424",
-  "vehicleId": "5aae648e-3d58-4984-b459-a743ee929322"
+  "cellId": "edefeed5-735a-4354-96f3-306155155dcb",
+  "userId": "f71516bb-24e7-428e-8df6-716a8c80f307",
+  "vehicleId": "8a133a1e-9cc7-408d-998d-b742abd3bb82"
 }
 
 ###
@@ -263,6 +263,15 @@ GET http://127.0.0.1:8000/reservation/21bc1236-a47d-4162-8668-19b41c3565b2
 Content-Type: application/json
 
 ###
+
+# Obtener todas las reservas de un usuario
+# Validaciones:
+# - Que exista la reserva
+GET http://127.0.0.1:8000/reservations/f71516bb-24e7-428e-8df6-716a8c80f307
+Content-Type: application/json
+
+###
+
 
 # Empleados
 

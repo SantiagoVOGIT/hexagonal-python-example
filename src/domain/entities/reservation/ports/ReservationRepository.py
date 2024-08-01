@@ -5,6 +5,7 @@ from typing import Optional, List
 from src.domain.entities.reservation.Reservation import Reservation
 from src.domain.entities.reservation.value_objects.ReservationId import ReservationId
 from src.domain.entities.reservation.value_objects.ReservationStatus import ReservationStatus
+from src.domain.entities.user.value_objects.UserId import UserId
 
 
 class ReservationRepository(ABC):
@@ -31,4 +32,8 @@ class ReservationRepository(ABC):
 
     @abstractmethod
     def getAllReservations(self) -> Optional[List[Reservation]]:
+        pass
+
+    @abstractmethod
+    def getReservationsByUserId(self, userId: UserId) -> Optional[List[Reservation]]:
         pass

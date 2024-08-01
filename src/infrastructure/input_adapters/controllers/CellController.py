@@ -29,7 +29,7 @@ class CellController:
                 )
                 return {
                     "detail": MessageFactory
-                    .build(InfrastructureInfo.SUCCESS_CREATED_USER)
+                    .build(InfrastructureInfo.SUCCESS_CREATED_CELL)
                     .getDetail()
                 }
             except Exception as exc:

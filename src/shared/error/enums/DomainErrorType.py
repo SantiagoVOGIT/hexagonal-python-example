@@ -21,7 +21,7 @@ class DomainErrorType(Enum):
     USER_ID_REQUIRED = "No se puede realizar esta acción sin un usuario asociado."
     USER_ALREADY_EXISTS = "Este usuario ya existe en el sistema."
     EMPLOYEE_ALREADY_EXISTS = "Este empleado ya se encuentra asociado a otro usuario"
-    VEHICLE_ALREADY_EXISTS = "Este vehículo ya existe en el sistema"
+    VEHICLE_ALREADY_EXISTS = "Esta placa ya se encuentra asociada a otro vehículo"
     CELL_ALREADY_EXISTS = "Este número de celda ya está asociado con otra celda."
     CELL_NOT_AVAILABLE = "No es posible reservar esta celda en estos momentos"
     INCOMPATIBLE_VEHICLE_TYPE_CELL = "Su tipo de vehiculo no es compatible con esta celda"

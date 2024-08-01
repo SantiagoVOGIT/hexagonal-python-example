@@ -4,6 +4,8 @@ from fastapi import FastAPI, HTTPException
 
 from src.domain.entities.user.ports.UserGateway import UserGateway
 from src.domain.entities.user.value_objects.UserId import UserId
+from src.domain.entities.user.value_objects.UserRole import UserRole
+from src.domain.entities.user.value_objects.UserStatus import UserStatus
 from src.infrastructure.common.enums.InfrastructureInfo import InfrastructureInfo
 from src.infrastructure.input_adapters.dto.UserDTO import UserDTO
 from src.shared.error.ExceptionHandler import ExceptionHandler
@@ -29,6 +31,8 @@ class UserController:
                     dniType=request.dniType,
                     emailAddress=request.emailAddress,
                     phoneNumber=request.phoneNumber,
+                    status=UserStatus.ACTIVE,
+                    role=UserRole.USER
                 )
                 return {
                     "detail": MessageFactory

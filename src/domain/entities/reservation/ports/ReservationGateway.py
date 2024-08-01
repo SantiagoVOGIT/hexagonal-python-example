@@ -43,3 +43,7 @@ class ReservationGateway(ABC):
     @abstractmethod
     def getReservationById(self, reservationId: ReservationId) -> Optional[Reservation]:
         pass
+
+    @abstractmethod
+    def getReservationsByUserId(self, userId: UserId) -> List[Reservation]:
+        pass

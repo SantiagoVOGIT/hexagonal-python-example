@@ -21,14 +21,14 @@ class UserUseCase(UserGateway):
         self.__userRepository = userOutputAdapter
 
     def createUser(self,
-                   dniNumber: Optional[str] = None,
-                   dniType: Optional[DniType] = None,
-                   firstName: Optional[str] = None,
-                   lastName: Optional[str] = None,
-                   emailAddress: Optional[str] = None,
-                   phoneNumber: Optional[str] = None,
-                   role: Optional[UserRole] = None,
-                   status: Optional[UserStatus] = None
+                   dniNumber: str,
+                   dniType: DniType,
+                   firstName: str,
+                   lastName: str,
+                   emailAddress: str,
+                   phoneNumber: str,
+                   role: UserRole,
+                   status: UserStatus
                    ) -> User:
 
         self.__validateNewDniNumber(dniNumber)
