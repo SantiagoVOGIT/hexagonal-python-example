@@ -1,7 +1,9 @@
 from datetime import datetime, timezone
 from typing import List, Optional
 
-from src.domain.common.enums.DomainErrorType import DomainErrorType
+from src.shared.error.DomainException import DomainException
+from src.shared.error.ExceptionHandler import ExceptionHandler
+from src.shared.error.enums.DomainErrorType import DomainErrorType
 from src.domain.entities.cell.ports.CellRepository import CellRepository
 from src.domain.entities.cell.value_objects.CellId import CellId
 from src.domain.entities.cell.value_objects.CellStatus import CellStatus
@@ -14,7 +16,7 @@ from src.domain.entities.reservation.value_objects.ReservationStatus import Rese
 from src.domain.entities.user.value_objects.UserId import UserId
 from src.domain.entities.vehicle.ports.VehicleRepository import VehicleRepository
 from src.domain.entities.vehicle.value_objects.VehicleId import VehicleId
-from src.shared.utils.ErrorHandler import ExceptionHandler, DomainException
+from src.domain.entities.vehicle.value_objects.VehicleType import VehicleType
 
 
 class ReservationUseCase(ReservationGateway):
@@ -32,29 +34,11 @@ class ReservationUseCase(ReservationGateway):
         self.__cellRepository = cellOutputAdapter
         self.__vehicleRepository = vehicleOutputAdapter
 
-    def createReservation(self,
-                          userId: UserId,
-                          cellId: CellId,
-                          vehicleId: VehicleId
-                          ) -> Reservation:
+    def createReservation(self, userId: UserId, cellId: CellId, vehicleId: VehicleId) -> Reservation:
 
-        if userId is None:
-            ExceptionHandler.raiseException(DomainException(
-                DomainErrorType.USER_ID_REQUIRED,
-            ))
-
-        cellStatus = self.__cellRepository.getStatus(cellId)
-        if cellStatus != CellStatus.AVAILABLE:
-            ExceptionHandler.raiseException(DomainException(
-                DomainErrorType.CELL_NOT_AVAILABLE,
-            ))
-
-        userVehicleType = self.__vehicleRepository.getVehicleType(vehicleId)
-        cellVehicleType = self.__cellRepository.getVehicleType(cellId)
-        if userVehicleType != cellVehicleType:
-            ExceptionHandler.raiseException(DomainException(
-                DomainErrorType.INCOMPATIBLE_VEHICLE_TYPE_CELL
-            ))
+        self.__validateUserId(userId)
+        self.__validateCellAvailability(cellId)
+        self.__validateVehicleCompatibility(vehicleId, cellId)
 
         newReservation: Reservation = ReservationFactory.create(
             userId=userId,
@@ -67,62 +51,30 @@ class ReservationUseCase(ReservationGateway):
         return newReservation
 
     def cancelReservation(self, reservationId: ReservationId) -> None:
-        reservation = self.__reservationRepository.findById(reservationId)
-        if reservation is None:
-            ExceptionHandler.raiseException(DomainException(
-                DomainErrorType.RESERVATION_NOT_FOUND
-            ))
-
-        endTime: datetime = datetime.now(timezone.utc)
+        reservation: Optional[Reservation] = self.__reservationRepository.findById(reservationId)
         self.__reservationRepository.updateStatus(reservationId, ReservationStatus.CANCELLED)
-        self.__reservationRepository.updateEndTime(reservationId, endTime)
-
-        cellId = reservation.getCellId()
-        self.__cellRepository.updateStatus(cellId, CellStatus.AVAILABLE)
+        self.__reservationRepository.updateEndTime(reservationId, datetime.now(timezone.utc))
+        self.__cellRepository.updateStatus(reservation.getCellId(), CellStatus.AVAILABLE)
 
     def rejectReservation(self, reservationId: ReservationId) -> None:
-        reservation = self.__reservationRepository.findById(reservationId)
-        if reservation is None:
-            ExceptionHandler.raiseException(DomainException(
-                DomainErrorType.RESERVATION_NOT_FOUND
-            ))
-
-        endTime: datetime = datetime.now(timezone.utc)
+        reservation: Optional[Reservation] = self.__reservationRepository.findById(reservationId)
         self.__reservationRepository.updateStatus(reservationId, ReservationStatus.REJECTED)
-        self.__reservationRepository.updateEndTime(reservationId, endTime)
-
-        cellId = reservation.getCellId()
-        self.__cellRepository.updateStatus(cellId, CellStatus.AVAILABLE)
+        self.__reservationRepository.updateEndTime(reservationId, datetime.now(timezone.utc))
+        self.__cellRepository.updateStatus(reservation.getCellId(), CellStatus.AVAILABLE)
 
     def confirmReservation(self, reservationId: ReservationId) -> None:
-        reservation = self.__reservationRepository.findById(reservationId)
-        if reservation is None:
-            ExceptionHandler.raiseException(DomainException(
-                DomainErrorType.RESERVATION_NOT_FOUND
-            ))
-
-        startTime: datetime = datetime.now(timezone.utc)
+        reservation: Optional[Reservation] = self.__reservationRepository.findById(reservationId)
         self.__reservationRepository.updateStatus(reservationId, ReservationStatus.CONFIRMED)
-        self.__reservationRepository.updateStarTime(reservationId, startTime)
-
-        cellId = reservation.getCellId()
-        self.__cellRepository.updateStatus(cellId, CellStatus.OCCUPIED)
+        self.__reservationRepository.updateStarTime(reservationId, datetime.now(timezone.utc))
+        self.__cellRepository.updateStatus(reservation.getCellId(), CellStatus.OCCUPIED)
 
     def completeReservation(self, reservationId: ReservationId) -> None:
-        reservation = self.__reservationRepository.findById(reservationId)
-        if reservation is None:
-            ExceptionHandler.raiseException(DomainException(
-                DomainErrorType.RESERVATION_NOT_FOUND
-            ))
-
-        endTime: datetime = datetime.now(timezone.utc)
+        reservation: Optional[Reservation] = self.__reservationRepository.findById(reservationId)
         self.__reservationRepository.updateStatus(reservationId, ReservationStatus.COMPLETED)
-        self.__reservationRepository.updateEndTime(reservationId, endTime)
+        self.__reservationRepository.updateEndTime(reservationId, datetime.now(timezone.utc))
+        self.__cellRepository.updateStatus(reservation.getCellId(), CellStatus.AVAILABLE)
 
-        cellId = reservation.getCellId()
-        self.__cellRepository.updateStatus(cellId, CellStatus.AVAILABLE)
-
-    def getAllReservations(self) -> Optional[List[Reservation]]:
+    def getAllReservations(self) -> List[Reservation]:
         reservations: Optional[List[Reservation]] = self.__reservationRepository.getAllReservations()
         if not reservations:
             ExceptionHandler.raiseException(DomainException(
@@ -130,11 +82,28 @@ class ReservationUseCase(ReservationGateway):
             ))
         return reservations
 
-    def getReservationById(self, reservationId: ReservationId) -> Optional[Reservation]:
+    def getReservationById(self, reservationId: ReservationId) -> Reservation:
         reservation: Optional[Reservation] = self.__reservationRepository.findById(reservationId)
-        if reservation is None:
-            ExceptionHandler.raiseException(DomainException(
-                DomainErrorType.RESERVATION_NOT_FOUND
-            ))
         return reservation
 
+    def __validateCellAvailability(self, cellId: CellId) -> None:
+        cellStatus: CellStatus = self.__cellRepository.getStatus(cellId)
+        if cellStatus != CellStatus.AVAILABLE:
+            ExceptionHandler.raiseException(DomainException(
+                DomainErrorType.CELL_NOT_AVAILABLE
+            ))
+
+    def __validateVehicleCompatibility(self, vehicleId: VehicleId, cellId: CellId) -> None:
+        userVehicleType: VehicleType = self.__vehicleRepository.getVehicleType(vehicleId)
+        cellVehicleType: VehicleType = self.__cellRepository.getVehicleType(cellId)
+        if userVehicleType != cellVehicleType:
+            ExceptionHandler.raiseException(DomainException(
+                DomainErrorType.INCOMPATIBLE_VEHICLE_TYPE_CELL
+            ))
+
+    @staticmethod
+    def __validateUserId(userId: UserId) -> None:
+        if userId is None:
+            ExceptionHandler.raiseException(DomainException(
+                DomainErrorType.USER_ID_REQUIRED,
+            ))

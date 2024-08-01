@@ -5,7 +5,7 @@ from fastapi import FastAPI, HTTPException
 from src.domain.entities.user.ports.AuthGateway import AuthGateway
 from src.infrastructure.common.enums.InfrastructureInfo import InfrastructureInfo
 from src.infrastructure.input_adapters.dto.UserDTO import UserDTO
-from src.shared.utils.ErrorHandler import ExceptionHandler
+from src.shared.error.ExceptionHandler import ExceptionHandler
 from src.shared.utils.MessageFactory import MessageFactory
 
 

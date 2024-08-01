@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import TypeVar
+from typing import TypeVar, Optional
 
 from src.domain.entities.user.User import User
 from src.domain.entities.user.value_objects.DniType import DniType
@@ -13,39 +13,28 @@ T = TypeVar('T')
 class UserGateway(ABC):
 
     @abstractmethod
-    def register(self,
-                 dniNumber: str,
-                 dniType: DniType,
-                 firstName: str,
-                 lastName: str,
-                 emailAddress: str,
-                 phoneNumber: str,
-                 ) -> User:
-        pass
-
-    @abstractmethod
     def createUser(self,
-                   dniNumber: str,
-                   dniType: DniType,
-                   firstName: str,
-                   lastName: str,
-                   emailAddress: str,
-                   phoneNumber: str,
-                   role: UserRole,
-                   status: UserStatus
+                   dniNumber: Optional[str] = None,
+                   dniType: Optional[DniType] = None,
+                   firstName: Optional[str] = None,
+                   lastName: Optional[str] = None,
+                   emailAddress: Optional[str] = None,
+                   phoneNumber: Optional[str] = None,
+                   role: Optional[UserRole] = None,
+                   status: Optional[UserStatus] = None
                    ) -> User:
         pass
 
     @abstractmethod
     def updateUser(self,
                    userId: UserId,
-                   dniNumber: str,
-                   dniType: DniType,
-                   firstName: str,
-                   lastName: str,
-                   emailAddress: str,
-                   phoneNumber: str,
-                   role: UserRole,
-                   status: UserStatus
+                   dniNumber: Optional[str] = None,
+                   dniType: Optional[DniType] = None,
+                   firstName: Optional[str] = None,
+                   lastName: Optional[str] = None,
+                   emailAddress: Optional[str] = None,
+                   phoneNumber: Optional[str] = None,
+                   role: Optional[UserRole] = None,
+                   status: Optional[UserStatus] = None
                    ) -> None:
         pass

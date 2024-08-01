@@ -8,7 +8,7 @@ Accept: application/json
 
 # Usuarios
 
-# Registrar un nuevo usuario
+# Registrorse
 # Rol requerido: invitado
 # Validaciones:
 # - Que no exista un usuario ya registrado mediante el DNI o correo eléctronico
@@ -17,42 +17,22 @@ POST http://127.0.0.1:8000/register
 Content-Type: application/json
 
 {
-  "dniNumber": "08825553",
+  "dniNumber": "1036928592",
   "dniType": "CÉDULA CIUDADANÍA",
-  "firstName": "XD",
-  "lastName": "Ochoa",
-  "phoneNumber": "0012558423",
-  "emailAddress": "xdjnumdibba@gmail.com"
-}
-
-###
-
-# Modificar un usuario
-# Rol requerido: usuario/administrador
-# Validaciones:
-# - Que el usuario exista
-# - Que el email o el DNI no coincidan con los de otro usuario
-# - Que el formato de los campos coincidan con los del dominio
-PUT http://127.0.0.1:8000/update-user/49d57c69-4898-481e-b51f-b03333aaaad9
-Content-Type: application/json
-
-{
-  "dniNumber": "1236928592",
-  "dniType": "CÉDULA CIUDADANÍA",
-  "firstName": "Pablo",
-  "lastName": "Hernandez",
+  "firstName": "Santiago",
+  "lastName": "Valencia Ochoa",
   "phoneNumber": "3024508215",
-  "emailAddress": "clxudia@gmail.com"
+  "emailAddress": "fenixcaps@gmail.com"
 }
 
 ###
 
-# Crear un usuario
+# Crear un usuario completo
 # Rol requerido: administrador
 # Validaciones:
 # - Que el email o el DNI no coincidan con los de otro usuario
 # - Que el formato de los campos coincidan con los del dominio
-POST http://127.0.0.1:8000/create-user
+POST http://127.0.0.1:8000/admin/create-user
 Content-Type: application/json
 
 {
@@ -66,10 +46,50 @@ Content-Type: application/json
   "role": "USUARIO"
 }
 
+###
+
+# Modificar información completa de un usuario
+# Rol requerido: administrador
+# Validaciones:
+# - Que el usuario exista
+# - Que el email o el DNI no coincidan con los de otro usuario
+# - Que el formato de los campos coincidan con los del dominio
+PUT http://127.0.0.1:8000/admin/update-user/498466cc-b5c8-4a1e-9820-2bd39ed65429
+Content-Type: application/json
+
+{
+  "dniNumber": "43855553",
+  "dniType": "CÉDULA CIUDADANÍA",
+  "firstName": "Claudia",
+  "lastName": "Arelis Ochoa",
+  "phoneNumber": "3024508215",
+  "emailAddress": "claudia@gmail.com",
+  "role": "USUARIO",
+  "status": "INACTIVO"
+}
 
 ###
 
-# Iniciar sesión de un usuario
+# Modificar información de usuario bàsica
+# Rol requerido: usuario
+# Validaciones:
+# - Que el usuario exista
+# - Que el email o el DNI no coincidan con los de otro usuario
+# - Que el formato de los campos coincidan con los del dominio
+PUT http://127.0.0.1:8000/update-user/498466cc-b5c8-4a1e-9820-2bd39ed65429
+Content-Type: application/json
+
+{
+  "dniType": "CÉDULA CIUDADANÍA",
+  "firstName": "Claudia",
+  "lastName": "Arelis Ochoa",
+  "phoneNumber": "3024508215",
+  "emailAddress": "claudia@gmail.com"
+}
+
+###
+
+# Iniciar sesión
 # Rol requerido: invitado
 # Validaciones:
 # - Que DNI y correo electrónico coincidian con los de un usuario registrado
@@ -90,7 +110,7 @@ Content-Type: application/json
 # Validaciones:
 # - Que no se registre una celda con un número de espacio ya asociado a otra celda
 # - Que el formato de los campos coincidan con los del dominio
-POST http://127.0.0.1:8000/create-cell
+POST http://127.0.0.1:8000/admin/create-cell
 Content-Type: application/json
 
 {
@@ -108,7 +128,7 @@ Content-Type: application/json
 # - Que el número de celda no coincida con el de otra celda
 # - Que el formato de los campos coincidan con los del dominio
 
-PUT http://127.0.0.1:8000/update-cell/c5f96e48-479b-4d05-8ea1-14a6a7c899bb
+PUT http://127.0.0.1:8000//admin/update-cell/{cell_id}
 Content-Type: application/json
 
 {
@@ -132,9 +152,26 @@ POST http://127.0.0.1:8000/create-vehicle
 Content-Type: application/json
 
 {
-  "userId": "c95905d5-45dc-4088-a479-92be9133c107",
-  "licensePlate": "AAA727",
-  "model": "Zephyr X1",
+  "userId": "9abb2fdd-7658-4c39-8906-2831f3fe2424",
+  "licensePlate": "ABC123",
+  "model": "Ferrari 296 GTB",
+  "vehicleType": "AUTOMÓVIL"
+}
+
+###
+
+# Modificar un vehículo
+# Rol requerido: usuario
+# Validaciones:
+# - Queel vehiculo exista
+# - Que no se modifique un vehiculo con un número de placa ya asociado a otro vehículo
+# - Que el formato de los campos coincidan con los del dominio
+PUT http://127.0.0.1:8000/update-vehicle/4d268463-bbb5-4025-b643-c1f3564eeea0
+Content-Type: application/json
+
+{
+  "licensePlate": "ABC123",
+  "model": "Ferrari 296 GTB",
   "vehicleType": "AUTOMÓVIL"
 }
 
@@ -152,9 +189,9 @@ POST http://127.0.0.1:8000/create-reservation
 Content-Type: application/json
 
 {
-  "userId": "c95905d5-45dc-4088-a479-92be9133c107",
-  "cellId": "c5f96e48-479b-4d05-8ea1-14a6a7c899bb",
-  "vehicleId": "5d4d0b1c-375e-406b-9953-f9e78da18f02"
+  "cellId": "f89bb89d-11c2-4dbe-823c-47648c61e946",
+  "userId": "9abb2fdd-7658-4c39-8906-2831f3fe2424",
+  "vehicleId": "5aae648e-3d58-4984-b459-a743ee929322"
 }
 
 ###
@@ -167,7 +204,7 @@ POST http://127.0.0.1:8000/cancel-reservation
 Content-Type: application/json
 
 {
-  "reservationId": "b0170041-a243-4c3c-83d4-8ba165c50b65"
+  "reservationId": "21bc1236-a47d-4162-8668-19b41c3565b2"
 }
 
 ###
@@ -175,11 +212,11 @@ Content-Type: application/json
 # Rol requerido: administrador
 # Validaciones:
 # - Que exista la reserva
-POST http://127.0.0.1:8000/reject-reservation
+POST http://127.0.0.1:8000/admin/reject-reservation
 Content-Type: application/json
 
 {
-  "reservationId": "20843587-3b38-4d32-b50f-95fdb25340d2"
+  "reservationId": "21bc1236-a47d-4162-8668-19b41c3565b2"
 }
 
 ###
@@ -188,11 +225,11 @@ Content-Type: application/json
 # Rol requerido: administrador
 # Validaciones:
 # - Que exista la reserva
-POST http://127.0.0.1:8000/confirm-reservation
+POST http://127.0.0.1:8000/admin/confirm-reservation
 Content-Type: application/json
 
 {
-  "reservationId": "b0170041-a243-4c3c-83d4-8ba165c50b65"
+  "reservationId": "21bc1236-a47d-4162-8668-19b41c3565b2"
 }
 
 ###
@@ -201,11 +238,11 @@ Content-Type: application/json
 # Rol requerido: administrador
 # Validaciones:
 # - Que exista la reserva
-POST http://127.0.0.1:8000/complete-reservation
+POST http://127.0.0.1:8000/admin/complete-reservation
 Content-Type: application/json
 
 {
-  "reservationId": "932a7e9b-d95f-4923-bbdc-f9e0f84ad812"
+  "reservationId": "21bc1236-a47d-4162-8668-19b41c3565b2"
 }
 
 ###
@@ -214,7 +251,7 @@ Content-Type: application/json
 # Rol requerido: administrador
 # Validaciones:
 # - Que existan reservas
-GET http://127.0.0.1:8000/reservations
+GET http://127.0.0.1:8000/admin/reservations
 Content-Type: application/json
 
 ###
@@ -222,7 +259,7 @@ Content-Type: application/json
 # Obtener una reserva por su ID
 # Validaciones:
 # - Que exista la reserva
-GET http://127.0.0.1:8000/reservation/20843587-3b38-4d32-b50f-95fdb25340d2
+GET http://127.0.0.1:8000/reservation/21bc1236-a47d-4162-8668-19b41c3565b2
 Content-Type: application/json
 
 ###
@@ -235,12 +272,13 @@ Content-Type: application/json
 # - Que no se registre un empleado sin un ID de usuario asociado
 # - Que no se registre un empleado con un ID de usuario ya asociado a otro empleado
 # - Que el formato de los campos coincidan con los del dominio
-POST http://127.0.0.1:8000/create-employee
+POST http://127.0.0.1:8000/admin/create-employee
 Content-Type: application/json
 
 {
-  "userId": "c95905d5-45dc-4088-a479-92be9133c107",
+  "userId": "9abb2fdd-7658-4c39-8906-2831f3fe2424",
   "position": "GERENTE",
+  "status": "VACACIONES",
   "salary": "1000000"
 }
 
@@ -250,11 +288,12 @@ Content-Type: application/json
 # Rol requerido: administrador
 # Validaciones:
 # - Que exista el empleado
-PUT http://127.0.0.1:8000/update-employee/1c947a6b-fae8-476b-a902-9b2535deda7a
+PUT http://127.0.0.1:8000/admin/update-employee/ad70ad07-5504-4607-a4b3-28ccae08a879
 Content-Type: application/json
 
 {
   "position": "GERENTE",
+  "status": "ACTIVO",
   "salary": "50"
 }
 

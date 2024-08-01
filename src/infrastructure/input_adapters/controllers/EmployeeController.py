@@ -6,7 +6,7 @@ from src.domain.entities.employee.ports.EmployeeGateway import EmployeeGateway
 from src.domain.entities.employee.value_objects.EmployeeId import EmployeeId
 from src.infrastructure.common.enums.InfrastructureInfo import InfrastructureInfo
 from src.infrastructure.input_adapters.dto.EmployeeDTO import EmployeeDTO
-from src.shared.utils.ErrorHandler import ExceptionHandler
+from src.shared.error.ExceptionHandler import ExceptionHandler
 from src.shared.utils.MessageFactory import MessageFactory
 
 
@@ -19,12 +19,13 @@ class EmployeeController:
 
     def setupRoutes(self, app: FastAPI) -> None:
 
-        @app.post("/create-employee")
+        @app.post("/admin/create-employee")
         async def createEmployee(request: EmployeeDTO):
             try:
                 self.__employeeGateway.createEmployee(
                     request.userId,
                     request.position,
+                    request.status,
                     request.salary
                 )
                 return {
@@ -39,7 +40,7 @@ class EmployeeController:
                     detail=errorResponse
                 )
 
-        @app.put("/update-employee/{employee_id}")
+        @app.put("/admin/update-employee/{employee_id}")
         async def updateEmployee(employee_id: str, request: EmployeeDTO):
             try:
                 employeeId = EmployeeId(employee_id)
@@ -47,6 +48,7 @@ class EmployeeController:
                     employeeId=employeeId,
                     userId=request.userId,
                     position=request.position,
+                    status=request.status,
                     salary=request.salary
                 )
                 return {

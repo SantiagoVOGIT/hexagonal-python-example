@@ -4,16 +4,17 @@ from typing import Optional, List, cast
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
-from src.domain.common.enums.DomainErrorType import DomainErrorType
 from src.domain.entities.reservation.Reservation import Reservation
 from src.domain.entities.reservation.ports.ReservationRepository import ReservationRepository
 from src.domain.entities.reservation.value_objects.ReservationId import ReservationId
 from src.domain.entities.reservation.value_objects.ReservationStatus import ReservationStatus
 from src.infrastructure.common.DatabaseService import DatabaseService
-from src.infrastructure.common.enums.InfrastructureErrorType import InfrastructureErrorType
+from src.shared.error.CustomException import CustomException
+from src.shared.error.ExceptionHandler import ExceptionHandler
+from src.shared.error.enums.ErrorType import ErrorType
+from src.shared.error.enums.InfrastructureErrorType import InfrastructureErrorType
 from src.infrastructure.output_adapters.persistence.entities.reservation_data.ReservationData import ReservationData
 from src.infrastructure.output_adapters.persistence.entities.reservation_data.ReservationMapper import ReservationMapper
-from src.shared.utils.ErrorHandler import ExceptionHandler, CustomException, ErrorType
 
 
 class ReservationPostgreRepository(ReservationRepository):
@@ -46,15 +47,8 @@ class ReservationPostgreRepository(ReservationRepository):
             reservationData = session.query(ReservationData).filter(
                 ReservationData.id == reservationId.getValue()
             ).first()
-            if reservationData is None:
-                ExceptionHandler.raiseException(CustomException(
-                    ErrorType.DOMAIN_ERROR,
-                    DomainErrorType.RESERVATION_NOT_FOUND.name,
-                    DomainErrorType.RESERVATION_NOT_FOUND.value
-                ))
             reservationData.status = status.getValue()
             session.commit()
-
         except SQLAlchemyError as exc:
             session.rollback()
             ExceptionHandler.raiseException(CustomException(
@@ -72,12 +66,6 @@ class ReservationPostgreRepository(ReservationRepository):
             reservationData = session.query(ReservationData).filter(
                 ReservationData.id == reservationId.getValue()
             ).first()
-            if reservationData is None:
-                ExceptionHandler.raiseException(CustomException(
-                    ErrorType.DOMAIN_ERROR,
-                    DomainErrorType.RESERVATION_NOT_FOUND.name,
-                    DomainErrorType.RESERVATION_NOT_FOUND.value
-                ))
             reservationData.end_time = endTime
             session.commit()
         except SQLAlchemyError as exc:
@@ -97,12 +85,6 @@ class ReservationPostgreRepository(ReservationRepository):
             reservationData = session.query(ReservationData).filter(
                 ReservationData.id == reservationId.getValue()
             ).first()
-            if reservationData is None:
-                ExceptionHandler.raiseException(CustomException(
-                    ErrorType.DOMAIN_ERROR,
-                    DomainErrorType.RESERVATION_NOT_FOUND.name,
-                    DomainErrorType.RESERVATION_NOT_FOUND.value
-                ))
             reservationData.start_time = startTime
             session.commit()
         except SQLAlchemyError as exc:
@@ -124,7 +106,11 @@ class ReservationPostgreRepository(ReservationRepository):
             ).first()
 
             if reservationData is None:
-                return None
+                ExceptionHandler.raiseException(CustomException(
+                    ErrorType.INFRASTRUCTURE_ERROR,
+                    InfrastructureErrorType.RESERVATION_NOT_FOUND.name,
+                    InfrastructureErrorType.RESERVATION_NOT_FOUND.value
+                ))
 
             return ReservationMapper.toDomain(reservationData)
         except SQLAlchemyError as exc:
@@ -141,9 +127,11 @@ class ReservationPostgreRepository(ReservationRepository):
         session: Session = self.__databaseService.getSession()
         try:
             reservationDataList = cast(List[ReservationData], session.query(ReservationData).all())
-            if reservationDataList is None:
-                return None
-            return [ReservationMapper.toDomain(reservationData) for reservationData in reservationDataList]
+            return [
+                ReservationMapper.toDomain(reservationData)
+                for reservationData
+                in reservationDataList
+            ]
         except SQLAlchemyError as exc:
             ExceptionHandler.raiseException(CustomException(
                 ErrorType.INFRASTRUCTURE_ERROR,

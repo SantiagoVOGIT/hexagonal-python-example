@@ -1,14 +1,16 @@
 from typing import Optional
 
-from src.domain.common.enums.DomainErrorType import DomainErrorType
+from src.shared.error.DomainException import DomainException
+from src.shared.error.ExceptionHandler import ExceptionHandler
+from src.shared.error.enums.DomainErrorType import DomainErrorType
 from src.domain.entities.employee.Employee import Employee
 from src.domain.entities.employee.EmployeeFactory import EmployeeFactory
 from src.domain.entities.employee.ports.EmployeeGateway import EmployeeGateway
 from src.domain.entities.employee.ports.EmployeeRepository import EmployeeRepository
 from src.domain.entities.employee.value_objects.EmployeeId import EmployeeId
 from src.domain.entities.employee.value_objects.EmployeePosition import EmployeePosition
+from src.domain.entities.employee.value_objects.EmployeeStatus import EmployeeStatus
 from src.domain.entities.user.value_objects.UserId import UserId
-from src.shared.utils.ErrorHandler import ExceptionHandler, DomainException
 
 
 class EmployeeUseCase(EmployeeGateway):
@@ -21,24 +23,18 @@ class EmployeeUseCase(EmployeeGateway):
     def createEmployee(self,
                        userId: UserId,
                        position: EmployeePosition,
+                       status: EmployeeStatus,
                        salary: float,
                        ) -> Employee:
 
-        if userId is None:
-            ExceptionHandler.raiseException(DomainException(
-                DomainErrorType.USER_ID_REQUIRED,
-            ))
-
-        existingEmployee: Optional[Employee] = self.__employeeRepository.findByUserId(userId)
-        if existingEmployee is not None:
-            ExceptionHandler.raiseException(DomainException(
-                DomainErrorType.EMPLOYEE_ALREADY_EXISTS
-            ))
+        self.__validateUserId(userId)
+        self.__validateNewEmployee(userId)
 
         newEmployee: Employee = EmployeeFactory.create(
             userId=userId,
             position=position,
-            salary=salary,
+            status=status,
+            salary=salary
         )
         self.__employeeRepository.saveEmployee(newEmployee)
         return newEmployee
@@ -47,20 +43,33 @@ class EmployeeUseCase(EmployeeGateway):
                        employeeId: EmployeeId,
                        userId: Optional[UserId] = None,
                        position: Optional[EmployeePosition] = None,
+                       status: Optional[EmployeeStatus] = None,
                        salary: Optional[float] = None
                        ) -> Employee:
 
-        existingEmployee: Optional[Employee] = self.__employeeRepository.findById(employeeId)
-        if existingEmployee is None:
-            ExceptionHandler.raiseException(DomainException(
-                DomainErrorType.EMPLOYEE_NOT_FOUND
-            ))
+        employee: Optional[Employee] = self.__employeeRepository.findById(employeeId)
 
         updatedEmployee: Employee = EmployeeFactory.update(
-            employee=existingEmployee,
+            employee=employee,
             userId=userId,
             position=position,
+            status=status,
             salary=salary
         )
         self.__employeeRepository.updateEmployee(updatedEmployee)
         return updatedEmployee
+
+    def __validateNewEmployee(self, userId: UserId) -> Optional[Employee]:
+        employee: Optional[Employee] = self.__employeeRepository.findByUserId(userId)
+        if employee is not None:
+            ExceptionHandler.raiseException(DomainException(
+                DomainErrorType.EMPLOYEE_ALREADY_EXISTS
+            ))
+        return employee
+
+    @staticmethod
+    def __validateUserId(userId: UserId) -> None:
+        if userId is None:
+            ExceptionHandler.raiseException(DomainException(
+                DomainErrorType.USER_ID_REQUIRED,
+            ))

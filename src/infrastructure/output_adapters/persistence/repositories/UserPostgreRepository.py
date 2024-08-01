@@ -3,15 +3,16 @@ from typing import Optional
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
-from src.domain.common.enums.DomainErrorType import DomainErrorType
 from src.domain.entities.user.User import User
 from src.domain.entities.user.ports.UserRepository import UserRepository
 from src.domain.entities.user.value_objects.UserId import UserId
 from src.infrastructure.common.DatabaseService import DatabaseService
-from src.infrastructure.common.enums.InfrastructureErrorType import InfrastructureErrorType
+from src.shared.error.CustomException import CustomException
+from src.shared.error.ExceptionHandler import ExceptionHandler
+from src.shared.error.enums.ErrorType import ErrorType
+from src.shared.error.enums.InfrastructureErrorType import InfrastructureErrorType
 from src.infrastructure.output_adapters.persistence.entities.user_data.UserData import UserData
 from src.infrastructure.output_adapters.persistence.entities.user_data.UserMapper import UserMapper
-from src.shared.utils.ErrorHandler import ExceptionHandler, CustomException, ErrorType
 
 
 class UserPostgreRepository(UserRepository):
@@ -44,13 +45,6 @@ class UserPostgreRepository(UserRepository):
             userData = session.query(UserData).filter(
                 UserData.id == user.getId().getValue()
             ).first()
-
-            if userData is None:
-                ExceptionHandler.raiseException(CustomException(
-                    ErrorType.DOMAIN_ERROR,
-                    DomainErrorType.USER_NOT_FOUND.value,
-                    DomainErrorType.USER_NOT_FOUND.value
-                ))
 
             userData.dni_number = user.getDniNumber()
             userData.dni_type = user.getDniType().getValue()
@@ -115,12 +109,16 @@ class UserPostgreRepository(UserRepository):
     def findById(self, userId: UserId) -> Optional[User]:
         session: Session = self.__databaseService.getSession()
         try:
-            userIdData: Optional[UserData] = session.query(UserData).filter_by(
-                id=userId.getValue()
+            userData: Optional[UserData] = session.query(UserData).filter(
+                UserData.id == userId.getValue()
             ).first()
-            if userIdData is None:
-                return None
-            return UserMapper.toDomain(userIdData)
+            if userData is None:
+                ExceptionHandler.raiseException(CustomException(
+                    ErrorType.INFRASTRUCTURE_ERROR,
+                    InfrastructureErrorType.USER_NOT_FOUND.name,
+                    InfrastructureErrorType.USER_NOT_FOUND.value
+                ))
+            return UserMapper.toDomain(userData)
 
         except SQLAlchemyError as exc:
             ExceptionHandler.raiseException(CustomException(

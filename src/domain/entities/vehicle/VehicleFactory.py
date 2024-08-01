@@ -20,7 +20,6 @@ class VehicleFactory:
                registeredAt: Optional[datetime] = None,
                id: Optional[VehicleId] = None
                ) -> Vehicle:
-
         return Vehicle(
             userId=userId,
             model=DomainUtils.validateModel(model),
@@ -28,4 +27,21 @@ class VehicleFactory:
             vehicleType=DomainUtils.validateEnum(vehicleType, VehicleType),
             id=DomainUtils.resolveId(id, VehicleId),
             registeredAt=DomainUtils.resolveCreatedAt(registeredAt)
+        )
+
+    @staticmethod
+    def update(vehicle: Vehicle,
+               userId: Optional[UserId] = None,
+               licensePlate: Optional[str] = None,
+               model: Optional[str] = None,
+               vehicleType: Optional[VehicleType] = None,
+               registeredAt: Optional[datetime] = None
+               ) -> Vehicle:
+        return Vehicle(
+            id=vehicle.getId(),
+            userId=userId if userId is not None else vehicle.getUserId(),
+            licensePlate=DomainUtils.validateLicensePlate(licensePlate) if licensePlate is not None else vehicle.getLicensePlate(),
+            model=DomainUtils.validateModel(model) if model is not None else vehicle.getModel(),
+            vehicleType=DomainUtils.validateEnum(vehicleType, VehicleType) if vehicleType is not None else vehicle.getVehicleType(),
+            registeredAt=DomainUtils.resolveCreatedAt(registeredAt) if registeredAt is not None else vehicle.getRegisteredAt()
         )

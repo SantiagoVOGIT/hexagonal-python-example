@@ -1,12 +1,11 @@
 from sqlalchemy import Column, String, DateTime, ForeignKey
-from sqlalchemy.dialects.postgresql import UUID
 
 from src.domain.entities.cell.value_objects.CellId import CellId
 from src.domain.entities.reservation.value_objects.ReservationId import ReservationId
 from src.domain.entities.user.value_objects.UserId import UserId
 from src.domain.entities.vehicle.value_objects.VehicleId import VehicleId
 from src.infrastructure.common.DatabaseService import DatabaseService
-from src.infrastructure.output_adapters.persistence.entities.EntityIdAdapter import EntityIdAdapter
+from src.infrastructure.output_adapters.common.EntityIdAdapter import EntityIdAdapter
 
 
 class ReservationData(DatabaseService.getBase()):

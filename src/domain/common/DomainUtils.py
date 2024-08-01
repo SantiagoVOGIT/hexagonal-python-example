@@ -3,8 +3,9 @@ from datetime import datetime, timezone
 from typing import Optional, TypeVar, Type, Union
 
 from src.shared.decorators.UtilityClass import utilityClass
-from src.shared.utils.ErrorHandler import DomainException, ExceptionHandler
-from src.domain.common.enums.DomainErrorType import DomainErrorType
+from src.shared.error.DomainException import DomainException
+from src.shared.error.ExceptionHandler import ExceptionHandler
+from src.shared.error.enums.DomainErrorType import DomainErrorType
 from src.domain.entities.reservation.value_objects.ReservationCode import ReservationCode
 
 T = TypeVar('T')

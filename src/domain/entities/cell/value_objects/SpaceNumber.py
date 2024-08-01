@@ -13,6 +13,7 @@ class SpaceNumber(Enum):
     CELDA_SIETE = "7"
     CELDA_OCHO = "8"
     CELDA_NUEVE = "9"
+    CELDA_DIEZ = "10"
 
     def __init__(self, value: str):
         self.__value = value

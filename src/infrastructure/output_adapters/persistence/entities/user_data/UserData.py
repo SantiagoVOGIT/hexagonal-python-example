@@ -2,7 +2,7 @@ from sqlalchemy import Column, String, DateTime
 
 from src.domain.entities.user.value_objects.UserId import UserId
 from src.infrastructure.common.DatabaseService import DatabaseService
-from src.infrastructure.output_adapters.persistence.entities.EntityIdAdapter import EntityIdAdapter
+from src.infrastructure.output_adapters.common.EntityIdAdapter import EntityIdAdapter
 
 
 class UserData(DatabaseService.getBase()):

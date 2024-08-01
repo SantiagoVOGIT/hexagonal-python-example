@@ -3,7 +3,7 @@ from sqlalchemy.dialects.postgresql import UUID
 
 from src.domain.entities.vehicle.value_objects.VehicleId import VehicleId
 from src.infrastructure.common.DatabaseService import DatabaseService
-from src.infrastructure.output_adapters.persistence.entities.EntityIdAdapter import EntityIdAdapter
+from src.infrastructure.output_adapters.common.EntityIdAdapter import EntityIdAdapter
 
 
 class VehicleData(DatabaseService.getBase()):

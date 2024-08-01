@@ -6,7 +6,7 @@ from src.domain.entities.user.ports.UserGateway import UserGateway
 from src.domain.entities.user.value_objects.UserId import UserId
 from src.infrastructure.common.enums.InfrastructureInfo import InfrastructureInfo
 from src.infrastructure.input_adapters.dto.UserDTO import UserDTO
-from src.shared.utils.ErrorHandler import ExceptionHandler
+from src.shared.error.ExceptionHandler import ExceptionHandler
 from src.shared.utils.MessageFactory import MessageFactory
 
 
@@ -22,7 +22,7 @@ class UserController:
         @app.post("/register")
         async def register(request: UserDTO):
             try:
-                self.__userGateway.register(
+                self.__userGateway.createUser(
                     dniNumber=request.dniNumber,
                     firstName=request.firstName,
                     lastName=request.lastName,
@@ -41,7 +41,7 @@ class UserController:
                     status_code=400, detail=errorResponse
                 )
 
-        @app.post("/create-user")
+        @app.post("/admin/create-user")
         async def createReservation(request: UserDTO):
             try:
                 self.__userGateway.createUser(
@@ -56,7 +56,7 @@ class UserController:
                 )
                 return {
                     "detail": MessageFactory
-                    .build(InfrastructureInfo.SUCCES_CREATED_CELL)
+                    .build(InfrastructureInfo.SUCCESS_CREATED_USER)
                     .getDetail()
                 }
 
@@ -67,7 +67,7 @@ class UserController:
                     detail=errorResponse
                 )
 
-        @app.put("/update-user/{user_id}")
+        @app.put("/admin/update-user/{user_id}")
         async def updateUser(user_id: str, request: UserDTO):
             try:
                 userId = UserId(user_id)
@@ -85,6 +85,31 @@ class UserController:
                 return {
                     "detail": MessageFactory
                     .build(InfrastructureInfo.SUCCESS_UPDATED_USER)
+                    .getDetail()
+                }
+
+            except Exception as exc:
+                errorResponse: Dict[str, Any] = ExceptionHandler.handleException(exc)
+                raise HTTPException(
+                    status_code=400,
+                    detail=errorResponse
+                )
+
+        @app.put("/update-user/{user_id}")
+        async def updateUser(user_id: str, request: UserDTO):
+            try:
+                userId = UserId(user_id)
+                self.__userGateway.updateUser(
+                    userId=userId,
+                    dniType=request.dniType,
+                    firstName=request.firstName,
+                    lastName=request.lastName,
+                    emailAddress=request.emailAddress,
+                    phoneNumber=request.phoneNumber,
+                )
+                return {
+                    "detail": MessageFactory
+                    .build(InfrastructureInfo.SUCCES_UPDATED_USER_BASIC_INFO)
                     .getDetail()
                 }
 

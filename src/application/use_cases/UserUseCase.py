@@ -1,6 +1,8 @@
 from typing import Optional
 
-from src.domain.common.enums.DomainErrorType import DomainErrorType
+from src.shared.error.DomainException import DomainException
+from src.shared.error.ExceptionHandler import ExceptionHandler
+from src.shared.error.enums.DomainErrorType import DomainErrorType
 from src.domain.entities.user.User import User
 from src.domain.entities.user.UserFactory import UserFactory
 from src.domain.entities.user.ports.UserRepository import UserRepository
@@ -9,7 +11,6 @@ from src.domain.entities.user.value_objects.UserId import UserId
 from src.domain.entities.user.value_objects.UserRole import UserRole
 from src.domain.entities.user.value_objects.UserStatus import UserStatus
 from src.domain.entities.user.ports.UserGateway import UserGateway
-from src.shared.utils.ErrorHandler import ExceptionHandler, DomainException
 
 
 class UserUseCase(UserGateway):
@@ -20,14 +21,14 @@ class UserUseCase(UserGateway):
         self.__userRepository = userOutputAdapter
 
     def createUser(self,
-                   dniNumber: str,
-                   dniType: DniType,
-                   firstName: str,
-                   lastName: str,
-                   emailAddress: str,
-                   phoneNumber: str,
-                   role: UserRole,
-                   status: UserStatus
+                   dniNumber: Optional[str] = None,
+                   dniType: Optional[DniType] = None,
+                   firstName: Optional[str] = None,
+                   lastName: Optional[str] = None,
+                   emailAddress: Optional[str] = None,
+                   phoneNumber: Optional[str] = None,
+                   role: Optional[UserRole] = None,
+                   status: Optional[UserStatus] = None
                    ) -> User:
 
         self.__validateNewDniNumber(dniNumber)
@@ -68,24 +69,21 @@ class UserUseCase(UserGateway):
 
     def updateUser(self,
                    userId: UserId,
-                   dniNumber: str,
-                   dniType: DniType,
-                   firstName: str,
-                   lastName: str,
-                   emailAddress: str,
-                   phoneNumber: str,
-                   role: UserRole,
-                   status: UserStatus
+                   dniNumber: Optional[str] = None,
+                   dniType: Optional[DniType] = None,
+                   firstName: Optional[str] = None,
+                   lastName: Optional[str] = None,
+                   emailAddress: Optional[str] = None,
+                   phoneNumber: Optional[str] = None,
+                   role: Optional[UserRole] = None,
+                   status: Optional[UserStatus] = None
                    ) -> None:
 
-        existingUser: Optional[User] = self.__userRepository.findById(userId)
-        currentDniNumber: str = existingUser.getDniNumber()
-        currentEmailAddress: str = existingUser.getEmailAddress()
+        self.__validateUserId(userId)
 
-        if existingUser is None:
-            ExceptionHandler.raiseException(DomainException(
-                DomainErrorType.USER_NOT_FOUND
-            ))
+        user: Optional[User] = self.__userRepository.findById(userId)
+        currentDniNumber: str = user.getDniNumber()
+        currentEmailAddress: str = user.getEmailAddress()
 
         if currentDniNumber != dniNumber:
             self.__validateNewDniNumber(dniNumber)
@@ -94,7 +92,7 @@ class UserUseCase(UserGateway):
             self.__validateNewEmail(emailAddress)
 
         updatedUser: User = UserFactory.update(
-            user=existingUser,
+            user=user,
             dniNumber=dniNumber,
             dniType=dniType,
             firstName=firstName,
@@ -118,4 +116,11 @@ class UserUseCase(UserGateway):
         if existingEmail is not None:
             ExceptionHandler.raiseException(DomainException(
                 DomainErrorType.EMAIL_ALREADY_EXISTS
+            ))
+
+    @staticmethod
+    def __validateUserId(userId: UserId) -> None:
+        if userId is None:
+            ExceptionHandler.raiseException(DomainException(
+                DomainErrorType.USER_ID_REQUIRED,
             ))

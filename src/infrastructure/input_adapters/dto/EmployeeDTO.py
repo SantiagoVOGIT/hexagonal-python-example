@@ -3,6 +3,7 @@ from pydantic import BaseModel, Field, field_validator
 
 from src.domain.entities.employee.value_objects.EmployeeId import EmployeeId
 from src.domain.entities.employee.value_objects.EmployeePosition import EmployeePosition
+from src.domain.entities.employee.value_objects.EmployeeStatus import EmployeeStatus
 from src.domain.entities.user.value_objects.UserId import UserId
 
 
@@ -11,6 +12,7 @@ class EmployeeDTO(BaseModel):
     employeeId: Optional[EmployeeId] = Field(default=None)
     userId: Optional[UserId] = Field(default=None)
     position: Optional[EmployeePosition] = Field(default=None)
+    status: Optional[EmployeeStatus] = Field(default=None)
     salary: Optional[float] = Field(default=None)
 
     @field_validator('employeeId', mode='before')
@@ -46,6 +48,17 @@ class EmployeeDTO(BaseModel):
         except ValueError as ex:
             raise ValueError(f'Invalid EmployeePosition format: {ex}')
 
+    @field_validator('status', mode='before')
+    def validateStatus(cls, v):
+        if v is None:
+            return None
+        if isinstance(v, EmployeeStatus):
+            return v
+        try:
+            return EmployeeStatus(v)
+        except ValueError as ex:
+            raise ValueError(f'Invalid EmployeeStatus format: {ex}')
+
     class Config:
         use_enum_values = True
         arbitrary_types_allowed = True
@@ -60,4 +73,6 @@ class EmployeeDTO(BaseModel):
             d['userId'] = str(d['userId'].getValue())
         if d['position'] is not None:
             d['position'] = d['position'].value
+        if d['status'] is not None:
+            d['status'] = d['status'].value
         return d

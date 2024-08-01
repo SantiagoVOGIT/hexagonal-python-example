@@ -8,8 +8,10 @@ from src.domain.entities.user.value_objects.UserId import UserId
 from src.domain.entities.user.value_objects.UserRole import UserRole
 from src.domain.entities.user.value_objects.UserStatus import UserStatus
 
+
 @utilityClass
 class UserFactory:
+
     @staticmethod
     def create(
             dniNumber: str,
@@ -18,7 +20,7 @@ class UserFactory:
             lastName: str,
             emailAddress: str,
             phoneNumber: str,
-            role: UserRole,
+            role: UserRole = UserRole.USER,
             status: UserStatus = UserStatus.ACTIVE,
             id: Optional[UserId] = None,
             createdAt: Optional[datetime] = None

@@ -7,6 +7,7 @@ class CellStatus(Enum):
     OCCUPIED = "OCUPADA"
     MAINTENANCE = "MANTENIMIENTO"
     RESERVED = "RESERVADA"
+    INACTIVE = "INACTIVA"
 
     def __init__(self, value: str):
         self.__value = value

@@ -6,10 +6,12 @@ from sqlalchemy import Engine, create_engine, text
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import sessionmaker, Session, DeclarativeMeta, declarative_base, DeclarativeBase
 
-from src.infrastructure.output_adapters.persistence.entities.setupRelationships import setupRelationships
-from src.shared.utils.ErrorHandler import ExceptionHandler, CustomException, ErrorType
+from src.infrastructure.output_adapters.common.setupRelationships import setupRelationships
+from src.shared.error.CustomException import CustomException
+from src.shared.error.ExceptionHandler import ExceptionHandler
+from src.shared.error.enums.ErrorType import ErrorType
 from src.shared.utils.MessageFactory import MessageFactory
-from src.infrastructure.common.enums.InfrastructureErrorType import InfrastructureErrorType
+from src.shared.error.enums.InfrastructureErrorType import InfrastructureErrorType
 from src.infrastructure.common.enums.InfrastructureInfo import InfrastructureInfo
 
 
