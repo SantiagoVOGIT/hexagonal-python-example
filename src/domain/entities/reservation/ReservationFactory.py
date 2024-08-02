@@ -1,7 +1,6 @@
 from datetime import datetime
 from typing import Optional
 
-from src.shared.decorators.UtilityClass import utilityClass
 from src.domain.common.DomainUtils import DomainUtils
 from src.domain.entities.cell.value_objects.CellId import CellId
 from src.domain.entities.reservation.Reservation import Reservation
@@ -10,6 +9,7 @@ from src.domain.entities.reservation.value_objects.ReservationId import Reservat
 from src.domain.entities.reservation.value_objects.ReservationStatus import ReservationStatus
 from src.domain.entities.user.value_objects.UserId import UserId
 from src.domain.entities.vehicle.value_objects.VehicleId import VehicleId
+from src.shared.decorators.UtilityClass import utilityClass
 
 
 @utilityClass
@@ -33,7 +33,7 @@ class ReservationFactory:
             vehicleId=vehicleId,
             endTime=endTime,
             startTime=startTime,
-            status=DomainUtils.validateEnum(status, ReservationStatus),
+            status=status,
             reservationCode=DomainUtils.resolveReservationCode(reservationCode),
             id=DomainUtils.resolveId(id, ReservationId),
             createdAt=DomainUtils.resolveCreatedAt(createdAt),

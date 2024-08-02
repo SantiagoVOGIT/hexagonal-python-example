@@ -10,12 +10,12 @@ from src.domain.entities.cell.value_objects.CellStatus import CellStatus
 from src.domain.entities.cell.value_objects.SpaceNumber import SpaceNumber
 from src.domain.entities.vehicle.value_objects.VehicleType import VehicleType
 from src.infrastructure.common.DatabaseService import DatabaseService
+from src.infrastructure.output_adapters.persistence.entities.cell_data.CellData import CellData
+from src.infrastructure.output_adapters.persistence.entities.cell_data.CellMapper import CellMapper
 from src.shared.error.CustomException import CustomException
 from src.shared.error.ExceptionHandler import ExceptionHandler
 from src.shared.error.enums.ErrorType import ErrorType
 from src.shared.error.enums.InfrastructureErrorType import InfrastructureErrorType
-from src.infrastructure.output_adapters.persistence.entities.cell_data.CellData import CellData
-from src.infrastructure.output_adapters.persistence.entities.cell_data.CellMapper import CellMapper
 
 
 class CellPostgreRepository(CellRepository):
@@ -31,15 +31,8 @@ class CellPostgreRepository(CellRepository):
             cellData: CellData = CellMapper.toPersistence(cell)
             session.add(cellData)
             session.commit()
-
         except SQLAlchemyError as exc:
-            session.rollback()
-            ExceptionHandler.raiseException(CustomException(
-                ErrorType.INFRASTRUCTURE_ERROR,
-                InfrastructureErrorType.DATABASE_ERROR.name,
-                InfrastructureErrorType.DATABASE_ERROR.value,
-                {"original_error": str(exc)}
-            ))
+            self.__handleSqlalchemyException(session, exc)
         finally:
             session.close()
 
@@ -53,13 +46,9 @@ class CellPostgreRepository(CellRepository):
             if cellData is None:
                 return None
             return CellMapper.toDomain(cellData)
+
         except SQLAlchemyError as exc:
-            ExceptionHandler.raiseException(CustomException(
-                ErrorType.INFRASTRUCTURE_ERROR,
-                InfrastructureErrorType.DATABASE_ERROR.name,
-                InfrastructureErrorType.DATABASE_ERROR.value,
-                {"original_error": str(exc)}
-            ))
+            self.__handleSqlalchemyException(session, exc)
         finally:
             session.close()
 
@@ -78,12 +67,7 @@ class CellPostgreRepository(CellRepository):
                 ))
             return CellMapper.toDomain(cellData)
         except SQLAlchemyError as exc:
-            ExceptionHandler.raiseException(CustomException(
-                ErrorType.INFRASTRUCTURE_ERROR,
-                InfrastructureErrorType.DATABASE_ERROR.name,
-                InfrastructureErrorType.DATABASE_ERROR.value,
-                {"original_error": str(exc)}
-            ))
+            self.__handleSqlalchemyException(session, exc)
         finally:
             session.close()
 
@@ -102,12 +86,7 @@ class CellPostgreRepository(CellRepository):
                 ))
             return CellStatus(cellIdData.status)
         except SQLAlchemyError as exc:
-            ExceptionHandler.raiseException(CustomException(
-                ErrorType.INFRASTRUCTURE_ERROR,
-                InfrastructureErrorType.DATABASE_ERROR.name,
-                InfrastructureErrorType.DATABASE_ERROR.value,
-                {"original_error": str(exc)}
-            ))
+            self.__handleSqlalchemyException(session, exc)
         finally:
             session.close()
 
@@ -117,6 +96,7 @@ class CellPostgreRepository(CellRepository):
             cellIdData = session.query(CellData).filter(
                 CellData.id == cellId.getValue()
             ).first()
+
             if cellIdData is None:
                 ExceptionHandler.raiseException(CustomException(
                     ErrorType.INFRASTRUCTURE_ERROR,
@@ -125,12 +105,7 @@ class CellPostgreRepository(CellRepository):
                 ))
             return VehicleType(cellIdData.vehicle_type)
         except SQLAlchemyError as exc:
-            ExceptionHandler.raiseException(CustomException(
-                ErrorType.INFRASTRUCTURE_ERROR,
-                InfrastructureErrorType.DATABASE_ERROR.name,
-                InfrastructureErrorType.DATABASE_ERROR.value,
-                {"original_error": str(exc)}
-            ))
+            self.__handleSqlalchemyException(session, exc)
         finally:
             session.close()
 
@@ -140,6 +115,7 @@ class CellPostgreRepository(CellRepository):
             cellData = session.query(CellData).filter(
                 CellData.id == cellId.getValue()
             ).first()
+
             if cellData is None:
                 ExceptionHandler.raiseException(CustomException(
                     ErrorType.INFRASTRUCTURE_ERROR,
@@ -149,13 +125,7 @@ class CellPostgreRepository(CellRepository):
             cellData.status = status.value
             session.commit()
         except SQLAlchemyError as exc:
-            session.rollback()
-            ExceptionHandler.raiseException(CustomException(
-                ErrorType.INFRASTRUCTURE_ERROR,
-                InfrastructureErrorType.DATABASE_ERROR.name,
-                InfrastructureErrorType.DATABASE_ERROR.value,
-                {"original_error": str(exc)}
-            ))
+            self.__handleSqlalchemyException(session, exc)
         finally:
             session.close()
 
@@ -179,12 +149,16 @@ class CellPostgreRepository(CellRepository):
 
             session.commit()
         except SQLAlchemyError as exc:
-            session.rollback()
-            ExceptionHandler.raiseException(CustomException(
-                ErrorType.INFRASTRUCTURE_ERROR,
-                InfrastructureErrorType.DATABASE_ERROR.name,
-                InfrastructureErrorType.DATABASE_ERROR.value,
-                {"original_error": str(exc)}
-            ))
+            self.__handleSqlalchemyException(session, exc)
         finally:
             session.close()
+
+    @staticmethod
+    def __handleSqlalchemyException(session: Session, exc: SQLAlchemyError) -> None:
+        session.rollback()
+        ExceptionHandler.raiseException(CustomException(
+            ErrorType.INFRASTRUCTURE_ERROR,
+            InfrastructureErrorType.DATABASE_ERROR.name,
+            InfrastructureErrorType.DATABASE_ERROR.value,
+            {"original_error": str(exc)}
+        ))

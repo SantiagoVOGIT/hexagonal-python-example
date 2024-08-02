@@ -13,6 +13,7 @@ from src.shared.utils.MessageFactory import MessageFactory
 
 
 class ReservationController:
+
     __reservationGateway: ReservationGateway
 
     def __init__(self, useCase: ReservationGateway):
@@ -35,10 +36,7 @@ class ReservationController:
                 }
             except Exception as exc:
                 errorResponse: Dict[str, Any] = ExceptionHandler.handleException(exc)
-                raise HTTPException(
-                    status_code=400,
-                    detail=errorResponse
-                )
+                raise HTTPException(status_code=400, detail=errorResponse)
 
         @app.post("/cancel-reservation")
         async def cancelReservation(request: ReservationDTO):
@@ -53,10 +51,7 @@ class ReservationController:
                 }
             except Exception as exc:
                 errorResponse: Dict[str, Any] = ExceptionHandler.handleException(exc)
-                raise HTTPException(
-                    status_code=400,
-                    detail=errorResponse
-                )
+                raise HTTPException(status_code=400, detail=errorResponse)
 
         @app.post("/admin/reject-reservation")
         async def rejectReservation(request: ReservationDTO):
@@ -71,10 +66,7 @@ class ReservationController:
                 }
             except Exception as exc:
                 errorResponse: Dict[str, Any] = ExceptionHandler.handleException(exc)
-                raise HTTPException(
-                    status_code=400,
-                    detail=errorResponse
-                )
+                raise HTTPException(status_code=400, detail=errorResponse)
 
         @app.post("/admin/confirm-reservation")
         async def createReservation(request: ReservationDTO):
@@ -89,10 +81,7 @@ class ReservationController:
                 }
             except Exception as exc:
                 errorResponse: Dict[str, Any] = ExceptionHandler.handleException(exc)
-                raise HTTPException(
-                    status_code=400,
-                    detail=errorResponse
-                )
+                raise HTTPException(status_code=400, detail=errorResponse)
 
         @app.post("/admin/complete-reservation")
         async def createReservation(request: ReservationDTO):
@@ -107,10 +96,7 @@ class ReservationController:
                 }
             except Exception as exc:
                 errorResponse: Dict[str, Any] = ExceptionHandler.handleException(exc)
-                raise HTTPException(
-                    status_code=400,
-                    detail=errorResponse
-                )
+                raise HTTPException(status_code=400, detail=errorResponse)
 
         @app.get("/admin/reservations")
         async def getAllReservations():
@@ -124,10 +110,7 @@ class ReservationController:
                 }
             except Exception as exc:
                 errorResponse: Dict[str, Any] = ExceptionHandler.handleException(exc)
-                raise HTTPException(
-                    status_code=400,
-                    detail=errorResponse
-                )
+                raise HTTPException(status_code=400, detail=errorResponse)
 
         @app.get("/reservation/{reservation_id}")
         async def getReservationById(reservation_id: str):
@@ -139,10 +122,7 @@ class ReservationController:
                 }
             except Exception as exc:
                 errorResponse: Dict[str, Any] = ExceptionHandler.handleException(exc)
-                raise HTTPException(
-                    status_code=400,
-                    detail=errorResponse
-                )
+                raise HTTPException(status_code=400, detail=errorResponse)
 
         @app.get("/reservations/{user_id}")
         async def getReservationsByUserId(user_id: str):
@@ -157,7 +137,4 @@ class ReservationController:
                 }
             except Exception as exc:
                 errorResponse: Dict[str, Any] = ExceptionHandler.handleException(exc)
-                raise HTTPException(
-                    status_code=400,
-                    detail=errorResponse
-                )
+                raise HTTPException(status_code=400, detail=errorResponse)

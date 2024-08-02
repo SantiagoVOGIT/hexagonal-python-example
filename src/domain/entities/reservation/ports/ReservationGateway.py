@@ -21,6 +21,18 @@ class ReservationGateway(ABC):
         pass
 
     @abstractmethod
+    def getReservationById(self, reservationId: ReservationId) -> Optional[Reservation]:
+        pass
+
+    @abstractmethod
+    def getReservationsByUserId(self, userId: UserId) -> List[Reservation]:
+        pass
+
+    @abstractmethod
+    def getAllReservations(self) -> Optional[List[Reservation]]:
+        pass
+
+    @abstractmethod
     def cancelReservation(self, reservationId: ReservationId) -> None:
         pass
 
@@ -34,16 +46,4 @@ class ReservationGateway(ABC):
 
     @abstractmethod
     def completeReservation(self, reservationId: ReservationId) -> None:
-        pass
-
-    @abstractmethod
-    def getAllReservations(self) -> Optional[List[Reservation]]:
-        pass
-
-    @abstractmethod
-    def getReservationById(self, reservationId: ReservationId) -> Optional[Reservation]:
-        pass
-
-    @abstractmethod
-    def getReservationsByUserId(self, userId: UserId) -> List[Reservation]:
         pass

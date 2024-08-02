@@ -15,6 +15,18 @@ class ReservationRepository(ABC):
         pass
 
     @abstractmethod
+    def findById(self, reservationId: ReservationId) -> Optional[Reservation]:
+        pass
+
+    @abstractmethod
+    def getReservationsByUserId(self, userId: UserId) -> Optional[List[Reservation]]:
+        pass
+
+    @abstractmethod
+    def getAllReservations(self) -> Optional[List[Reservation]]:
+        pass
+
+    @abstractmethod
     def updateStatus(self, reservationId: ReservationId, status: ReservationStatus) -> None:
         pass
 
@@ -24,16 +36,4 @@ class ReservationRepository(ABC):
 
     @abstractmethod
     def updateStarTime(self, reservationId: ReservationId, startTime: datetime) -> None:
-        pass
-
-    @abstractmethod
-    def findById(self, reservationId: ReservationId) -> Optional[Reservation]:
-        pass
-
-    @abstractmethod
-    def getAllReservations(self) -> Optional[List[Reservation]]:
-        pass
-
-    @abstractmethod
-    def getReservationsByUserId(self, userId: UserId) -> Optional[List[Reservation]]:
         pass

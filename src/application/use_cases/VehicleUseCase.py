@@ -1,15 +1,15 @@
-from typing import Optional
+from typing import Optional, List
 
-from src.shared.error.DomainException import DomainException
-from src.shared.error.ExceptionHandler import ExceptionHandler
-from src.shared.error.enums.DomainErrorType import DomainErrorType
 from src.domain.entities.user.value_objects.UserId import UserId
 from src.domain.entities.vehicle.Vehicle import Vehicle
 from src.domain.entities.vehicle.VehicleFactory import VehicleFactory
+from src.domain.entities.vehicle.ports.VehicleGateway import VehicleGateway
 from src.domain.entities.vehicle.ports.VehicleRepository import VehicleRepository
 from src.domain.entities.vehicle.value_objects.VehicleId import VehicleId
 from src.domain.entities.vehicle.value_objects.VehicleType import VehicleType
-from src.domain.entities.vehicle.ports.VehicleGateway import VehicleGateway
+from src.shared.error.DomainException import DomainException
+from src.shared.error.ExceptionHandler import ExceptionHandler
+from src.shared.error.enums.DomainErrorType import DomainErrorType
 
 
 class VehicleUseCase(VehicleGateway):
@@ -61,6 +61,15 @@ class VehicleUseCase(VehicleGateway):
         )
         self.__vehicleRepository.updateVehicle(updateVehicle)
         return updateVehicle
+
+    def getVehiclesByUserId(self, userId: UserId) -> List[Vehicle]:
+        self.__validateUserId(userId)
+        vehicles: Optional[List[Vehicle]] = self.__vehicleRepository.getVehiclesByUserId(userId)
+        if not vehicles:
+            ExceptionHandler.raiseException(DomainException(
+                DomainErrorType.VEHICLES_NOT_FOUND
+            ))
+        return vehicles
 
     def __validateNewLicensePlate(self, licensePlate: str):
         vehicle: Optional[Vehicle] = self.__vehicleRepository.findByLicensePlate(licensePlate)

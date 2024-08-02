@@ -177,6 +177,14 @@ Content-Type: application/json
 
 ###
 
+# Obtener los vehiculos de un usuario
+# Rol requerido: usuario
+# Validaciones:
+# - Que existan vehículos
+GET http://127.0.0.1:8000/vehicles/f71516bb-24e7-428e-8df6-716a8c80f307
+Content-Type: application/json
+
+###
 # Reservas
 
 # Crear una nueva reserva
@@ -189,7 +197,7 @@ POST http://127.0.0.1:8000/create-reservation
 Content-Type: application/json
 
 {
-  "cellId": "edefeed5-735a-4354-96f3-306155155dcb",
+  "cellId": "c5f96e48-479b-4d05-8ea1-14a6a7c899bb",
   "userId": "f71516bb-24e7-428e-8df6-716a8c80f307",
   "vehicleId": "8a133a1e-9cc7-408d-998d-b742abd3bb82"
 }

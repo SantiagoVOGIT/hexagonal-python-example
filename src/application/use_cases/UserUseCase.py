@@ -1,16 +1,16 @@
 from typing import Optional
 
-from src.shared.error.DomainException import DomainException
-from src.shared.error.ExceptionHandler import ExceptionHandler
-from src.shared.error.enums.DomainErrorType import DomainErrorType
 from src.domain.entities.user.User import User
 from src.domain.entities.user.UserFactory import UserFactory
+from src.domain.entities.user.ports.UserGateway import UserGateway
 from src.domain.entities.user.ports.UserRepository import UserRepository
 from src.domain.entities.user.value_objects.DniType import DniType
 from src.domain.entities.user.value_objects.UserId import UserId
 from src.domain.entities.user.value_objects.UserRole import UserRole
 from src.domain.entities.user.value_objects.UserStatus import UserStatus
-from src.domain.entities.user.ports.UserGateway import UserGateway
+from src.shared.error.DomainException import DomainException
+from src.shared.error.ExceptionHandler import ExceptionHandler
+from src.shared.error.enums.DomainErrorType import DomainErrorType
 
 
 class UserUseCase(UserGateway):
@@ -46,26 +46,6 @@ class UserUseCase(UserGateway):
         )
         self.__userRepository.saveUser(newUser)
         return newUser
-
-    def register(self,
-                 dniNumber: str,
-                 dniType: DniType,
-                 firstName: str,
-                 lastName: str,
-                 emailAddress: str,
-                 phoneNumber: str,
-                 ) -> User:
-
-        return self.createUser(
-            dniNumber=dniNumber,
-            dniType=dniType,
-            firstName=firstName,
-            lastName=lastName,
-            emailAddress=emailAddress,
-            phoneNumber=phoneNumber,
-            role=UserRole.USER,
-            status=UserStatus.ACTIVE
-        )
 
     def updateUser(self,
                    userId: UserId,

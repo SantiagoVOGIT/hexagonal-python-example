@@ -35,15 +35,13 @@ class UserController:
                     role=UserRole.USER
                 )
                 return {
-                    "detail": MessageFactory
+                    "message": MessageFactory
                     .build(InfrastructureInfo.SUCCES_REGISTERED_USER)
                     .getDetail()
                 }
             except Exception as exc:
                 errorResponse: Dict[str, Any] = ExceptionHandler.handleException(exc)
-                raise HTTPException(
-                    status_code=400, detail=errorResponse
-                )
+                raise HTTPException(status_code=400, detail=errorResponse)
 
         @app.post("/admin/create-user")
         async def createReservation(request: UserDTO):
@@ -59,17 +57,14 @@ class UserController:
                     role=request.role,
                 )
                 return {
-                    "detail": MessageFactory
+                    "message": MessageFactory
                     .build(InfrastructureInfo.SUCCESS_CREATED_USER)
                     .getDetail()
                 }
 
             except Exception as exc:
                 errorResponse: Dict[str, Any] = ExceptionHandler.handleException(exc)
-                raise HTTPException(
-                    status_code=400,
-                    detail=errorResponse
-                )
+                raise HTTPException(status_code=400, detail=errorResponse)
 
         @app.put("/admin/update-user/{user_id}")
         async def updateUser(user_id: str, request: UserDTO):
@@ -87,17 +82,14 @@ class UserController:
                     status=request.status
                 )
                 return {
-                    "detail": MessageFactory
+                    "message": MessageFactory
                     .build(InfrastructureInfo.SUCCESS_UPDATED_USER)
                     .getDetail()
                 }
 
             except Exception as exc:
                 errorResponse: Dict[str, Any] = ExceptionHandler.handleException(exc)
-                raise HTTPException(
-                    status_code=400,
-                    detail=errorResponse
-                )
+                raise HTTPException(status_code=400, detail=errorResponse)
 
         @app.put("/update-user/{user_id}")
         async def updateUser(user_id: str, request: UserDTO):
@@ -112,14 +104,11 @@ class UserController:
                     phoneNumber=request.phoneNumber,
                 )
                 return {
-                    "detail": MessageFactory
+                    "message": MessageFactory
                     .build(InfrastructureInfo.SUCCES_UPDATED_USER_BASIC_INFO)
                     .getDetail()
                 }
 
             except Exception as exc:
                 errorResponse: Dict[str, Any] = ExceptionHandler.handleException(exc)
-                raise HTTPException(
-                    status_code=400,
-                    detail=errorResponse
-                )
+                raise HTTPException(status_code=400, detail=errorResponse)

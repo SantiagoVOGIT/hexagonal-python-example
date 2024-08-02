@@ -10,15 +10,16 @@ from src.domain.entities.reservation.value_objects.ReservationId import Reservat
 from src.domain.entities.reservation.value_objects.ReservationStatus import ReservationStatus
 from src.domain.entities.user.value_objects.UserId import UserId
 from src.infrastructure.common.DatabaseService import DatabaseService
+from src.infrastructure.output_adapters.persistence.entities.reservation_data.ReservationData import ReservationData
+from src.infrastructure.output_adapters.persistence.entities.reservation_data.ReservationMapper import ReservationMapper
 from src.shared.error.CustomException import CustomException
 from src.shared.error.ExceptionHandler import ExceptionHandler
 from src.shared.error.enums.ErrorType import ErrorType
 from src.shared.error.enums.InfrastructureErrorType import InfrastructureErrorType
-from src.infrastructure.output_adapters.persistence.entities.reservation_data.ReservationData import ReservationData
-from src.infrastructure.output_adapters.persistence.entities.reservation_data.ReservationMapper import ReservationMapper
 
 
 class ReservationPostgreRepository(ReservationRepository):
+
     __databaseService: DatabaseService
 
     def __init__(self, adapterService: DatabaseService):
@@ -31,70 +32,7 @@ class ReservationPostgreRepository(ReservationRepository):
             session.add(reservationData)
             session.commit()
         except SQLAlchemyError as exc:
-            session.rollback()
-            ExceptionHandler.raiseException(CustomException(
-                ErrorType.INFRASTRUCTURE_ERROR,
-                InfrastructureErrorType.DATABASE_ERROR.name,
-                InfrastructureErrorType.DATABASE_ERROR.value,
-                {"original_error": str(exc)}
-            ))
-        finally:
-            session.close()
-
-    def updateStatus(self, reservationId: ReservationId, status: ReservationStatus) -> None:
-        session: Session = self.__databaseService.getSession()
-        try:
-            reservationData = session.query(ReservationData).filter(
-                ReservationData.id == reservationId.getValue()
-            ).first()
-            reservationData.status = status.getValue()
-            session.commit()
-        except SQLAlchemyError as exc:
-            session.rollback()
-            ExceptionHandler.raiseException(CustomException(
-                ErrorType.INFRASTRUCTURE_ERROR,
-                InfrastructureErrorType.DATABASE_ERROR.name,
-                InfrastructureErrorType.DATABASE_ERROR.value,
-                {"original_error": str(exc)}
-            ))
-        finally:
-            session.close()
-
-    def updateEndTime(self, reservationId: ReservationId, endTime: datetime) -> None:
-        session: Session = self.__databaseService.getSession()
-        try:
-            reservationData = session.query(ReservationData).filter(
-                ReservationData.id == reservationId.getValue()
-            ).first()
-            reservationData.end_time = endTime
-            session.commit()
-        except SQLAlchemyError as exc:
-            session.rollback()
-            ExceptionHandler.raiseException(CustomException(
-                ErrorType.INFRASTRUCTURE_ERROR,
-                InfrastructureErrorType.DATABASE_ERROR.name,
-                InfrastructureErrorType.DATABASE_ERROR.value,
-                {"original_error": str(exc)}
-            ))
-        finally:
-            session.close()
-
-    def updateStarTime(self, reservationId: ReservationId, startTime: datetime) -> None:
-        session: Session = self.__databaseService.getSession()
-        try:
-            reservationData = session.query(ReservationData).filter(
-                ReservationData.id == reservationId.getValue()
-            ).first()
-            reservationData.start_time = startTime
-            session.commit()
-        except SQLAlchemyError as exc:
-            session.rollback()
-            ExceptionHandler.raiseException(CustomException(
-                ErrorType.INFRASTRUCTURE_ERROR,
-                InfrastructureErrorType.DATABASE_ERROR.name,
-                InfrastructureErrorType.DATABASE_ERROR.value,
-                {"original_error": str(exc)}
-            ))
+            self.__handleSqlalchemyException(session, exc)
         finally:
             session.close()
 
@@ -114,31 +52,7 @@ class ReservationPostgreRepository(ReservationRepository):
 
             return ReservationMapper.toDomain(reservationData)
         except SQLAlchemyError as exc:
-            ExceptionHandler.raiseException(CustomException(
-                ErrorType.INFRASTRUCTURE_ERROR,
-                InfrastructureErrorType.DATABASE_ERROR.name,
-                InfrastructureErrorType.DATABASE_ERROR.value,
-                {"original_error": str(exc)}
-            ))
-        finally:
-            session.close()
-
-    def getAllReservations(self) -> Optional[List[Reservation]]:
-        session: Session = self.__databaseService.getSession()
-        try:
-            reservationDataList = cast(List[ReservationData], session.query(ReservationData).all())
-            return [
-                ReservationMapper.toDomain(reservationData)
-                for reservationData
-                in reservationDataList
-            ]
-        except SQLAlchemyError as exc:
-            ExceptionHandler.raiseException(CustomException(
-                ErrorType.INFRASTRUCTURE_ERROR,
-                InfrastructureErrorType.DATABASE_ERROR.name,
-                InfrastructureErrorType.DATABASE_ERROR.value,
-                {"original_error": str(exc)}
-            ))
+            self.__handleSqlalchemyException(session, exc)
         finally:
             session.close()
 
@@ -153,11 +67,69 @@ class ReservationPostgreRepository(ReservationRepository):
                 for reservationData in reservationDataList
             ]
         except SQLAlchemyError as exc:
-            ExceptionHandler.raiseException(CustomException(
-                ErrorType.INFRASTRUCTURE_ERROR,
-                InfrastructureErrorType.DATABASE_ERROR.name,
-                InfrastructureErrorType.DATABASE_ERROR.value,
-                {"original_error": str(exc)}
-            ))
+            self.__handleSqlalchemyException(session, exc)
         finally:
             session.close()
+
+    def getAllReservations(self) -> Optional[List[Reservation]]:
+        session: Session = self.__databaseService.getSession()
+        try:
+            reservationDataList = cast(List[ReservationData], session.query(ReservationData).all())
+            return [
+                ReservationMapper.toDomain(reservationData)
+                for reservationData
+                in reservationDataList
+            ]
+        except SQLAlchemyError as exc:
+            self.__handleSqlalchemyException(session, exc)
+        finally:
+            session.close()
+
+    def updateStatus(self, reservationId: ReservationId, status: ReservationStatus) -> None:
+        session: Session = self.__databaseService.getSession()
+        try:
+            reservationData = session.query(ReservationData).filter(
+                ReservationData.id == reservationId.getValue()
+            ).first()
+            reservationData.status = status.getValue()
+            session.commit()
+        except SQLAlchemyError as exc:
+            self.__handleSqlalchemyException(session, exc)
+        finally:
+            session.close()
+
+    def updateEndTime(self, reservationId: ReservationId, endTime: datetime) -> None:
+        session: Session = self.__databaseService.getSession()
+        try:
+            reservationData = session.query(ReservationData).filter(
+                ReservationData.id == reservationId.getValue()
+            ).first()
+            reservationData.end_time = endTime
+            session.commit()
+        except SQLAlchemyError as exc:
+            self.__handleSqlalchemyException(session, exc)
+        finally:
+            session.close()
+
+    def updateStarTime(self, reservationId: ReservationId, startTime: datetime) -> None:
+        session: Session = self.__databaseService.getSession()
+        try:
+            reservationData = session.query(ReservationData).filter(
+                ReservationData.id == reservationId.getValue()
+            ).first()
+            reservationData.start_time = startTime
+            session.commit()
+        except SQLAlchemyError as exc:
+            self.__handleSqlalchemyException(session, exc)
+        finally:
+            session.close()
+
+    @staticmethod
+    def __handleSqlalchemyException(session: Session, exc: SQLAlchemyError) -> None:
+        session.rollback()
+        ExceptionHandler.raiseException(CustomException(
+            ErrorType.INFRASTRUCTURE_ERROR,
+            InfrastructureErrorType.DATABASE_ERROR.name,
+            InfrastructureErrorType.DATABASE_ERROR.value,
+            {"original_error": str(exc)}
+        ))

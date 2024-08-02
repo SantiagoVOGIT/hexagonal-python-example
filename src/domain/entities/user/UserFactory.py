@@ -1,12 +1,13 @@
 from datetime import datetime
 from typing import Optional
-from src.shared.decorators.UtilityClass import utilityClass
+
 from src.domain.common.DomainUtils import DomainUtils
 from src.domain.entities.user.User import User
 from src.domain.entities.user.value_objects.DniType import DniType
 from src.domain.entities.user.value_objects.UserId import UserId
 from src.domain.entities.user.value_objects.UserRole import UserRole
 from src.domain.entities.user.value_objects.UserStatus import UserStatus
+from src.shared.decorators.UtilityClass import utilityClass
 
 
 @utilityClass
@@ -31,9 +32,9 @@ class UserFactory:
             lastName=DomainUtils.validateName(lastName),
             emailAddress=DomainUtils.validateEmailAddress(emailAddress),
             phoneNumber=DomainUtils.validatePhoneNumber(phoneNumber),
-            dniType=DomainUtils.validateEnum(dniType, DniType),
-            role=DomainUtils.validateEnum(role, UserRole),
-            status=DomainUtils.validateEnum(status, UserStatus),
+            dniType=dniType,
+            role=role,
+            status=status,
             id=DomainUtils.resolveId(id, UserId),
             createdAt=DomainUtils.resolveCreatedAt(createdAt)
         )
@@ -53,12 +54,12 @@ class UserFactory:
         return User(
             id=user.getId(),
             dniNumber=DomainUtils.validateDniNumber(dniNumber) if dniNumber is not None else user.getDniNumber(),
-            dniType=DomainUtils.validateEnum(dniType, DniType) if dniType is not None else user.getDniType(),
+            dniType=dniType if dniType is not None else user.getDniType(),
             firstName=DomainUtils.validateName(firstName) if firstName is not None else user.getFirstName(),
             lastName=DomainUtils.validateName(lastName) if lastName is not None else user.getLastName(),
             emailAddress=DomainUtils.validateEmailAddress(emailAddress) if emailAddress is not None else user.getEmailAddress(),
             phoneNumber=DomainUtils.validatePhoneNumber(phoneNumber) if phoneNumber is not None else user.getPhoneNumber(),
-            role=DomainUtils.validateEnum(role, UserRole) if role is not None else user.getRole(),
-            status=DomainUtils.validateEnum(status, UserStatus) if status is not None else user.getStatus(),
+            role=role if role is not None else user.getRole(),
+            status=status if status is not None else user.getStatus(),
             createdAt=user.getCreatedAt()
         )

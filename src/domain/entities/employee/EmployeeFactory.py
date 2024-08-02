@@ -24,8 +24,8 @@ class EmployeeFactory:
         return Employee(
             userId=userId,
             salary=DomainUtils.validateSalary(salary),
-            position=DomainUtils.validateEnum(position, EmployeePosition),
-            status=DomainUtils.validateEnum(status, EmployeeStatus),
+            position=position,
+            status=status,
             id=DomainUtils.resolveId(id, EmployeeId),
             createdAt=DomainUtils.resolveCreatedAt(createAt),
         )
@@ -40,8 +40,8 @@ class EmployeeFactory:
         return Employee(
             id=employee.getId(),
             userId=userId if userId is not None else employee.getUserId(),
-            position=DomainUtils.validateEnum(position, EmployeePosition) if position is not None else employee.getPosition(),
-            status=DomainUtils.validateEnum(status, EmployeeStatus) if status is not None else employee.getStatus(),
+            position=position if position is not None else employee.getPosition(),
+            status=status if status is not None else employee.getStatus(),
             salary=DomainUtils.validateSalary(salary) if salary is not None else employee.getSalary(),
             createdAt=employee.getCreatedAt()
         )

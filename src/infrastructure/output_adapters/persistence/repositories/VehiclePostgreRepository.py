@@ -1,19 +1,20 @@
-from typing import Optional
+from typing import Optional, List
 
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
+from src.domain.entities.user.value_objects.UserId import UserId
 from src.domain.entities.vehicle.Vehicle import Vehicle
 from src.domain.entities.vehicle.ports.VehicleRepository import VehicleRepository
 from src.domain.entities.vehicle.value_objects.VehicleId import VehicleId
 from src.domain.entities.vehicle.value_objects.VehicleType import VehicleType
 from src.infrastructure.common.DatabaseService import DatabaseService
+from src.infrastructure.output_adapters.persistence.entities.vehicle_data.VehicleData import VehicleData
+from src.infrastructure.output_adapters.persistence.entities.vehicle_data.VehicleMapper import VehicleMapper
 from src.shared.error.CustomException import CustomException
 from src.shared.error.ExceptionHandler import ExceptionHandler
 from src.shared.error.enums.ErrorType import ErrorType
 from src.shared.error.enums.InfrastructureErrorType import InfrastructureErrorType
-from src.infrastructure.output_adapters.persistence.entities.vehicle_data.VehicleData import VehicleData
-from src.infrastructure.output_adapters.persistence.entities.vehicle_data.VehicleMapper import VehicleMapper
 
 
 class VehiclePostgreRepository(VehicleRepository):
@@ -30,13 +31,7 @@ class VehiclePostgreRepository(VehicleRepository):
             session.add(vehicleData)
             session.commit()
         except SQLAlchemyError as exc:
-            session.rollback()
-            ExceptionHandler.raiseException(CustomException(
-                ErrorType.INFRASTRUCTURE_ERROR,
-                InfrastructureErrorType.DATABASE_ERROR.name,
-                InfrastructureErrorType.DATABASE_ERROR.value,
-                {"original_error": str(exc)}
-            ))
+            self.__handleSqlalchemyException(session, exc)
         finally:
             session.close()
 
@@ -50,12 +45,7 @@ class VehiclePostgreRepository(VehicleRepository):
                 return None
             return VehicleMapper.toDomain(vehicleData)
         except SQLAlchemyError as exc:
-            ExceptionHandler.raiseException(CustomException(
-                ErrorType.INFRASTRUCTURE_ERROR,
-                InfrastructureErrorType.DATABASE_ERROR.name,
-                InfrastructureErrorType.DATABASE_ERROR.value,
-                {"original_error": str(exc)}
-            ))
+            self.__handleSqlalchemyException(session, exc)
         finally:
             session.close()
 
@@ -73,12 +63,7 @@ class VehiclePostgreRepository(VehicleRepository):
                 ))
             return VehicleType(vehicleData.vehicle_type)
         except SQLAlchemyError as exc:
-            ExceptionHandler.raiseException(CustomException(
-                ErrorType.INFRASTRUCTURE_ERROR,
-                InfrastructureErrorType.DATABASE_ERROR.name,
-                InfrastructureErrorType.DATABASE_ERROR.value,
-                {"original_error": str(exc)}
-            ))
+            self.__handleSqlalchemyException(session, exc)
         finally:
             session.close()
 
@@ -96,13 +81,7 @@ class VehiclePostgreRepository(VehicleRepository):
 
             session.commit()
         except SQLAlchemyError as exc:
-            session.rollback()
-            ExceptionHandler.raiseException(CustomException(
-                ErrorType.INFRASTRUCTURE_ERROR,
-                InfrastructureErrorType.DATABASE_ERROR.name,
-                InfrastructureErrorType.DATABASE_ERROR.value,
-                {"original_error": str(exc)}
-            ))
+            self.__handleSqlalchemyException(session, exc)
         finally:
             session.close()
 
@@ -121,11 +100,32 @@ class VehiclePostgreRepository(VehicleRepository):
                 ))
             return VehicleMapper.toDomain(vehicleData)
         except SQLAlchemyError as exc:
-            ExceptionHandler.raiseException(CustomException(
-                ErrorType.INFRASTRUCTURE_ERROR,
-                InfrastructureErrorType.DATABASE_ERROR.name,
-                InfrastructureErrorType.DATABASE_ERROR.value,
-                {"original_error": str(exc)}
-            ))
+            self.__handleSqlalchemyException(session, exc)
         finally:
             session.close()
+
+    def getVehiclesByUserId(self, userId: UserId) -> Optional[List[Vehicle]]:
+        session: Session = self.__databaseService.getSession()
+        try:
+            vehicleDataList = session.query(VehicleData).filter(
+                VehicleData.user_id == userId.getValue()
+            ).all()
+            return [
+                VehicleMapper.toDomain(vehicleData)
+                for vehicleData
+                in vehicleDataList
+            ]
+        except SQLAlchemyError as exc:
+            self.__handleSqlalchemyException(session, exc)
+        finally:
+            session.close()
+
+    @staticmethod
+    def __handleSqlalchemyException(session: Session, exc: SQLAlchemyError) -> None:
+        session.rollback()
+        ExceptionHandler.raiseException(CustomException(
+            ErrorType.INFRASTRUCTURE_ERROR,
+            InfrastructureErrorType.DATABASE_ERROR.name,
+            InfrastructureErrorType.DATABASE_ERROR.value,
+            {"original_error": str(exc)}
+        ))

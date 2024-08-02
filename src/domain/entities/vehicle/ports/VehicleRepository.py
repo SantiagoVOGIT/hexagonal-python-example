@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Optional
+from typing import Optional, List
 
 from src.domain.entities.user.value_objects.UserId import UserId
 from src.domain.entities.vehicle.Vehicle import Vehicle
@@ -25,6 +25,9 @@ class VehicleRepository(ABC):
     def findById(self, vehicleId: VehicleId) -> Optional[Vehicle]:
         pass
 
+    @abstractmethod
+    def getVehiclesByUserId(self, userId: UserId) -> Optional[List[Vehicle]]:
+        pass
 
     @abstractmethod
     def updateVehicle(self, vehicle: Vehicle) -> None:

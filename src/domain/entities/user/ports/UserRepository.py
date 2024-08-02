@@ -16,13 +16,13 @@ class UserRepository(ABC):
         pass
 
     @abstractmethod
+    def findById(self, userId: UserId) -> Optional[User]:
+        pass
+
+    @abstractmethod
     def findByEmail(self, email: str) -> Optional[User]:
         pass
 
     @abstractmethod
     def findByDniNumber(self, dniNumber: str) -> Optional[User]:
-        pass
-
-    @abstractmethod
-    def findById(self, userId: UserId) -> Optional[User]:
         pass

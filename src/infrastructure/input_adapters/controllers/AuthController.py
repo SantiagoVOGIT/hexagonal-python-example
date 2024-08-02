@@ -26,12 +26,10 @@ class AuthController:
                     request.dniNumber
                 )
                 return {
-                    "detail": MessageFactory
+                    "message": MessageFactory
                     .build(InfrastructureInfo.SUCCES_LOGIN)
                     .getDetail()
                 }
             except Exception as exc:
                 errorResponse: Dict[str, Any] = ExceptionHandler.handleException(exc)
-                raise HTTPException(
-                    status_code=400, detail=errorResponse
-                )
+                raise HTTPException(status_code=400, detail=errorResponse)

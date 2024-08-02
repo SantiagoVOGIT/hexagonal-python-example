@@ -1,7 +1,8 @@
-from typing import Dict, Any
+from typing import Dict, Any, List
 
 from fastapi import FastAPI, HTTPException
 
+from src.domain.entities.employee.Employee import Employee
 from src.domain.entities.employee.ports.EmployeeGateway import EmployeeGateway
 from src.domain.entities.employee.value_objects.EmployeeId import EmployeeId
 from src.infrastructure.common.enums.InfrastructureInfo import InfrastructureInfo
@@ -29,16 +30,13 @@ class EmployeeController:
                     request.salary
                 )
                 return {
-                    "detail": MessageFactory
+                    "message": MessageFactory
                     .build(InfrastructureInfo.SUCCES_CREATED_EMPLOYEE)
                     .getDetail()
                 }
             except Exception as exc:
                 errorResponse: Dict[str, Any] = ExceptionHandler.handleException(exc)
-                raise HTTPException(
-                    status_code=400,
-                    detail=errorResponse
-                )
+                raise HTTPException(status_code=400, detail=errorResponse)
 
         @app.put("/admin/update-employee/{employee_id}")
         async def updateEmployee(employee_id: str, request: EmployeeDTO):
@@ -52,13 +50,25 @@ class EmployeeController:
                     salary=request.salary
                 )
                 return {
-                    "detail": MessageFactory
+                    "message": MessageFactory
                     .build(InfrastructureInfo.SUCCESS_UPDATED_EMPLOYEE)
                     .getDetail()
                 }
             except Exception as exc:
                 errorResponse: Dict[str, Any] = ExceptionHandler.handleException(exc)
-                raise HTTPException(
-                    status_code=400,
-                    detail=errorResponse
-                )
+                raise HTTPException(status_code=400, detail=errorResponse)
+
+        @app.get("/admin/employees")
+        async def getAllEmployees():
+            try:
+                employees: List[Employee] = self.__employeeGateway.getAllEmployees()
+                return {
+                    "employees": [
+                        Employee.toDict(employee)
+                        for employee
+                        in employees
+                    ]
+                }
+            except Exception as exc:
+                errorResponse: Dict[str, Any] = ExceptionHandler.handleException(exc)
+                raise HTTPException(status_code=400, detail=errorResponse)

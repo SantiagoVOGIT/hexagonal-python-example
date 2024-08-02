@@ -1,12 +1,12 @@
 import re
 from datetime import datetime, timezone
-from typing import Optional, TypeVar, Type, Union
+from typing import Optional, TypeVar, Type
 
+from src.domain.entities.reservation.value_objects.ReservationCode import ReservationCode
 from src.shared.decorators.UtilityClass import utilityClass
 from src.shared.error.DomainException import DomainException
 from src.shared.error.ExceptionHandler import ExceptionHandler
 from src.shared.error.enums.DomainErrorType import DomainErrorType
-from src.domain.entities.reservation.value_objects.ReservationCode import ReservationCode
 
 T = TypeVar('T')
 
@@ -77,21 +77,6 @@ class DomainUtils:
                 DomainErrorType.INVALID_MODEL_FORMAT
             ))
         return value
-
-    @staticmethod
-    def validateEnum(value: Union[str, T], enumType: Type[T]) -> T:
-        if isinstance(value, enumType):
-            return value
-        elif isinstance(value, str):
-            try:
-                return enumType(value)
-            except ValueError:
-                pass
-
-        ExceptionHandler.raiseException(DomainException(
-            DomainErrorType.INVALID_ENUM_VALUE,
-            {"message": f"{value}, {enumType}"}
-        ))
 
     @staticmethod
     def resolveId(id: Optional[T], EntityId: Type[T]) -> T:

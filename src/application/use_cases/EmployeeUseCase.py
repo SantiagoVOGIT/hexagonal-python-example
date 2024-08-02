@@ -1,8 +1,5 @@
-from typing import Optional
+from typing import Optional, List
 
-from src.shared.error.DomainException import DomainException
-from src.shared.error.ExceptionHandler import ExceptionHandler
-from src.shared.error.enums.DomainErrorType import DomainErrorType
 from src.domain.entities.employee.Employee import Employee
 from src.domain.entities.employee.EmployeeFactory import EmployeeFactory
 from src.domain.entities.employee.ports.EmployeeGateway import EmployeeGateway
@@ -11,6 +8,9 @@ from src.domain.entities.employee.value_objects.EmployeeId import EmployeeId
 from src.domain.entities.employee.value_objects.EmployeePosition import EmployeePosition
 from src.domain.entities.employee.value_objects.EmployeeStatus import EmployeeStatus
 from src.domain.entities.user.value_objects.UserId import UserId
+from src.shared.error.DomainException import DomainException
+from src.shared.error.ExceptionHandler import ExceptionHandler
+from src.shared.error.enums.DomainErrorType import DomainErrorType
 
 
 class EmployeeUseCase(EmployeeGateway):
@@ -58,6 +58,14 @@ class EmployeeUseCase(EmployeeGateway):
         )
         self.__employeeRepository.updateEmployee(updatedEmployee)
         return updatedEmployee
+
+    def getAllEmployees(self) -> List[Employee]:
+        employees: Optional[List[Employee]] = self.__employeeRepository.getAllEmployees()
+        if not employees:
+            ExceptionHandler.raiseException(DomainException(
+                DomainErrorType.EMPLOYEES_NOT_FOUND
+            ))
+        return employees
 
     def __validateNewEmployee(self, userId: UserId) -> Optional[Employee]:
         employee: Optional[Employee] = self.__employeeRepository.findByUserId(userId)

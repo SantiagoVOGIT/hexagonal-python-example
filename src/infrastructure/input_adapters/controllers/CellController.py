@@ -28,16 +28,13 @@ class CellController:
                     request.status
                 )
                 return {
-                    "detail": MessageFactory
+                    "message": MessageFactory
                     .build(InfrastructureInfo.SUCCESS_CREATED_CELL)
                     .getDetail()
                 }
             except Exception as exc:
                 errorResponse: Dict[str, Any] = ExceptionHandler.handleException(exc)
-                raise HTTPException(
-                    status_code=400,
-                    detail=errorResponse
-                )
+                raise HTTPException(status_code=400, detail=errorResponse)
 
         @app.put("/admin/update-cell/{cell_id}")
         async def updateEmployee(cell_id: str, request: CellDTO):
@@ -50,13 +47,10 @@ class CellController:
                     spaceNumber=request.spaceNumber
                 )
                 return {
-                    "detail": MessageFactory
+                    "message": MessageFactory
                     .build(InfrastructureInfo.SUCCESS_UPDATED_CELL)
                     .getDetail()
                 }
             except Exception as exc:
                 errorResponse: Dict[str, Any] = ExceptionHandler.handleException(exc)
-                raise HTTPException(
-                    status_code=400,
-                    detail=errorResponse
-                )
+                raise HTTPException(status_code=400, detail=errorResponse)

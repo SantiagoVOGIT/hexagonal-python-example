@@ -2,7 +2,8 @@ from enum import Enum
 
 
 class DomainErrorType(Enum):
-
+    EMPLOYEES_NOT_FOUND = "No se encontró ningún empleado"
+    VEHICLES_NOT_FOUND = "No se encontró ningún vehículo"
     RESERVATIONS_NOT_FOUND = "No se encontró ninguna reserva"
     SPACE_NUMBER_ALREADY_EXISTS = "Este número de celda ya se encuentra asociado a otra celda"
     EMAIL_ALREADY_EXISTS = "Este correo electrónico ya se encuentra asociado a otro usuario"

@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import TypeVar, Optional
+from typing import TypeVar, Optional, List
 
 from src.domain.entities.employee.Employee import Employee
 from src.domain.entities.employee.value_objects.EmployeeId import EmployeeId
@@ -29,4 +29,8 @@ class EmployeeGateway(ABC):
                        status: Optional[EmployeeStatus] = None,
                        salary: Optional[float] = None
                        ) -> Employee:
+        pass
+
+    @abstractmethod
+    def getAllEmployees(self) -> List[Employee]:
         pass
