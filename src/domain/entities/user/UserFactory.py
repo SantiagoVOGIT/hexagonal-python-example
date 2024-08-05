@@ -32,9 +32,9 @@ class UserFactory:
             lastName=DomainUtils.validateName(lastName),
             emailAddress=DomainUtils.validateEmailAddress(emailAddress),
             phoneNumber=DomainUtils.validatePhoneNumber(phoneNumber),
-            dniType=dniType,
-            role=role,
-            status=status,
+            dniType=DomainUtils.validateEnum(dniType, DniType),
+            role=DomainUtils.validateEnum(role, UserRole),
+            status=DomainUtils.validateEnum(status, UserStatus),
             id=DomainUtils.resolveId(id, UserId),
             createdAt=DomainUtils.resolveCreatedAt(createdAt)
         )
@@ -54,12 +54,12 @@ class UserFactory:
         return User(
             id=user.getId(),
             dniNumber=DomainUtils.validateDniNumber(dniNumber) if dniNumber is not None else user.getDniNumber(),
-            dniType=dniType if dniType is not None else user.getDniType(),
+            dniType=DomainUtils.validateEnum(dniType, DniType) if dniType is not None else user.getDniType(),
             firstName=DomainUtils.validateName(firstName) if firstName is not None else user.getFirstName(),
             lastName=DomainUtils.validateName(lastName) if lastName is not None else user.getLastName(),
             emailAddress=DomainUtils.validateEmailAddress(emailAddress) if emailAddress is not None else user.getEmailAddress(),
             phoneNumber=DomainUtils.validatePhoneNumber(phoneNumber) if phoneNumber is not None else user.getPhoneNumber(),
-            role=role if role is not None else user.getRole(),
-            status=status if status is not None else user.getStatus(),
+            role=DomainUtils.validateEnum(role, UserRole) if role is not None else user.getRole(),
+            status=DomainUtils.validateEnum(status, UserStatus) if status is not None else user.getStatus(),
             createdAt=user.getCreatedAt()
         )

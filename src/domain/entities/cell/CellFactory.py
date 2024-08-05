@@ -21,9 +21,9 @@ class CellFactory:
                createdAt: Optional[datetime] = None
                ) -> Cell:
         return Cell(
-            spaceNumber=spaceNumber,
-            vehicleType=vehicleType,
-            status=status,
+            spaceNumber=DomainUtils.validateEnum(spaceNumber, SpaceNumber),
+            vehicleType=DomainUtils.validateEnum(vehicleType, VehicleType),
+            status=DomainUtils.validateEnum(status, CellStatus),
             id=DomainUtils.resolveId(id, CellId),
             createdAt=DomainUtils.resolveCreatedAt(createdAt),
         )
@@ -36,8 +36,10 @@ class CellFactory:
             status: Optional[CellStatus] = None) -> Cell:
         return Cell(
             id=cell.getId(),
-            spaceNumber=spaceNumber if spaceNumber is not None else cell.getSpaceNumber(),
-            vehicleType=vehicleType if vehicleType is not None else cell.getVehicleType(),
-            status=status if status is not None else cell.getStatus(),
+            spaceNumber=DomainUtils.validateEnum(spaceNumber,
+                                                 SpaceNumber) if spaceNumber is not None else cell.getSpaceNumber(),
+            vehicleType=DomainUtils.validateEnum(vehicleType,
+                                                 VehicleType) if vehicleType is not None else cell.getVehicleType(),
+            status=DomainUtils.validateEnum(status, CellStatus) if status is not None else cell.getStatus(),
             createdAt=cell.getCreatedAt()
         )

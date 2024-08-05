@@ -33,7 +33,7 @@ class ReservationFactory:
             vehicleId=vehicleId,
             endTime=endTime,
             startTime=startTime,
-            status=status,
+            status=DomainUtils.validateEnum(status, ReservationStatus),
             reservationCode=DomainUtils.resolveReservationCode(reservationCode),
             id=DomainUtils.resolveId(id, ReservationId),
             createdAt=DomainUtils.resolveCreatedAt(createdAt),

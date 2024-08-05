@@ -17,12 +17,12 @@ POST http://127.0.0.1:8000/register
 Content-Type: application/json
 
 {
-  "dniNumber": "43855553",
+  "dniNumber": "73855553",
   "dniType": "CÉDULA CIUDADANÍA",
   "firstName": "Claudia",
   "lastName": "Arelis Ochoa",
   "phoneNumber": "3012558423",
-  "emailAddress": "claudia@gmail.com"
+  "emailAddress": "mlaudia@gmail.com"
 }
 
 ###
@@ -36,12 +36,12 @@ POST http://127.0.0.1:8000/admin/create-user
 Content-Type: application/json
 
 {
-  "dniNumber": "1036928592",
+  "dniNumber": "6036928592",
   "dniType": "CÉDULA CIUDADANÍA",
   "firstName": "Pablo",
   "lastName": "Hernandez",
   "phoneNumber": "3024508215",
-  "emailAddress": "pablo@gmail.com",
+  "emailAddress": "bablo@gmail.com",
   "status": "ACTIVO",
   "role": "USUARIO"
 }

@@ -24,7 +24,7 @@ class VehicleFactory:
             userId=userId,
             model=DomainUtils.validateModel(model),
             licensePlate=DomainUtils.validateLicensePlate(licensePlate),
-            vehicleType=vehicleType,
+            vehicleType=DomainUtils.validateEnum(vehicleType, VehicleType),
             id=DomainUtils.resolveId(id, VehicleId),
             registeredAt=DomainUtils.resolveCreatedAt(registeredAt)
         )
@@ -42,6 +42,7 @@ class VehicleFactory:
             userId=userId if userId is not None else vehicle.getUserId(),
             licensePlate=DomainUtils.validateLicensePlate(licensePlate) if licensePlate is not None else vehicle.getLicensePlate(),
             model=DomainUtils.validateModel(model) if model is not None else vehicle.getModel(),
-            vehicleType=vehicleType if vehicleType is not None else vehicle.getVehicleType(),
+            vehicleType=DomainUtils.validateEnum(vehicleType,
+                                                 VehicleType) if vehicleType is not None else vehicle.getVehicleType(),
             registeredAt=DomainUtils.resolveCreatedAt(registeredAt) if registeredAt is not None else vehicle.getRegisteredAt()
         )
